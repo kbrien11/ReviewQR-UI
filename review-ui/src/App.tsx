@@ -4,6 +4,7 @@ import Login from "./pages/Login/Login";
 import LandingPage from './pages/Landing/LandingPage'
 import Dashboard from './pages/Dashboard/Dashboard'
 import Reviews from './pages/Reviews/Reviews'
+import QRPreview from './pages/QRPreview/QrPreview'
 // import Dashboard from './pages/Dashboard/Dashboard'
 // import Reviews from './pages/Reviews/Reviews'
 // import Analytics from './pages/Analytics/Analytics'
@@ -17,6 +18,8 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/reviews" element={<Reviews />} />
+        <Route path="/scans" element={<QRPreview />} />
+        {/* <Route path="/dashboard" element={<Dashboard /
         {/* <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/analytics" element={<Analytics />} />

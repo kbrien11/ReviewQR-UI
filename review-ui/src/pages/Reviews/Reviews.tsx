@@ -8,27 +8,53 @@ export default function Reviews() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
+  const [statusMessage, setStatusMessage] = useState("");
 
   useEffect(() => {
-    async function fetchReviews() {
-      try {
-        const response = await fetch("http://127.0.0.1:8000/api/reviews/list/", {
+    const delayDebounce = setTimeout(() => {
+      fetchReviews();
+    }, 300); // 300ms debounce
+  
+    return () => clearTimeout(delayDebounce);
+  }, [search, filter]);
+
+  async function fetchReviews() {
+    try {
+      const params = new URLSearchParams();
+  
+      // Text search
+      if (search) params.append("q", search);
+  
+      // Filters
+      if (filter === "public") params.append("public", "true");
+      if (filter === "private") params.append("public", "false");
+      if (filter === "mobile") params.append("device", "mobile");
+      if (filter === "desktop") params.append("device", "desktop");
+  
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/reviews/search/?${params.toString()}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        });
-
-        const json = await response.json();
+        }
+      );
+  
+      const json = await response.json();
+  
+      if (json.count === 0) {
+        setReviews([]);
+        setStatusMessage(json.status_message);
+      } else {
         setReviews(json.results);
-      } catch (err) {
-        console.error("Review fetch error:", err);
-      } finally {
-        setLoading(false);
+        setStatusMessage(json.status_message);
       }
+    } catch (err) {
+      console.error("Review search error:", err);
+    } finally {
+      setLoading(false);
     }
-
-    fetchReviews();
-  }, [token]);
+  }
 
   const filteredReviews = reviews.filter((r) => {
     const matchesSearch =

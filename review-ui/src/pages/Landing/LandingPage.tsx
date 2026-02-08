@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import qrCartoon from '../../assets/qrCartoon.png'
 
 export default function LandingPage() {
   const [fadeIn, setFadeIn] = useState(false);
@@ -32,34 +33,51 @@ export default function LandingPage() {
 </nav>
 
       {/* HERO */}
-      <div className="flex flex-col items-center justify-center text-center px-6 mt-32">
-        <h2
-          className={`text-4xl md:text-5xl font-extrabold leading-tight transition-all duration-700 ${
-            fadeIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-        >
-          Get More Reviews Instantly  
-          <span className="text-blue-600"> With One Scan</span>
-        </h2>
+<div className="flex flex-col-reverse md:flex-row items-center justify-between px-6 mt-32 gap-10">
 
-        <p
-          className={`mt-4 text-gray-600 max-w-md transition-all duration-700 delay-200 ${
-            fadeIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-        >
-          ReviewQR helps small businesses collect more 5‑star reviews using
-          beautifully branded QR codes and a smart review funnel.
-        </p>
+{/* Left: Text Content */}
+<div className="text-center md:text-left md:w-1/2">
+  <h2
+    className={`text-4xl md:text-5xl font-extrabold leading-tight transition-all duration-700 ${
+      fadeIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+    }`}
+  >
+    Get More Reviews Instantly  
+    <span className="text-blue-600"> With One Scan</span>
+  </h2>
 
-        <Link
-          to="/register"
-          className={`mt-8 px-6 py-3 bg-blue-600 text-white rounded-lg text-lg font-semibold shadow-lg hover:bg-blue-700 transition-all duration-300 hover:scale-105 ${
-            fadeIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-        >
-          Get Started Free
-        </Link>
-      </div>
+  <p
+    className={`mt-4 text-gray-600 max-w-md transition-all duration-700 delay-200 ${
+      fadeIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+    }`}
+  >
+    ReviewQR helps small businesses collect more 5‑star reviews using
+    beautifully branded QR codes and a smart review funnel.
+  </p>
+
+  <Link
+    to="/register"
+    className={`mt-8 inline-block px-6 py-3 bg-blue-600 text-white rounded-lg text-lg font-semibold shadow-lg hover:bg-blue-700 transition-all duration-300 hover:scale-105 ${
+      fadeIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+    }`}
+  >
+    Get Started Free
+  </Link>
+</div>
+
+{/* Right: Cartoon Image */}
+<div className="relative md:w-1/2 flex justify-center items-center">
+  {/* Soft glow background */}
+  <div className="absolute inset-0 bg-gradient-to-br from-blue-100/60 to-white/0 rounded-3xl blur-2xl opacity-70"></div>
+
+  {/* Cartoon image */}
+  <img
+    src={qrCartoon}
+    alt="Cartoon scanning QR code"
+    className="w-72 md:w-96 relative z-10 animate-float mix-blend-darken"
+  />
+</div>
+</div>
 
       {/* FEATURES */}
       <div className="mt-24 px-6 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto pb-20">

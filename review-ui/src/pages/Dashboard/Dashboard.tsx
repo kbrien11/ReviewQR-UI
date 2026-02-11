@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export default function Dashboard() {
   const { token } = useAuth();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  const [businessSlug, setBusinessSlug] = useState("");
+const [businessName, setBusinessName] = useState("");
+
+  const { slug } = useParams();
 
   useEffect(() => {
     async function fetchDashboard() {
@@ -16,6 +23,8 @@ export default function Dashboard() {
 
         const json = await response.json();
         setData(json);
+        setBusinessName(json.business_name);
+        setBusinessSlug(json.business_slug);
       } catch (err) {
         console.error("Dashboard fetch error:", err);
       } finally {
@@ -26,7 +35,7 @@ export default function Dashboard() {
     fetchDashboard();
   }, [token]);
 
-  if (loading) {
+  if (loading || !data) {
     return (
       <div className="min-h-screen flex items-center justify-center text-gray-600">
         Loading dashboard…
@@ -62,6 +71,47 @@ export default function Dashboard() {
 
         <p className="mt-2 text-slate-300">{data.status_message}</p>
       </div>
+      {/* DASHBOARD TABS */}
+<div className="flex space-x-8 border-b mt-6 px-2">
+  <NavLink
+    to={`/dashboard/${data.business_slug}`}
+    className={({ isActive }) =>
+      `py-3 border-b-2 ${
+        isActive
+          ? "border-blue-600 text-blue-600 font-semibold"
+          : "border-transparent text-gray-600 hover:text-gray-800"
+      }`
+    }
+  >
+    Overview
+  </NavLink>
+
+  <NavLink
+    to={`/reviews`}
+    className={({ isActive }) =>
+      `py-3 border-b-2 ${
+        isActive
+          ? "border-blue-600 text-blue-600 font-semibold"
+          : "border-transparent text-gray-600 hover:text-gray-800"
+      }`
+    }
+  >
+    Reviews
+  </NavLink>
+
+  <NavLink
+    to={`/business/${data.business_slug}/qr`}
+    className={({ isActive }) =>
+      `py-3 border-b-2 ${
+        isActive
+          ? "border-blue-600 text-blue-600 font-semibold"
+          : "border-transparent text-gray-600 hover:text-gray-800"
+      }`
+    }
+  >
+    QR Code
+  </NavLink>
+</div>
 
       {/* MAIN GRID */}
       <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -101,7 +151,7 @@ export default function Dashboard() {
           <div className="flex justify-around text-center">
             <div>
               <p className="text-3xl font-bold text-blue-600">
-                {data.device_breakdown.mobile || 0}
+                {data?.device_breakdown.mobile || 0}
               </p>
               <p className="text-gray-600">Mobile</p>
             </div>

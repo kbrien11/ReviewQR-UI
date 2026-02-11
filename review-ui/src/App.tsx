@@ -6,6 +6,8 @@ import Dashboard from './pages/Dashboard/Dashboard'
 import Reviews from './pages/Reviews/Reviews'
 import QRPreview from './pages/QRPreview/QrPreview'
 import LeaveReviewPage from "./pages/Reviews/LeaveReviewPage";
+import BusinessQRPage from "./pages/BusinessQRPage/BusinessQRPage";
+import ProtectedRoute from "./context/ProtectedRoute";
 // import Dashboard from './pages/Dashboard/Dashboard'
 // import Reviews from './pages/Reviews/Reviews'
 // import Analytics from './pages/Analytics/Analytics'
@@ -17,10 +19,23 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/reviews" element={<Reviews />} />
-        <Route path="/scans" element={<QRPreview />} />
+        <Route path="/dashboard" element={
+    <ProtectedRoute>
+      <Dashboard />
+    </ProtectedRoute>
+  } />
+        <Route path="/reviews" element={
+    <ProtectedRoute>
+      <Reviews />
+    </ProtectedRoute>
+  } />
+        <Route path="/scans" element={
+    <ProtectedRoute>
+      <QRPreview />
+    </ProtectedRoute>
+  } />
         <Route path="/review/:slug" element={<LeaveReviewPage />} />
+        <Route path="/business/:slug/qr" element={<BusinessQRPage />} />
         {/* <Route path="/dashboard" element={<Dashboard /
         {/* <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/reviews" element={<Reviews />} />

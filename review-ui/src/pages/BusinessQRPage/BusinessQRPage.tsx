@@ -18,11 +18,11 @@ export default function BusinessQRPage() {
   const [border, setBorder] = useState(4);
 
   useEffect(() => {
-    fetch(`http://192.168.1.161:8000/api/business/${slug}/qr/`)
+    fetch(`https://reviewqrapi.onrender.com/api/business/${slug}/qr/`)
       .then(res => res.json())
       .then(data => {
         setBusinessName(data.name);
-        setQrCodeUrl(`http://192.168.1.161:8000${data.qr_code}`);
+        setQrCodeUrl(`https://reviewqrapi.onrender.com${data.qr_code}`);
 
         setBrandColor(data.brand_color);
         setFillColor(data.qr_fill_color);
@@ -34,7 +34,7 @@ export default function BusinessQRPage() {
 
   const saveChanges = async () => {
     const response = await fetch(
-      `http://192.168.1.161:8000/api/business/${slug}/qr/`,
+      `https://reviewqrapi.onrender.com/api/business/${slug}/qr/`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -50,7 +50,7 @@ export default function BusinessQRPage() {
 
     if (response.ok) {
       const updated = await response.json();
-      setQrCodeUrl(`http://192.168.1.161:8000${updated.qr_code}`);
+      setQrCodeUrl(`https://reviewqrapi.onrender.com${updated.qr_code}`);
       setEditing(false);
     }
   };

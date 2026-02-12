@@ -17,7 +17,7 @@ const [businessName, setBusinessName] = useState("");
   useEffect(() => {
     async function fetchDashboard() {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/dashboard/summary/", {
+        const response = await fetch("https://reviewqrapi.onrender.com/api/dashboard/summary/", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -141,7 +141,7 @@ const [businessName, setBusinessName] = useState("");
             <h2 className="text-lg font-bold">Device Breakdown</h2>
 
             <Link
-              to="/scans"
+              to={`/scans/${businessSlug}`}
               className="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold shadow-md hover:bg-indigo-700 hover:shadow-lg hover:scale-[1.02] active:scale-[.98] transition-all duration-200"
             >
               View More →

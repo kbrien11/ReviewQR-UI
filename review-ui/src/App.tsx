@@ -29,7 +29,7 @@ export default function App() {
       <Reviews />
     </ProtectedRoute>
   } />
-        <Route path="/scans" element={
+        <Route path="/scans/:slug" element={
     <ProtectedRoute>
       <QRPreview />
     </ProtectedRoute>

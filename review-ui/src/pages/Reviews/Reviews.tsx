@@ -28,7 +28,7 @@ export default function Reviews() {
       if (filter === "desktop") params.append("device", "desktop");
 
       const response = await fetch(
-        `http://127.0.0.1:8000/api/reviews/search/?${params.toString()}`,
+        `https://reviewqrapi.onrender.com/api/reviews/search/?${params.toString()}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

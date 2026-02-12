@@ -16,7 +16,7 @@ export default function LeaveReviewPage() {
   const [businessName, setBusinessName] = useState("");
 
   useEffect(() => {
-    fetch(`http://192.168.1.161:8000/api/business/${slug}/`)
+    fetch(`https://reviewqrapi.onrender.com/api/business/${slug}/`)
       .then(res => res.json())
       .then(data => {
         setBusinessId(data.id);
@@ -29,7 +29,7 @@ export default function LeaveReviewPage() {
 
     setLoading(true);
 
-    const response = await fetch("http://192.168.1.161:8000/api/reviews/submit/", {
+    const response = await fetch("https://reviewqrapi.onrender.com/api/reviews/submit/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

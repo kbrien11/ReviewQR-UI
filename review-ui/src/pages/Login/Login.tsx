@@ -16,7 +16,7 @@ export default function Login() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8000/auth/owner/login/", {
+      const response = await fetch("https://reviewqrapi.onrender.com/auth/owner/login/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),

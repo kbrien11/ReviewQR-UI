@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
 
 export default function QRPreview() {
   const { token } = useAuth();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-
+  const { slug } = useParams();
   useEffect(() => {
     async function fetchScans() {
       try {
+
+        
         const response = await fetch(
-          "http://127.0.0.1:8000/api/business/piper-9aab04/analytics/summary/",
+          `https://reviewqrapi.onrender.com/api/business/${slug}/analytics/summary/`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

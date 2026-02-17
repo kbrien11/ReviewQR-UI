@@ -8,6 +8,7 @@ import QRPreview from './pages/QRPreview/QrPreview'
 import LeaveReviewPage from "./pages/Reviews/LeaveReviewPage";
 import BusinessQRPage from "./pages/BusinessQRPage/BusinessQRPage";
 import ProtectedRoute from "./context/ProtectedRoute";
+import Register from "./pages/Register/Register";
 // import Dashboard from './pages/Dashboard/Dashboard'
 // import Reviews from './pages/Reviews/Reviews'
 // import Analytics from './pages/Analytics/Analytics'
@@ -19,6 +20,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={
     <ProtectedRoute>
       <Dashboard />

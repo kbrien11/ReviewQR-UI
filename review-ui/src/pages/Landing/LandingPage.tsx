@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+
 import qrCartoon from '../../assets/qrCartoon.png'
 
 export default function LandingPage() {

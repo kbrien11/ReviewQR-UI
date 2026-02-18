@@ -82,6 +82,45 @@ export default function Register() {
     }
   };
 
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+  
+  const isValidPhone = (phone: string) => {
+    return /^\+?[0-9\s\-()]{7,15}$/.test(phone);
+  };
+  
+  const isValidUrl = (url: string) => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const validateStep = () => {
+    switch (step) {
+      case 0:
+        return (
+          form.name.trim() !== "" &&
+          isValidEmail(form.email) &&
+          isValidPhone(form.phone) &&
+          isValidUrl(form.google_review_link)
+        );
+      case 1:
+        return form.brand_color.trim() !== "";
+      case 2:
+        return form.qr_fill_color.trim() !== "";
+      case 3:
+        return form.qr_back_color.trim() !== "";
+      case 4:
+        return form.qr_box_size > 0 && form.qr_border > 0;
+      default:
+        return true;
+    }
+  };
+
   // Animation classes
   const slideClass =
     direction === "forward"
@@ -179,7 +218,11 @@ export default function Register() {
                 placeholder="Email"
                 value={form.email}
                 onChange={handleChange}
-                className="w-full border rounded-lg p-3"
+                className={`w-full border rounded-lg p-3 ${
+                    form.email.trim() !== "" && !isValidEmail(form.email)
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  }`}
               />
 
               <input
@@ -188,7 +231,11 @@ export default function Register() {
                 placeholder="Phone Number"
                 value={form.phone}
                 onChange={handleChange}
-                className="w-full border rounded-lg p-3"
+                className={`w-full border rounded-lg p-3 ${
+                    form.phone.trim() !== "" && !isValidPhone(form.phone)
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  }`}
               />
 
               <input
@@ -197,7 +244,11 @@ export default function Register() {
                 placeholder="Google Review Link"
                 value={form.google_review_link}
                 onChange={handleChange}
-                className="w-full border rounded-lg p-3"
+                className={`w-full border rounded-lg p-3 ${
+                    form.google_review_link.trim() !== "" && !isValidUrl(form.google_review_link)
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  }`}
               />
 
               <div className="flex justify-between items-center">
@@ -209,11 +260,16 @@ export default function Register() {
                 </button>
 
                 <button
-                  onClick={next}
-                  className="px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold transition-all duration-300 hover:bg-blue-700 hover:scale-105 shadow-md"
-                >
-                  Continue
-                </button>
+  onClick={next}
+  disabled={!validateStep()}
+  className={`px-6 py-3 rounded-lg font-semibold shadow-md transition-all duration-300 
+    ${validateStep()
+      ? "bg-blue-600 text-white hover:bg-blue-700 hover:scale-105"
+      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+    }`}
+>
+  Continue
+</button>
               </div>
             </div>
           )}

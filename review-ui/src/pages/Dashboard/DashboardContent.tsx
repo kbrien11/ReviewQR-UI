@@ -1,5 +1,5 @@
 import { useParams, Link, NavLink } from "react-router-dom";
-import DashboardCard from "./DashBoardCard";
+import DashboardCard from "./DashboardCard";
 import DashboardSkeleton from "./DashboardSkeleton";
 import DeviceBreakdown from "./DeviceBreakdown";
 import LatestReview from "./LatestReview";
@@ -28,28 +28,7 @@ export default function Dashboard() {
         <p className="mt-2 text-slate-300">{data.status_message}</p>
       </div>
 
-      {/* TABS */}
-      <div className="flex space-x-8 border-b mt-6 px-2">
-        {[
-          { label: "Overview", path: `/dashboard/${data.business_slug}` },
-          { label: "Reviews", path: `/reviews` },
-          { label: "QR Code", path: `/business/${data.business_slug}/qr` },
-        ].map(({ label, path }) => (
-          <NavLink
-            key={label}
-            to={path}
-            className={({ isActive }) =>
-              `py-3 border-b-2 ${
-                isActive
-                  ? "border-blue-600 text-blue-600 font-semibold"
-                  : "border-transparent text-gray-600 hover:text-gray-800"
-              }`
-            }
-          >
-            {label}
-          </NavLink>
-        ))}
-      </div>
+
 
       {/* MAIN GRID */}
       <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">

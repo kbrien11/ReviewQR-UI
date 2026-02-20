@@ -50,8 +50,8 @@ export default function BusinessQRPage() {
 
     if (response.ok) {
       const updated = await response.json();
-      setQrCodeUrl(`https://reviewqrapi.onrender.com${updated.qr_code}`);
-      setEditing(false);
+      setQrCodeUrl(updated.qr_code);
+    setEditing(false);
     }
   };
 

@@ -22,7 +22,7 @@ export default function BusinessQRPage() {
       .then(res => res.json())
       .then(data => {
         setBusinessName(data.name);
-        setQrCodeUrl(`https://reviewqrapi.onrender.com${data.qr_code}`);
+        setQrCodeUrl(data.qr_code);
 
         setBrandColor(data.brand_color);
         setFillColor(data.qr_fill_color);

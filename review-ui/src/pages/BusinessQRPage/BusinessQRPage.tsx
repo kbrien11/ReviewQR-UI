@@ -110,7 +110,7 @@ export default function BusinessQRPage() {
       <div className="max-w-2xl mx-auto mt-10 px-4">
 
         {/* QR PREVIEW (HIDDEN WHEN EDITING) */}
-        {!editing && (
+        {!editing &&  qrCodeUrl &&  (
           <div className="relative bg-white shadow-xl rounded-2xl p-8 border">
 
             {/* Edit Button */}
@@ -126,12 +126,13 @@ export default function BusinessQRPage() {
                 src={qrCodeUrl}
                 alt="QR Code"
                 className="w-64 h-64 rounded-xl shadow-md border"
-              />
+              /> 
 
               <p className="mt-4 text-gray-600 text-sm">
                 Scan this QR code to view your review page
               </p>
             </div>
+
           </div>
         )}
 

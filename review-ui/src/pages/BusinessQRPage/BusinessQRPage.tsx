@@ -55,6 +55,8 @@ export default function BusinessQRPage() {
     }
   };
 
+  console.log("QR URL:", qrCodeUrl);
+
   return (
     <div className="pb-20">
 

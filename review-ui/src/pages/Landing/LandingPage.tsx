@@ -80,70 +80,103 @@ export default function LandingPage() {
 </div>
 </div>
 
-      {/* FEATURES */}
-      <div className="mt-24 px-6 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto pb-20">
-        {[
-          {
-            title: "Branded QR Codes",
-            desc: "Customize colors, logos, and styles to match your business identity.",
-          },
-          {
-            title: "Smart Review Funnel",
-            desc: "Send happy customers to Google and collect private feedback from others.",
-          },
-          {
-            title: "Real-Time Analytics",
-            desc: "Track scans, reviews, and performance from a clean dashboard.",
-          },
-        ].map((item, i) => (
-          <div
-            key={i}
-            className={`p-6 bg-white rounded-xl shadow-md transition-all duration-500 hover:shadow-xl hover:-translate-y-2 hover:scale-[1.02] cursor-pointer ${
-              fadeIn
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-6"
-            }`}
-            style={{ transitionDelay: `${300 + i * 150}ms` }}
-          >
-            <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-            <p className="text-gray-600">{item.desc}</p>
-          </div>
-        ))}
+     {/* FEATURES */}
+<div className="mt-24 px-6 max-w-6xl mx-auto pb-20">
+  <h2
+    className={`text-3xl md:text-4xl font-extrabold text-center mb-12 transition-all duration-700 ${
+      fadeIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+    }`}
+  >
+    Powerful Features Built for Local Businesses
+  </h2>
+
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+    {[
+      {
+        title: "Branded QR Codes",
+        desc: "Customize colors, logos, and styles to match your business identity.",
+        icon: "🎨",
+      },
+      {
+        title: "Smart Review Funnel",
+        desc: "Send happy customers to Google and collect private feedback from others.",
+        icon: "🚀",
+      },
+      {
+        title: "Real-Time Analytics",
+        desc: "Track scans, reviews, and performance from a clean dashboard.",
+        icon: "📊",
+      },
+    ].map((item, i) => (
+      <div
+        key={i}
+        className={`
+          p-8 rounded-2xl shadow-lg bg-white/70 backdrop-blur-md border border-gray-200
+          transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02]
+          ${fadeIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
+        `}
+        style={{ transitionDelay: `${300 + i * 150}ms` }}
+      >
+        <div className="text-4xl mb-4">{item.icon}</div>
+        <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+        <p className="text-gray-600 leading-relaxed">{item.desc}</p>
       </div>
+    ))}
+  </div>
+</div>
 
       {/* TESTIMONIALS */}
-      <div className="bg-white py-16 px-6">
-        <h3 className="text-3xl font-bold text-center mb-10">Loved by Local Businesses</h3>
+<div className="bg-gradient-to-b from-white to-gray-50 py-20 px-6">
+  <h3
+    className={`text-3xl md:text-4xl font-extrabold text-center mb-14 transition-all duration-700 ${
+      fadeIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+    }`}
+  >
+    Loved by Local Businesses
+  </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {[
-            {
-              name: "Sarah M.",
-              role: "Salon Owner",
-              text: "We doubled our Google reviews in 3 weeks. Customers love how easy it is.",
-            },
-            {
-              name: "Daniel R.",
-              role: "Restaurant Manager",
-              text: "The QR codes look amazing on our tables. ReviewQR is a game changer.",
-            },
-            {
-              name: "Lena K.",
-              role: "Fitness Studio Owner",
-              text: "Finally a tool that makes reviews effortless. Highly recommended.",
-            },
-          ].map((t, i) => (
-            <div
-              key={i}
-              className="p-6 bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1"
-            >
-              <p className="text-gray-700 italic mb-4">“{t.text}”</p>
-              <div className="font-semibold">{t.name}</div>
-              <div className="text-sm text-gray-500">{t.role}</div>
-            </div>
-          ))}
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto">
+    {[
+      {
+        name: "Sarah M.",
+        role: "Salon Owner",
+        text: "We doubled our Google reviews in 3 weeks. Customers love how easy it is.",
+      },
+      {
+        name: "Daniel R.",
+        role: "Restaurant Manager",
+        text: "The QR codes look amazing on our tables. ReviewQR is a game changer.",
+      },
+      {
+        name: "Lena K.",
+        role: "Fitness Studio Owner",
+        text: "Finally a tool that makes reviews effortless. Highly recommended.",
+      },
+    ].map((t, i) => (
+      <div
+        key={i}
+        className={`
+          p-8 bg-white rounded-2xl shadow-md border border-gray-200
+          transition-all duration-500 hover:shadow-xl hover:-translate-y-2
+          ${fadeIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
+        `}
+        style={{ transitionDelay: `${500 + i * 150}ms` }}
+      >
+        <div className="flex items-center gap-4 mb-4">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">
+            {t.name[0]}
+          </div>
+          <div>
+            <div className="font-semibold">{t.name}</div>
+            <div className="text-sm text-gray-500">{t.role}</div>
+          </div>
         </div>
+
+        <p className="text-gray-700 italic leading-relaxed">“{t.text}”</p>
       </div>
+    ))}
+  </div>
+</div>
 
       {/* FOOTER */}
       <footer className="bg-gray-900 text-white py-10 mt-10">

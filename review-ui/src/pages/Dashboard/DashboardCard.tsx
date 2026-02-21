@@ -1,18 +1,45 @@
 
   
-  export default function DashboardCard({ label, value, icon, color, trend }: Props) {
-    const trendColor = trend === undefined ? "text-gray-400" : trend >= 0 ? "text-green-600" : "text-red-600";
-    const trendSymbol = trend === undefined ? "" : trend >= 0 ? "▲" : "▼";
-  
+ export default function DashboardCard({
+    label,
+    value,
+    color,      // expects gradient classes like "from-blue-500 to-blue-600"
+    icon,
+    trend,
+    trendColor,
+    trendSymbol,
+    delay = 0,
+  }) {
     return (
-      <div className={`p-5 rounded-xl shadow-lg text-white ${color} animate-fadeInUp`}>
-        <div className="flex justify-between items-center mb-1">
-          <p className="text-sm opacity-80">{label}</p>
+      <div
+        className={`
+          p-5 rounded-2xl bg-white border border-gray-100 shadow-sm
+          hover:shadow-xl hover:-translate-y-1 transition-all duration-300
+          animate-fadeInUp flex flex-col gap-3
+        `}
+        style={{ animationDelay: `${delay}ms` }}
+      >
+        {/* Icon */}
+        <div
+          className={`
+            w-12 h-12 rounded-xl bg-gradient-to-br ${color}
+            text-white flex items-center justify-center text-2xl shadow-inner
+          `}
+        >
           {icon}
         </div>
-        <p className="text-3xl font-extrabold">{value}</p>
+  
+        {/* Label */}
+        <p className="text-gray-600 text-sm font-medium">{label}</p>
+  
+        {/* Value */}
+        <p className="text-3xl font-extrabold text-gray-900 leading-none">
+          {value}
+        </p>
+  
+        {/* Trend */}
         {trend !== undefined && (
-          <p className={`text-sm mt-1 ${trendColor}`}>
+          <p className={`text-sm font-semibold ${trendColor}`}>
             {trendSymbol} {Math.abs(trend * 100).toFixed(1)}%
           </p>
         )}

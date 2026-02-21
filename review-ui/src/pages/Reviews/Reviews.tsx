@@ -75,12 +75,11 @@ export default function Reviews() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-10">
-
-      {/* MATCHING ANALYTICS HEADER */}
+  
+      {/* HEADER */}
       <div className="bg-gradient-to-r from-slate-900 to-slate-700 text-white p-8 shadow-xl rounded-b-3xl">
-
         <div className="flex justify-between items-center">
-
+  
           {/* Back Button + Title */}
           <div className="flex items-center gap-4">
             <button
@@ -95,20 +94,13 @@ export default function Reviews() {
                 stroke="currentColor"
                 className="w-6 h-6 text-white"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 19.5L8.25 12l7.5-7.5"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
               </svg>
             </button>
-
-            <h1 className="text-3xl font-extrabold tracking-tight">
-              All Reviews
-            </h1>
+  
+            <h1 className="text-3xl font-extrabold tracking-tight">All Reviews</h1>
           </div>
-
-          {/* ReviewQR Link */}
+  
           <Link
             to="/"
             className="text-white/80 hover:text-white hover:scale-105 transition-all font-semibold"
@@ -116,26 +108,24 @@ export default function Reviews() {
             ReviewQR
           </Link>
         </div>
-
+  
         <p className="mt-2 text-slate-300">{statusMessage}</p>
       </div>
-
-      
-
-      {/* PAGE CONTENT */}
-      <div className="p-5">
-
-        {/* Search Bar */}
+  
+      {/* CONTENT */}
+      <div className="p-5 max-w-3xl mx-auto">
+  
+        {/* Search */}
         <input
           type="text"
           placeholder="Search reviews…"
-          className="w-full px-4 py-3 rounded-xl border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition mb-4"
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition mb-6"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-
-        {/* Filter Bar */}
-        <div className="flex gap-2 overflow-x-auto pb-2 mb-4">
+  
+        {/* FILTER BAR (sticky on mobile) */}
+        <div className="flex gap-2 overflow-x-auto pb-2 mb-6 sticky top-0 bg-gray-50 z-10 pt-2">
           {[
             { key: "all", label: "All" },
             { key: "public", label: "Public" },
@@ -156,25 +146,32 @@ export default function Reviews() {
             </button>
           ))}
         </div>
-
-        {/* Review List */}
-        <div className="space-y-5">
-
+  
+        {/* REVIEW LIST */}
+        <div className="space-y-6">
+  
           {filteredReviews.length === 0 && (
             <div className="p-5 bg-yellow-50 border border-yellow-300 text-yellow-800 rounded-xl shadow-sm animate-fadeIn text-center font-medium">
               No reviews found for this criteria.
             </div>
           )}
-
+  
           {filteredReviews.map((review, i) => (
             <div
               key={review.id}
-              className="p-5 bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 animate-slideIn"
+              className="
+                p-5 bg-white rounded-2xl shadow-md border border-gray-100
+                hover:shadow-xl transition-all duration-300 hover:-translate-y-1
+                animate-slideIn
+              "
               style={{ animationDelay: `${i * 120}ms` }}
             >
-              <div className="flex justify-between items-center mb-2">
-                <p className="text-xl font-bold text-yellow-500">⭐ {review.rating}</p>
-
+              {/* Rating + Device */}
+              <div className="flex justify-between items-center mb-3">
+                <div className="flex items-center gap-1 text-yellow-500 text-xl font-bold">
+                  {"⭐".repeat(review.rating)}
+                </div>
+  
                 <span
                   className={`text-xs px-3 py-1 rounded-full font-semibold ${
                     review.device_type === "mobile"
@@ -182,16 +179,21 @@ export default function Reviews() {
                       : "bg-purple-100 text-purple-700"
                   }`}
                 >
-                  {review.device_type}
+                  {review.device_type === "mobile" ? "📱 Mobile" : "💻 Desktop"}
                 </span>
               </div>
-
-              <p className="text-gray-700 leading-relaxed">{review.comment}</p>
-
+  
+              {/* Comment */}
+              <p className="text-gray-700 leading-relaxed text-[15px]">
+                {review.comment}
+              </p>
+  
+              {/* Timestamp */}
               <p className="text-xs text-gray-400 mt-3">
                 {new Date(review.created_at).toLocaleString()}
               </p>
-
+  
+              {/* Public / Private */}
               {review.is_public ? (
                 <span className="inline-block mt-3 text-xs font-semibold text-green-700 bg-green-100 px-3 py-1 rounded-full">
                   Public Review

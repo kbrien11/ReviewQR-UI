@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-
+import { QRCodeCanvas } from "qrcode.react";
 import qrCartoon from '../../assets/qrCartoon.png'
 
 export default function LandingPage() {
@@ -187,11 +187,23 @@ export default function LandingPage() {
 
             {/* Screen 1 — Scan QR */}
             <div
-              className="absolute inset-0 flex flex-col items-center justify-center bg-white transition-opacity duration-700"
+              className="absolute inset-0 flex flex-col items-center justify-center bg-white transition-opacity duration-700 px-6"
               style={{ opacity: demoStep === 0 ? 1 : 0 }}
             >
               <div className="text-6xl mb-4">📱</div>
-              <p className="text-gray-700 font-medium">Scan the QR Code</p>
+              <p className="text-gray-700 font-medium mb-4">Scan the QR Code</p>
+
+              <div className="bg-white p-3 rounded-xl shadow-md border border-gray-200">
+                <QRCodeCanvas
+                  value="https://reviewqr.com/demo"  // fake demo URL
+                  size={140}                         // perfect size for the phone frame
+                  bgColor="#ffffff"
+                  fgColor="#000000"
+                  level="H"
+                  includeMargin={false}
+                  className="rounded-lg"
+                />
+              </div>
             </div>
 
             {/* Screen 2 — Review Page */}

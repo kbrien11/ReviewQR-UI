@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { QRCodeSVG } from "qrcode.react";
+import { QRCodeCanvas } from "qrcode.react";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -85,11 +85,11 @@ export default function Register() {
   const isValidEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
-  
+
   const isValidPhone = (phone: string) => {
     return /^\+?[0-9\s\-()]{7,15}$/.test(phone);
   };
-  
+
   const isValidUrl = (url: string) => {
     try {
       new URL(url);
@@ -128,386 +128,240 @@ export default function Register() {
       : "animate-slide-right-fade";
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6 relative">
+    <div className="min-h-screen bg-gray-50 flex">
 
-      {/* SUCCESS / ERROR ALERT */}
-      {alert && (
-        <div className="absolute top-6 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg animate-fade-in">
-          {alert}
-        </div>
-      )}
+      {/* LEFT PROGRESS RAIL */}
+      <div className="hidden md:flex flex-col w-64 border-r border-gray-200 bg-white p-6">
+        <h1 className="text-xl font-bold mb-8">ReviewQR Setup</h1>
 
-      <div className="w-full max-w-2xl bg-white shadow-xl rounded-2xl p-10 border border-gray-200 relative overflow-hidden">
-
-        {/* LOGO */}
-        <div className="absolute top-6 left-6 flex items-center gap-2">
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center shadow-md"
-            style={{ backgroundColor: form.brand_color }}
-          >
-            <span className="text-white font-bold text-lg">R</span>
-          </div>
-
-          <h1 className="text-2xl font-extrabold tracking-tight text-gray-900">
-            <span className="text-blue-600">Review</span>QR
-          </h1>
-        </div>
-
-        {/* BREADCRUMBS */}
-        {!showReviewModal && (
-        <div className="flex items-center justify-between mb-6 mt-16 relative">
-          {steps.map((label, index) => (
-            <div key={index} className="flex-1 flex flex-col items-center relative">
-
-              {/* Connecting line */}
-              {index < steps.length - 1 && (
-                <div
-                  className={`absolute top-4 left-1/2 w-full h-1 transition-all duration-500 
-                  ${index < step ? "bg-blue-600" : "bg-gray-200"}`}
-                />
-              )}
-
-              {/* Step circle */}
+        <div className="space-y-4">
+          {steps.map((label, i) => (
+            <div
+              key={i}
+              className={`
+                    flex items-center gap-3 text-sm font-medium
+                    ${i === step ? "text-indigo-600" : "text-gray-500"}
+                  `}
+            >
               <div
-                className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold z-10 transition-all duration-300
-                ${index <= step ? "bg-blue-600 text-white scale-110" : "bg-gray-200 text-gray-500"}`}
-              >
-                {index + 1}
-              </div>
-
-              <p
-                className={`text-xs mt-2 transition-all duration-300 ${
-                  index <= step ? "text-blue-600 font-medium" : "text-gray-400"
-                }`}
-              >
-                {label}
-              </p>
+                className={`
+                      w-2.5 h-2.5 rounded-full
+                      ${i === step ? "bg-indigo-600" : "bg-gray-300"}
+                    `}
+              ></div>
+              {label}
             </div>
           ))}
         </div>
-        )}
+      </div>
 
-        {/* PROGRESS BAR */}
-        {!showReviewModal && (
-        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-10">
-          <div
-            className="h-full bg-blue-600 transition-all duration-500"
-            style={{ width: `${(step / (steps.length - 1)) * 100}%` }}
-          />
-        </div>
-        )}
+      {/* MAIN CONTENT AREA */}
+      <div className="flex-1 flex justify-center items-center p-6">
 
-        {/* STEP CONTENT */}
-        <div className={slideClass}>
-          {step === 0 && (
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-800">Business Info</h2>
+        <div className="w-full max-w-xl bg-white p-10 rounded-xl border border-gray-200 shadow-sm relative">
 
-              <input
-                type="text"
-                name="name"
-                placeholder="Business Name"
-                value={form.name}
-                onChange={handleChange}
-                className="w-full border rounded-lg p-3"
-              />
-
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={form.email}
-                onChange={handleChange}
-                className={`w-full border rounded-lg p-3 ${
-                    form.email.trim() !== "" && !isValidEmail(form.email)
-                      ? "border-red-500"
-                      : "border-gray-300"
-                  }`}
-              />
-
-              <input
-                type="text"
-                name="phone"
-                placeholder="Phone Number"
-                value={form.phone}
-                onChange={handleChange}
-                className={`w-full border rounded-lg p-3 ${
-                    form.phone.trim() !== "" && !isValidPhone(form.phone)
-                      ? "border-red-500"
-                      : "border-gray-300"
-                  }`}
-              />
-
-              <input
-                type="text"
-                name="google_review_link"
-                placeholder="Google Review Link"
-                value={form.google_review_link}
-                onChange={handleChange}
-                className={`w-full border rounded-lg p-3 ${
-                    form.google_review_link.trim() !== "" && !isValidUrl(form.google_review_link)
-                      ? "border-red-500"
-                      : "border-gray-300"
-                  }`}
-              />
-
-              <div className="flex justify-between items-center">
-                <button
-                  onClick={saveProgress}
-                  className="text-sm underline text-gray-500"
-                >
-                  Save & Continue Later
-                </button>
-
-                <button
-  onClick={next}
-  disabled={!validateStep()}
-  className={`px-6 py-3 rounded-lg font-semibold shadow-md transition-all duration-300 
-    ${validateStep()
-      ? "bg-blue-600 text-white hover:bg-blue-700 hover:scale-105"
-      : "bg-gray-300 text-gray-500 cursor-not-allowed"
-    }`}
->
-  Continue
-</button>
-              </div>
+          {/* ALERTS */}
+          {alert && (
+            <div
+              className={`
+                    mb-6 p-4 rounded-lg text-sm font-medium
+                    ${alert.includes("successfully")
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"}
+                  `}
+            >
+              {alert}
             </div>
           )}
 
-          {/* BRAND COLOR */}
-          {step === 1 && (
-            <div className="space-y-6 text-center">
-              <h2 className="text-xl font-semibold text-gray-800">Choose Brand Color</h2>
+          {/* STEP CONTENT */}
+          <div className={`animate-step`}>
+            {step === 0 && (
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                  Business Info
+                </h2>
 
-              <div className="flex justify-center">
+                <input
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Business Name"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                />
+
+                <input
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="Email"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                />
+
+                <input
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+                  placeholder="Phone Number"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                />
+
+                <input
+                  name="google_review_link"
+                  value={form.google_review_link}
+                  onChange={handleChange}
+                  placeholder="Google Review Link"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+            )}
+
+            {step === 1 && (
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                  Brand Color
+                </h2>
+
                 <input
                   type="color"
                   name="brand_color"
                   value={form.brand_color}
                   onChange={handleChange}
-                  className="h-20 w-32 border rounded shadow"
+                  className="w-20 h-12 rounded-lg border border-gray-300 cursor-pointer"
                 />
               </div>
+            )}
 
-              <div className="flex justify-between">
-                <button onClick={back} className="px-6 py-3 rounded-lg border">
-                  Back
-                </button>
-                <button
-                  onClick={next}
-                  className="px-6 py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700 hover:scale-105 transition-all shadow-md"
-                >
-                  Continue
-                </button>
-              </div>
-            </div>
-          )}
+            {step === 2 && (
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                  QR Fill Color
+                </h2>
 
-          {/* QR FILL */}
-          {step === 2 && (
-            <div className="space-y-6 text-center">
-              <h2 className="text-xl font-semibold text-gray-800">QR Fill Color</h2>
-
-              <div className="flex justify-center">
                 <input
                   type="color"
                   name="qr_fill_color"
                   value={form.qr_fill_color}
                   onChange={handleChange}
-                  className="h-20 w-32 border rounded shadow"
+                  className="w-20 h-12 rounded-lg border border-gray-300 cursor-pointer"
                 />
+                <div className="mt-6 flex justify-center">
+                  <div className="p-4 rounded-xl border bg-white shadow-sm">
+                    <QRCodeCanvas
+                      value="https://reviewqr.com/preview"
+                      size={180}
+                      bgColor={form.qr_back_color}
+                      fgColor={form.qr_fill_color}
+                      level="H"
+                      includeMargin={true}
+                    />
+                  </div>
+                </div>
               </div>
+            )}
 
-              {/* QR PREVIEW */}
-              <div className="flex justify-center mt-6 animate-fade-scale">
-                <QRCodeSVG
-                  value="reviewqr-preview"
-                  size={150}
-                  bgColor={form.qr_back_color}
-                  fgColor={form.qr_fill_color}
-                  level="H"
-                />
-              </div>
+            {step === 3 && (
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                  QR Background Color
+                </h2>
 
-              <div className="flex justify-between">
-                <button onClick={back} className="px-6 py-3 rounded-lg border">
-                  Back
-                </button>
-                <button
-                  onClick={next}
-                  className="px-6 py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700 hover:scale-105 transition-all shadow-md"
-                >
-                  Continue
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* QR BACKGROUND */}
-          {step === 3 && (
-            <div className="space-y-6 text-center">
-              <h2 className="text-xl font-semibold text-gray-800">QR Background Color</h2>
-
-              <div className="flex justify-center">
                 <input
                   type="color"
                   name="qr_back_color"
                   value={form.qr_back_color}
                   onChange={handleChange}
-                  className="h-20 w-32 border rounded shadow"
+                  className="w-20 h-12 rounded-lg border border-gray-300 cursor-pointer"
                 />
-              </div>
-
-              {/* QR PREVIEW */}
-              <div className="flex justify-center mt-6 animate-fade-scale">
-                <QRCodeSVG
-                  value="reviewqr-preview"
-                  size={150}
-                  bgColor={form.qr_back_color}
-                  fgColor={form.qr_fill_color}
-                  level="H"
-                />
-              </div>
-
-              <div className="flex justify-between">
-                <button onClick={back} className="px-6 py-3 rounded-lg border">
-                  Back
-                </button>
-                <button
-                  onClick={next}
-                  className="px-6 py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700 hover:scale-105 transition-all shadow-md"
-                >
-                  Continue
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* QR SETTINGS */}
-          {step === 4 && (
-            <div className="space-y-6 text-center">
-              <h2 className="text-xl font-semibold text-gray-800">QR Settings</h2>
-
-              <label className="text-sm text-gray-600">QR Box Size ({form.qr_box_size})</label>
-              <input
-                type="range"
-                name="qr_box_size"
-                min="8"
-                max="20"
-                value={form.qr_box_size}
-                onChange={handleChange}
-                className="w-full"
-              />
-
-              <label className="text-sm text-gray-600">QR Border ({form.qr_border})</label>
-              <input
-                type="range"
-                name="qr_border"
-                min="1"
-                max="6"
-                value={form.qr_border}
-                onChange={handleChange}
-                className="w-full"
-              />
-
-              {/* QR PREVIEW */}
-              <div className="flex justify-center mt-6 animate-fade-scale">
-                <QRCodeSVG
-                  value="reviewqr-preview"
-                  size={150}
-                  bgColor={form.qr_back_color}
-                  fgColor={form.qr_fill_color}
-                  level="H"
-                />
-              </div>
-
-              <div className="flex justify-between">
-                <button onClick={back} className="px-6 py-3 rounded-lg border">
-                  Back
-                </button>
-                <button
-                  onClick={() => setShowReviewModal(true)}
-                  className="px-6 py-3 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 hover:scale-105 transition-all shadow-md"
-                >
-                  Finish & Review
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* REVIEW MODAL */}
-      {showReviewModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center p-6">
-          <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-lg animate-fade-in">
-
-            <h2 className="text-2xl font-bold mb-6 text-center">Review Your Details</h2>
-
-            <div className="space-y-3 text-gray-700">
-              {Object.entries(form).map(([key, value]) => (
-                <div key={key} className="flex justify-between border-b py-2">
-                  <span className="font-medium capitalize">{key.replace(/_/g, " ")}</span>
-                  <span>{value.toString()}</span>
+                <div className="mt-6 flex justify-center">
+                  <div className="p-4 rounded-xl border bg-white shadow-sm">
+                    <QRCodeCanvas
+                      value="https://reviewqr.com/preview"
+                      size={180}
+                      bgColor={form.qr_back_color}
+                      fgColor={form.qr_fill_color}
+                      level="H"
+                      includeMargin={true}
+                    />
+                  </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
 
-            <div className="flex justify-between mt-8">
+            {step === 4 && (
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                  QR Settings
+                </h2>
+
+                <input
+                  type="number"
+                  name="qr_box_size"
+                  value={form.qr_box_size}
+                  onChange={handleChange}
+                  placeholder="QR Box Size"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                />
+
+                <input
+                  type="number"
+                  name="qr_border"
+                  value={form.qr_border}
+                  onChange={handleChange}
+                  placeholder="QR Border Size"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+            )}
+
+            {step === 5 && (
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                  Review Your Info
+                </h2>
+
+                <pre className="bg-gray-50 p-4 rounded-lg border text-sm text-gray-700">
+                  {JSON.stringify(form, null, 2)}
+                </pre>
+
+                <button
+                  onClick={handleFinalSubmit}
+                  className="w-full mt-4 px-6 py-3 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition"
+                >
+                  Submit
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* NAVIGATION BUTTONS */}
+          <div className="flex justify-between mt-10">
+            {step > 0 ? (
               <button
-                onClick={() => setShowReviewModal(false)}
-                className="px-4 py-2 rounded-lg font-medium text-gray-700 transition-all duration-300 hover:bg-gray-200 hover:text-black hover:scale-105"
+                onClick={back}
+                className="px-4 py-2 text-gray-600 hover:text-gray-900"
               >
                 Back
               </button>
+            ) : (
+              <div />
+            )}
 
+            {step < steps.length - 1 && (
               <button
-                onClick={handleFinalSubmit}
-                className="px-4 py-2 rounded-lg font-medium text-white bg-blue-600 transition-all duration-300 hover:bg-blue-700 hover:scale-105 shadow-md"
+                onClick={next}
+                disabled={!validateStep()}
+                className="
+                      px-6 py-3 rounded-lg bg-indigo-600 text-white font-semibold
+                      hover:bg-indigo-700 disabled:opacity-40 transition
+                    "
               >
-                Submit
+                Continue
               </button>
-            </div>
-
+            )}
           </div>
         </div>
-      )}
-
-      {/* ANIMATION KEYFRAMES */}
-      <style>{`
-        .animate-fade-in {
-          animation: fadeIn 0.4s ease-out;
-        }
-        .animate-slide-left-fade {
-          animation: slideLeftFade 0.45s ease-out;
-        }
-        .animate-slide-right-fade {
-          animation: slideRightFade 0.45s ease-out;
-        }
-        .animate-fade-scale {
-          animation: fadeScale 0.4s ease-out;
-        }
-
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-
-        @keyframes slideLeftFade {
-          from { opacity: 0; transform: translateX(20px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes slideRightFade {
-          from { opacity: 0; transform: translateX(-20px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes fadeScale {
-          from { opacity: 0; transform: scale(0.95); }
-          to { opacity: 1; transform: scale(1); }
-        }
-      `}</style>
+      </div>
     </div>
-  );
+  )
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import { QRCodeCanvas } from "qrcode.react";
 import { Link } from "react-router-dom";
 
 
@@ -56,21 +56,36 @@ export default function BusinessQRPage() {
     }
   };
 
+  const fetchNewQrFromBackend = async () => {
+    const res = await fetch(
+      `https://reviewqrapi.onrender.com/api/business/${slug}/qr/`
+    );
+
+    const data = await res.json();
+
+    return {
+      qr_code_url: data.qr_code,
+      fill: data.qr_fill_color,
+      back: data.qr_back_color,
+      box: data.qr_box_size,
+      border: data.qr_border,
+    };
+  };
+
   console.log("QR URL:", qrCodeUrl);
 
   return (
-    <div className="pb-20">
+    <div className="min-h-screen bg-gray-50">
 
-      {/* MATCHING ANALYTICS HEADER */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-700 text-white p-8 shadow-xl rounded-b-3xl">
+      {/* TOP HEADER — Vercel style */}
+      <div className="bg-white border-b border-gray-200 px-6 py-6">
+        <div className="max-w-5xl mx-auto flex justify-between items-center">
 
-        <div className="flex justify-between items-center">
-
-          {/* LEFT SIDE: Back Button + Title */}
-          <div className="flex items-center gap-4">
+          {/* Back + Title */}
+          <div className="flex items-center gap-3">
             <button
               onClick={() => window.history.back()}
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition shadow-sm"
+              className="p-2 rounded-md hover:bg-gray-100 transition"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +93,7 @@ export default function BusinessQRPage() {
                 viewBox="0 0 24 24"
                 strokeWidth={2}
                 stroke="currentColor"
-                className="w-6 h-6 text-white"
+                className="w-5 h-5 text-gray-700"
               >
                 <path
                   strokeLinecap="round"
@@ -88,93 +103,133 @@ export default function BusinessQRPage() {
               </svg>
             </button>
 
-            <h1 className="text-3xl font-extrabold tracking-tight">
-              {businessName} QR Code
+            <h1 className="text-2xl font-bold text-gray-900">
+              {businessName} — QR Code
             </h1>
           </div>
 
-          {/* RIGHT SIDE: ReviewQR Link */}
           <Link
             to="/"
-            className="text-white/80 hover:text-white hover:scale-105 transition-all font-semibold"
+            className="text-gray-600 hover:text-gray-900 font-medium transition"
           >
             ReviewQR
           </Link>
         </div>
-
-        <p className="mt-2 text-slate-300">
-          Customize your QR code to match your brand
-        </p>
       </div>
 
-      {/* CONTENT CONTAINER */}
-      <div className="max-w-2xl mx-auto mt-10 px-4">
+      {/* MAIN CONTENT */}
+      <div className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
 
-        {/* QR PREVIEW (HIDDEN WHEN EDITING) */}
-        {!editing && qrCodeUrl && (
-          <div
-            className="
-      relative bg-white rounded-3xl p-8 border shadow-xl
-      animate-fadeInUp transition-all duration-500
-    "
-          >
-            {/* Glow Accent */}
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/10 to-transparent opacity-20 pointer-events-none"></div>
+        {/* LEFT — QR PREVIEW */}
+        <div className="flex flex-col items-center">
 
-            {/* Edit Button */}
-            <button
-              onClick={() => setEditing(true)}
-              className="
-        absolute top-4 right-4 p-3 rounded-full bg-white/70 backdrop-blur-md
-        hover:bg-white hover:shadow-lg hover:scale-105
-        transition-all duration-300
+          <div className="
+            bg-white border border-gray-200 rounded-xl shadow-sm
+            p-6 w-full flex flex-col items-center
+          ">
+            {editing ? (
+              // LIVE REACTIVE QR PREVIEW
+              <QRCodeCanvas
+                value={`https://reviewqr.com/${slug}`}
+                size={boxSize * 10}
+                bgColor={backColor}
+                fgColor={fillColor}
+                level="H"
+                includeMargin={true}
+              />
+            ) : (
+              // STATIC BACKEND QR PNG
+              qrCodeUrl && (
+                <img
+                  src={qrCodeUrl}
+                  alt="QR Code"
+                  className="w-64 h-64 rounded-lg border shadow-sm"
+                />
+              )
+            )}
+
+            <p className="mt-4 text-gray-600 text-sm text-center">
+              {editing
+                ? "Live preview — updates instantly"
+                : "Scan this QR code to view your review page"}
+            </p>
+          </div>
+
+          <div className="mt-6 flex items-center gap-3">
+
+            {/* Customize Button */}
+            {!editing && (
+              <button
+                onClick={() => setEditing(true)}
+                className="
+        px-5 py-3 rounded-lg bg-indigo-600 text-white font-semibold
+        hover:bg-indigo-700 transition
       "
+              >
+                Customize QR Code
+              </button>
+            )}
+
+            {/* Download Button */}
+            <button
+              onClick={() => {
+                const link = document.createElement("a");
+                link.href = qrCodeUrl;
+                link.download = `${slug}-qr.png`;
+                link.click();
+              }}
+              className="
+      inline-flex items-center gap-2
+      px-4 py-3 rounded-lg
+      border border-gray-300
+      text-gray-700 font-medium
+      bg-white
+      hover:bg-gray-50 hover:border-gray-400
+      active:scale-[.98]
+      transition
+    "
             >
-              <PencilSquareIcon className="h-6 w-6 text-gray-700" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.8}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M7.5 12l4.5 4.5m0 0l4.5-4.5m-4.5 4.5V3"
+                />
+              </svg>
+              Download QR
             </button>
 
-            <div className="flex flex-col items-center">
-              <img
-                src={qrCodeUrl}
-                alt="QR Code"
-                className="
-          w-64 h-64 rounded-2xl shadow-lg border
-          transition-all duration-500 hover:scale-[1.02]
-        "
-              />
-
-              <p className="mt-5 text-gray-600 text-sm text-center">
-                Scan this QR code to view your review page
-              </p>
-            </div>
           </div>
-        )}
+        </div>
 
-        {/* EDIT PANEL */}
+
+
+        {/* RIGHT — EDITOR PANEL */}
         {editing && (
-          <div
-            className="
-      mt-8 bg-white rounded-3xl p-6 border shadow-xl
-      animate-slideDown transition-all duration-500
-    "
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-800">Customize QR Styling</h2>
+          <div className="
+            bg-white border border-gray-200 rounded-xl shadow-sm p-6
+            animate-fadeInUp
+          ">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold text-gray-900">Customize QR</h2>
 
-              {/* Close Button */}
               <button
                 onClick={() => setEditing(false)}
-                className="
-          px-3 py-1 rounded-lg bg-gray-100 text-gray-700
-          hover:bg-gray-200 hover:shadow-sm transition-all
-        "
+                className="px-3 py-1.5 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 transition"
               >
                 Close
               </button>
             </div>
 
             {/* TABS */}
-            <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+            <div className="flex gap-2 mb-6 border-b border-gray-200 pb-2">
               {[
                 { id: "colors", label: "Colors" },
                 { id: "sizes", label: "Sizes" },
@@ -184,12 +239,12 @@ export default function BusinessQRPage() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`
-            px-4 py-2 rounded-xl font-medium whitespace-nowrap transition-all
-            ${activeTab === tab.id
-                      ? "bg-indigo-600 text-white shadow-md scale-[1.03]"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    px-4 py-2 rounded-md text-sm font-medium transition
+                    ${activeTab === tab.id
+                      ? "bg-indigo-600 text-white"
+                      : "text-gray-600 hover:bg-gray-100"
                     }
-          `}
+                  `}
                 >
                   {tab.label}
                 </button>
@@ -197,102 +252,108 @@ export default function BusinessQRPage() {
             </div>
 
             {/* TAB CONTENT */}
+            <div className="space-y-6">
 
-            {/* COLORS TAB */}
-            {activeTab === "colors" && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-fadeIn">
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Brand Color</label>
-                  <input
-                    type="color"
-                    value={brandColor}
-                    onChange={e => setBrandColor(e.target.value)}
-                    className="w-full h-12 rounded-lg border cursor-pointer"
-                  />
+              {/* COLORS */}
+              {activeTab === "colors" && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="text-sm font-medium text-gray-700">Brand Color</label>
+                    <input
+                      type="color"
+                      value={brandColor}
+                      onChange={e => setBrandColor(e.target.value)}
+                      className="w-full h-12 rounded-md border cursor-pointer"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium text-gray-700">Fill Color</label>
+                    <input
+                      type="color"
+                      value={fillColor}
+                      onChange={e => setFillColor(e.target.value)}
+                      className="w-full h-12 rounded-md border cursor-pointer"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium text-gray-700">Background Color</label>
+                    <input
+                      type="color"
+                      value={backColor}
+                      onChange={e => setBackColor(e.target.value)}
+                      className="w-full h-12 rounded-md border cursor-pointer"
+                    />
+                  </div>
                 </div>
+              )}
 
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Fill Color</label>
-                  <input
-                    type="color"
-                    value={fillColor}
-                    onChange={e => setFillColor(e.target.value)}
-                    className="w-full h-12 rounded-lg border cursor-pointer"
-                  />
+              {/* SIZES */}
+              {activeTab === "sizes" && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="text-sm font-medium text-gray-700">Box Size</label>
+                    <input
+                      type="number"
+                      value={boxSize}
+                      onChange={e => setBoxSize(Number(e.target.value))}
+                      className="w-full h-12 rounded-md border px-3"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium text-gray-700">Border Size</label>
+                    <input
+                      type="number"
+                      value={border}
+                      onChange={e => setBorder(Number(e.target.value))}
+                      className="w-full h-12 rounded-md border px-3"
+                    />
+                  </div>
                 </div>
+              )}
 
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Background Color</label>
-                  <input
-                    type="color"
-                    value={backColor}
-                    onChange={e => setBackColor(e.target.value)}
-                    className="w-full h-12 rounded-lg border cursor-pointer"
-                  />
+              {/* PRESETS */}
+              {activeTab === "presets" && (
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { name: "Minimal", brand: "#000000", fill: "#000000", back: "#FFFFFF" },
+                    { name: "Ocean", brand: "#2563eb", fill: "#1e40af", back: "#eff6ff" },
+                    { name: "Sunset", brand: "#f97316", fill: "#ea580c", back: "#fff7ed" },
+                    { name: "Forest", brand: "#16a34a", fill: "#15803d", back: "#f0fdf4" },
+                  ].map((preset, i) => (
+                    <button
+                      key={i}
+                      onClick={() => {
+                        setBrandColor(preset.brand);
+                        setFillColor(preset.fill);
+                        setBackColor(preset.back);
+                      }}
+                      className="
+                        p-4 rounded-md border bg-gray-50 hover:bg-gray-100
+                        transition shadow-sm hover:shadow-md
+                      "
+                    >
+                      <p className="font-medium text-gray-700">{preset.name}</p>
+                    </button>
+                  ))}
                 </div>
-              </div>
-            )}
-
-            {/* SIZES TAB */}
-            {activeTab === "sizes" && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-fadeIn">
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Box Size</label>
-                  <input
-                    type="number"
-                    value={boxSize}
-                    onChange={e => setBoxSize(Number(e.target.value))}
-                    className="w-full h-12 rounded-lg border px-3"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Border Size</label>
-                  <input
-                    type="number"
-                    value={border}
-                    onChange={e => setBorder(Number(e.target.value))}
-                    className="w-full h-12 rounded-lg border px-3"
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* PRESETS TAB */}
-            {activeTab === "presets" && (
-              <div className="grid grid-cols-2 gap-4 animate-fadeIn">
-                {[
-                  { name: "Minimal", brand: "#000000", fill: "#000000", back: "#FFFFFF" },
-                  { name: "Ocean", brand: "#2563eb", fill: "#1e40af", back: "#eff6ff" },
-                  { name: "Sunset", brand: "#f97316", fill: "#ea580c", back: "#fff7ed" },
-                  { name: "Forest", brand: "#16a34a", fill: "#15803d", back: "#f0fdf4" },
-                ].map((preset, i) => (
-                  <button
-                    key={i}
-                    onClick={() => {
-                      setBrandColor(preset.brand);
-                      setFillColor(preset.fill);
-                      setBackColor(preset.back);
-                    }}
-                    className="
-              p-4 rounded-xl border bg-gray-50 hover:bg-gray-100
-              transition-all shadow-sm hover:shadow-md
-            "
-                  >
-                    <p className="font-semibold text-gray-700">{preset.name}</p>
-                  </button>
-                ))}
-              </div>
-            )}
+              )}
+            </div>
 
             {/* SAVE BUTTON */}
             <button
-              onClick={saveChanges}
+              onClick={async () => {
+                await saveChanges(); // your backend save
+                const refreshed = await fetchNewQrFromBackend();
+                setQrCodeUrl(refreshed.qr_code_url);
+                setEditing(false);
+              }}
               className="
-        w-full mt-6 bg-indigo-600 text-white py-3 rounded-xl font-semibold
-        hover:bg-indigo-700 hover:shadow-lg hover:scale-[1.01]
-        active:scale-[.99] transition-all duration-300
-      "
+                w-full mt-8 bg-indigo-600 text-white py-3 rounded-lg font-semibold
+                hover:bg-indigo-700 transition
+              "
             >
               Save Changes
             </button>
@@ -300,5 +361,5 @@ export default function BusinessQRPage() {
         )}
       </div>
     </div>
-  );
+  )
 }

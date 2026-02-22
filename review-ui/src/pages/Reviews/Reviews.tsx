@@ -73,18 +73,34 @@ export default function Reviews() {
     );
   }
 
+  const formatDate = (value: string | Date | null | undefined) => {
+    if (!value) return "Unknown date";
+
+    const d = value instanceof Date ? value : new Date(value);
+    if (isNaN(d.getTime())) return "Unknown date";
+
+    return d.toLocaleString();
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 pb-10">
-  
-      {/* HEADER */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-700 text-white p-8 shadow-xl rounded-b-3xl">
+
+      {/* LINEAR-STYLE HEADER */}
+      <div className="
+        bg-white border-b border-gray-200
+        px-6 py-8 shadow-sm
+        animate-fadeInUp
+      ">
         <div className="flex justify-between items-center">
-  
+
           {/* Back Button + Title */}
           <div className="flex items-center gap-4">
             <button
               onClick={() => window.history.back()}
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition shadow-sm"
+              className="
+                p-2 rounded-lg bg-gray-100 hover:bg-gray-200
+                transition-all shadow-sm hover:shadow-md
+              "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -92,40 +108,57 @@ export default function Reviews() {
                 viewBox="0 0 24 24"
                 strokeWidth={2}
                 stroke="currentColor"
-                className="w-6 h-6 text-white"
+                className="w-6 h-6 text-gray-700"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 19.5L8.25 12l7.5-7.5"
+                />
               </svg>
             </button>
-  
-            <h1 className="text-3xl font-extrabold tracking-tight">All Reviews</h1>
+
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+              All Reviews
+            </h1>
           </div>
-  
+
+          {/* ReviewQR Link */}
           <Link
             to="/"
-            className="text-white/80 hover:text-white hover:scale-105 transition-all font-semibold"
+            className="
+              text-gray-600 hover:text-gray-900
+              font-semibold transition-all hover:scale-[1.03]
+            "
           >
             ReviewQR
           </Link>
         </div>
-  
-        <p className="mt-2 text-slate-300">{statusMessage}</p>
+
+        <p className="mt-2 text-gray-500">{statusMessage}</p>
       </div>
-  
-      {/* CONTENT */}
+
+      {/* PAGE CONTENT */}
       <div className="p-5 max-w-3xl mx-auto">
-  
-        {/* Search */}
-        <input
-          type="text"
-          placeholder="Search reviews…"
-          className="w-full px-4 py-3 rounded-xl border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition mb-6"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-  
-        {/* FILTER BAR (sticky on mobile) */}
-        <div className="flex gap-2 overflow-x-auto pb-2 mb-6 sticky top-0 bg-gray-50 z-10 pt-2">
+
+        {/* Search Bar */}
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search reviews…"
+            className="
+              w-full px-4 py-3 rounded-xl border border-gray-300
+              bg-white shadow-sm
+              focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+              transition-all
+            "
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
+        {/* Filter Bar */}
+        <div className="flex gap-2 overflow-x-auto pb-2 mb-6">
           {[
             { key: "all", label: "All" },
             { key: "public", label: "Public" },
@@ -136,70 +169,80 @@ export default function Reviews() {
             <button
               key={f.key}
               onClick={() => setFilter(f.key)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all whitespace-nowrap ${
-                filter === f.key
-                  ? "bg-blue-600 text-white shadow-md"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
+              className={`
+                px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all
+                ${filter === f.key
+                  ? "bg-indigo-600 text-white shadow-md scale-[1.03]"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }
+              `}
             >
               {f.label}
             </button>
           ))}
         </div>
-  
-        {/* REVIEW LIST */}
-        <div className="space-y-6">
-  
+
+        {/* Review List */}
+        <div className="space-y-5">
+
           {filteredReviews.length === 0 && (
-            <div className="p-5 bg-yellow-50 border border-yellow-300 text-yellow-800 rounded-xl shadow-sm animate-fadeIn text-center font-medium">
+            <div className="
+              p-5 bg-yellow-50 border border-yellow-300 text-yellow-800
+              rounded-xl shadow-sm animate-fadeIn text-center font-medium
+            ">
               No reviews found for this criteria.
             </div>
           )}
-  
+
           {filteredReviews.map((review, i) => (
             <div
               key={review.id}
               className="
-                p-5 bg-white rounded-2xl shadow-md border border-gray-100
-                hover:shadow-xl transition-all duration-300 hover:-translate-y-1
-                animate-slideIn
+                p-5 bg-white rounded-2xl border border-gray-200
+                shadow-sm hover:shadow-md
+                transition-all duration-300 hover:-translate-y-[2px]
+                animate-fadeInUp
               "
-              style={{ animationDelay: `${i * 120}ms` }}
+              style={{ animationDelay: `${i * 80}ms` }}
             >
-              {/* Rating + Device */}
-              <div className="flex justify-between items-center mb-3">
-                <div className="flex items-center gap-1 text-yellow-500 text-xl font-bold">
+              <div className="flex justify-between items-center mb-2">
+                <p className="text-lg font-semibold text-yellow-500">
                   {"⭐".repeat(review.rating)}
-                </div>
-  
+                </p>
+
                 <span
-                  className={`text-xs px-3 py-1 rounded-full font-semibold ${
-                    review.device_type === "mobile"
+                  className={`
+                    text-xs px-3 py-1 rounded-full font-medium
+                    ${review.device_type === "mobile"
                       ? "bg-blue-100 text-blue-700"
                       : "bg-purple-100 text-purple-700"
-                  }`}
+                    }
+                  `}
                 >
-                  {review.device_type === "mobile" ? "📱 Mobile" : "💻 Desktop"}
+                  {review.device_type}
                 </span>
               </div>
-  
-              {/* Comment */}
-              <p className="text-gray-700 leading-relaxed text-[15px]">
+
+              <p className="text-gray-800 leading-relaxed text-[15px]">
                 {review.comment}
               </p>
-  
-              {/* Timestamp */}
+
               <p className="text-xs text-gray-400 mt-3">
-                {new Date(review.created_at).toLocaleString()}
+              {formatDate(review.created_at)}
               </p>
-  
-              {/* Public / Private */}
+
               {review.is_public ? (
-                <span className="inline-block mt-3 text-xs font-semibold text-green-700 bg-green-100 px-3 py-1 rounded-full">
+                <span className="
+                  inline-block mt-3 text-xs font-semibold text-green-700
+                  bg-green-100 px-3 py-1 rounded-full
+                ">
                   Public Review
                 </span>
               ) : (
-                <span className="inline-block mt-3 text-xs font-semibold text-red-700 bg-red-100 px-3 py-1 rounded-full">
+                <span className="
+                  inline-block mt-3 text-xs font-semibold text-red-700
+                  bg-red-100 px-3 py-1 rounded-full
+                ">
                   Private Feedback
                 </span>
               )}

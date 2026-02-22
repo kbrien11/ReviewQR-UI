@@ -13,30 +13,33 @@
     return (
       <div
         className={`
-          p-5 rounded-2xl bg-white border border-gray-100 shadow-sm
-          hover:shadow-xl hover:-translate-y-1 transition-all duration-300
-          animate-fadeInUp flex flex-col gap-3
+          p-5 rounded-xl bg-white border border-gray-200
+          shadow-sm hover:shadow-md hover:-translate-y-[2px]
+          transition-all duration-300 animate-fadeInUp
+          flex flex-col gap-2
         `}
         style={{ animationDelay: `${delay}ms` }}
       >
-        {/* Icon */}
-        <div
-          className={`
-            w-12 h-12 rounded-xl bg-gradient-to-br ${color}
-            text-white flex items-center justify-center text-2xl shadow-inner
-          `}
-        >
-          {icon}
-        </div>
-  
+        {/* Optional Icon */}
+        {icon && (
+          <div
+            className="
+              w-10 h-10 rounded-lg bg-gray-100 text-gray-700
+              flex items-center justify-center text-xl
+            "
+          >
+            {icon}
+          </div>
+        )}
+    
         {/* Label */}
         <p className="text-gray-600 text-sm font-medium">{label}</p>
-  
+    
         {/* Value */}
-        <p className="text-3xl font-extrabold text-gray-900 leading-none">
+        <p className="text-3xl font-bold text-gray-900 leading-none tracking-tight">
           {value}
         </p>
-  
+    
         {/* Trend */}
         {trend !== undefined && (
           <p className={`text-sm font-semibold ${trendColor}`}>
@@ -44,5 +47,5 @@
           </p>
         )}
       </div>
-    );
+    )
   }

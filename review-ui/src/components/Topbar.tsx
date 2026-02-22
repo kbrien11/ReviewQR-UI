@@ -13,30 +13,43 @@ export default function TopBar() {
   };
 
   return (
-    <header className="h-16 bg-white border-b shadow-sm flex items-center justify-between px-6">
-      <h2 className="text-lg font-semibold text-gray-800">Dashboard</h2>
-
+    <header
+      className="
+        h-16 px-6 flex items-center justify-between
+        bg-white border-b border-gray-200
+      "
+    >
+      {/* Left: Page Title */}
+      <h2 className="text-lg font-semibold text-gray-900">
+        Dashboard
+      </h2>
+  
+      {/* Right: Actions */}
       <div className="flex items-center gap-4">
-
-        {/* Logout Button */}
+  
+        {/* Logout Button — subtle, Vercel style */}
         <button
           onClick={handleLogout}
           className="
-            px-4 py-2 rounded-lg font-semibold text-gray-700
-            bg-gray-100 hover:bg-gray-200 hover:text-gray-900
-            transition-all duration-200 shadow-sm hover:shadow-md
-            flex items-center gap-2
+            px-3 py-1.5 rounded-md text-sm font-medium
+            bg-gray-100 text-gray-700
+            hover:bg-gray-200 hover:text-gray-900
+            transition-all
           "
         >
-          <span className="text-lg">🚪</span>
           Logout
         </button>
-
+  
         {/* Avatar */}
-        <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold">
+        <div
+          className="
+            w-9 h-9 rounded-full bg-gray-100 border border-gray-300
+            flex items-center justify-center text-gray-700 font-semibold
+          "
+        >
           {user?.email?.[0]?.toUpperCase()}
         </div>
       </div>
     </header>
-  );
+  )
 }

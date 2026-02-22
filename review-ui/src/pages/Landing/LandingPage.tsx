@@ -15,7 +15,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setDemoStep((prev) => (prev + 1) % 3);
+      setDemoStep((prev) => (prev + 1) % 4);
     }, 2000); // change screen every 2 seconds
 
     return () => clearInterval(interval);
@@ -207,7 +207,6 @@ export default function LandingPage() {
             </div>
 
             {/* Screen 2 — Review Page */}
-            {/* Screen 2 — Review Page */}
             <div
               className="absolute inset-0 flex flex-col items-center justify-center bg-white transition-opacity duration-700 px-6"
               style={{ opacity: demoStep === 1 ? 1 : 0 }}
@@ -242,6 +241,36 @@ export default function LandingPage() {
                 <path d="M12 24l8 8 16-16" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               <p className="text-gray-700 font-medium mt-4">Success!</p>
+            </div>
+
+            {/* Screen 4 — Track Analytics */}
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center bg-white transition-opacity duration-700 px-6"
+              style={{ opacity: demoStep === 3 ? 1 : 0 }}
+            >
+              <p className="text-gray-700 font-medium mb-4">Track Your Analytics</p>
+
+              {/* Fake chart container */}
+              <div className="w-full bg-gray-100 rounded-xl p-4 shadow-inner">
+                <div className="flex items-end gap-2 h-32">
+
+                  {/* Bar 1 */}
+                  <div className="w-6 bg-indigo-300 rounded-t-lg animate-bar1"></div>
+
+                  {/* Bar 2 */}
+                  <div className="w-6 bg-indigo-400 rounded-t-lg animate-bar2"></div>
+
+                  {/* Bar 3 */}
+                  <div className="w-6 bg-indigo-500 rounded-t-lg animate-bar3"></div>
+
+                  {/* Bar 4 */}
+                  <div className="w-6 bg-indigo-400 rounded-t-lg animate-bar4"></div>
+
+                  {/* Bar 5 */}
+                  <div className="w-6 bg-indigo-300 rounded-t-lg animate-bar5"></div>
+
+                </div>
+              </div>
             </div>
           </div>
         </div>

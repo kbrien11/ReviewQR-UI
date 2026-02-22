@@ -157,3 +157,30 @@
   .animate-fadeUp {
     animation: fadeUp 0.7s ease forwards;
   }
+
+  @keyframes barGrow1 {
+    from { height: 0; }
+    to { height: 40%; }
+  }
+  @keyframes barGrow2 {
+    from { height: 0; }
+    to { height: 60%; }
+  }
+  @keyframes barGrow3 {
+    from { height: 0; }
+    to { height: 90%; }
+  }
+  @keyframes barGrow4 {
+    from { height: 0; }
+    to { height: 70%; }
+  }
+  @keyframes barGrow5 {
+    from { height: 0; }
+    to { height: 50%; }
+  }
+  
+  .animate-bar1 { animation: barGrow1 1s ease forwards; }
+  .animate-bar2 { animation: barGrow2 1s ease forwards; }
+  .animate-bar3 { animation: barGrow3 1s ease forwards; }
+  .animate-bar4 { animation: barGrow4 1s ease forwards; }
+  .animate-bar5 { animation: barGrow5 1s ease forwards; }

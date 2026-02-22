@@ -177,17 +177,27 @@ export default function LandingPage() {
       </div>
 
       {/* LIVE DEMO — Animated Phone Preview */}
-      <div className="py-24 bg-white border-t border-gray-200">
-        <h3 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-16 animate-fadeUp">
+      <div className="py-28 bg-white border-t border-gray-200">
+        <h3 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-20 animate-fadeUp">
           See It In Action
         </h3>
 
         <div className="flex justify-center">
-          <div className="relative w-[300px] h-[560px] rounded-3xl bg-black shadow-2xl overflow-hidden animate-float">
+          <div
+            className="
+        relative w-[320px] h-[600px]
+        rounded-[2.2rem] bg-black shadow-[0_20px_40px_rgba(0,0,0,0.15)]
+        overflow-hidden animate-float
+        border border-gray-800
+      "
+          >
 
             {/* Screen 1 — Scan QR */}
             <div
-              className="absolute inset-0 flex flex-col items-center justify-center bg-white transition-opacity duration-700 px-6"
+              className="
+          absolute inset-0 flex flex-col items-center justify-center
+          bg-white transition-opacity duration-700 px-6
+        "
               style={{ opacity: demoStep === 0 ? 1 : 0 }}
             >
               <div className="text-6xl mb-4">📱</div>
@@ -195,8 +205,8 @@ export default function LandingPage() {
 
               <div className="bg-white p-3 rounded-xl shadow-md border border-gray-200">
                 <QRCodeCanvas
-                  value="https://reviewqr.com/demo"  // fake demo URL
-                  size={140}                         // perfect size for the phone frame
+                  value="https://reviewqr.com/demo"
+                  size={150}
                   bgColor="#ffffff"
                   fgColor="#000000"
                   level="H"
@@ -208,7 +218,10 @@ export default function LandingPage() {
 
             {/* Screen 2 — Review Page */}
             <div
-              className="absolute inset-0 flex flex-col items-center justify-center bg-white transition-opacity duration-700 px-6"
+              className="
+          absolute inset-0 flex flex-col items-center justify-center
+          bg-white transition-opacity duration-700 px-6
+        "
               style={{ opacity: demoStep === 1 ? 1 : 0 }}
             >
               <div className="text-5xl mb-3">⭐️⭐️⭐️⭐️⭐️</div>
@@ -218,17 +231,20 @@ export default function LandingPage() {
                 type="text"
                 placeholder="Write your feedback..."
                 className="
-      w-full px-4 py-2 rounded-xl border border-gray-300
-      text-gray-700 placeholder-gray-400
-      focus:outline-none focus:ring-2 focus:ring-indigo-500
-      transition-all
-    "
+            w-full px-4 py-2 rounded-xl border border-gray-300
+            text-gray-700 placeholder-gray-400
+            focus:outline-none focus:ring-2 focus:ring-indigo-500
+            transition-all shadow-sm
+          "
               />
             </div>
 
             {/* Screen 3 — Success */}
             <div
-              className="absolute inset-0 flex flex-col items-center justify-center bg-white transition-opacity duration-700"
+              className="
+          absolute inset-0 flex flex-col items-center justify-center
+          bg-white transition-opacity duration-700
+        "
               style={{ opacity: demoStep === 2 ? 1 : 0 }}
             >
               <svg
@@ -245,33 +261,27 @@ export default function LandingPage() {
 
             {/* Screen 4 — Track Analytics */}
             <div
-              className="absolute inset-0 flex flex-col items-center justify-center bg-white transition-opacity duration-700 px-6"
+              className="
+          absolute inset-0 flex flex-col items-center justify-center
+          bg-white transition-opacity duration-700 px-6
+        "
               style={{ opacity: demoStep === 3 ? 1 : 0 }}
             >
               <p className="text-gray-700 font-medium mb-4">Track Your Analytics</p>
 
-              {/* Fake chart container */}
               <div className="w-full bg-gray-100 rounded-xl p-4 shadow-inner">
                 <div className="flex items-end gap-2 h-32">
 
-                  {/* Bar 1 */}
                   <div className="w-6 bg-indigo-300 rounded-t-lg animate-bar1"></div>
-
-                  {/* Bar 2 */}
                   <div className="w-6 bg-indigo-400 rounded-t-lg animate-bar2"></div>
-
-                  {/* Bar 3 */}
                   <div className="w-6 bg-indigo-500 rounded-t-lg animate-bar3"></div>
-
-                  {/* Bar 4 */}
                   <div className="w-6 bg-indigo-400 rounded-t-lg animate-bar4"></div>
-
-                  {/* Bar 5 */}
                   <div className="w-6 bg-indigo-300 rounded-t-lg animate-bar5"></div>
 
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>

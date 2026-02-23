@@ -135,23 +135,53 @@ export default function Register() {
         <h1 className="text-xl font-bold mb-8">ReviewQR Setup</h1>
 
         <div className="space-y-4">
-          {steps.map((label, i) => (
-            <div
-              key={i}
-              className={`
-                    flex items-center gap-3 text-sm font-medium
-                    ${i === step ? "text-indigo-600" : "text-gray-500"}
-                  `}
-            >
+          {steps.map((label, i) => {
+            const isCompleted = i < step;
+            const isActive = i === step;
+
+            return (
               <div
+                key={i}
                 className={`
-                      w-2.5 h-2.5 rounded-full
-                      ${i === step ? "bg-indigo-600" : "bg-gray-300"}
-                    `}
-              ></div>
-              {label}
-            </div>
-          ))}
+            flex items-center gap-3 text-sm font-medium
+            ${isActive ? "text-indigo-600" : isCompleted ? "text-gray-700" : "text-gray-400"}
+          `}
+              >
+                {/* Icon */}
+                <div
+                  className={`
+              flex items-center justify-center
+              w-5 h-5 rounded-full border
+              transition-all
+              ${isCompleted
+                      ? "bg-green-500 border-green-500 text-white"
+                      : isActive
+                        ? "border-indigo-600 text-indigo-600"
+                        : "border-gray-300 text-gray-300"
+                    }
+            `}
+                >
+                  {isCompleted ? (
+                    // Checkmark icon
+                    <svg
+                      className="w-3 h-3"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    // Dot for active/upcoming
+                    <div className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-indigo-600" : "bg-gray-300"}`} />
+                  )}
+                </div>
+
+                {label}
+              </div>
+            );
+          })}
         </div>
       </div>
 

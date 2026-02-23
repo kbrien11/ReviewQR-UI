@@ -25,16 +25,16 @@ export default function TopBar() {
       </h2>
   
       {/* Right: Actions */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-6">
   
-        {/* Logout Button — subtle, Vercel style */}
+        {/* Logout Button — cleaner, calmer, more premium */}
         <button
           onClick={handleLogout}
           className="
-            px-3 py-1.5 rounded-md text-sm font-medium
+            px-4 py-2 rounded-md text-sm font-medium
             bg-gray-100 text-gray-700
             hover:bg-gray-200 hover:text-gray-900
-            transition-all
+            transition-all shadow-sm
           "
         >
           Logout
@@ -43,13 +43,14 @@ export default function TopBar() {
         {/* Avatar */}
         <div
           className="
-            w-9 h-9 rounded-full bg-gray-100 border border-gray-300
+            w-10 h-10 rounded-full bg-gray-100 border border-gray-300
             flex items-center justify-center text-gray-700 font-semibold
+            shadow-sm
           "
         >
           {user?.email?.[0]?.toUpperCase()}
         </div>
       </div>
     </header>
-  )
+  );
 }

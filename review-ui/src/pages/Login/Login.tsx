@@ -41,13 +41,15 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 relative">
 
-      {/* Logo top-right */}
       <Link
         to="/"
         className="
-          absolute top-6 right-6 text-xl font-bold text-gray-900
-          hover:text-indigo-600 transition
-        "
+    absolute top-6 right-6
+    text-[17px] font-semibold tracking-tight
+    text-gray-800
+    hover:text-indigo-600 hover:opacity-90
+    transition-colors duration-200
+  "
       >
         ReviewQR
       </Link>
@@ -79,10 +81,14 @@ export default function Login() {
               type="text"
               placeholder="Enter your username"
               className="
-                w-full px-4 py-3 rounded-lg border border-gray-300
-                focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
-                transition
-              "
+  w-full px-4 py-3.5
+  rounded-lg border border-gray-300
+  text-[15px] font-medium text-gray-900
+  placeholder:text-gray-400
+  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+  transition
+  font-[var(--vercel-font)]
+"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
@@ -97,10 +103,14 @@ export default function Login() {
               type="password"
               placeholder="Enter your password"
               className="
-                w-full px-4 py-3 rounded-lg border border-gray-300
-                focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
-                transition
-              "
+  w-full px-4 py-3.5
+  rounded-lg border border-gray-300
+  text-[15px] font-medium text-gray-900
+  placeholder:text-gray-400
+  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+  transition
+  font-[var(--vercel-font)]
+"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { QRCodeCanvas } from "qrcode.react";
+import { Link } from "react-router-dom";
+
 
 export default function Register() {
   const navigate = useNavigate();
@@ -143,26 +145,24 @@ export default function Register() {
               <div
                 key={i}
                 className={`
-            flex items-center gap-3 text-sm font-medium
-            ${isActive ? "text-indigo-600" : isCompleted ? "text-gray-700" : "text-gray-400"}
-          `}
+                      flex items-center gap-3 text-sm font-medium
+                      ${isActive ? "text-indigo-600" : isCompleted ? "text-gray-700" : "text-gray-400"}
+                    `}
               >
                 {/* Icon */}
                 <div
                   className={`
-              flex items-center justify-center
-              w-5 h-5 rounded-full border
-              transition-all
-              ${isCompleted
+                        flex items-center justify-center
+                        w-5 h-5 rounded-full border transition-all
+                        ${isCompleted
                       ? "bg-green-500 border-green-500 text-white"
                       : isActive
                         ? "border-indigo-600 text-indigo-600"
                         : "border-gray-300 text-gray-300"
                     }
-            `}
+                      `}
                 >
                   {isCompleted ? (
-                    // Checkmark icon
                     <svg
                       className="w-3 h-3"
                       fill="none"
@@ -173,8 +173,10 @@ export default function Register() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                   ) : (
-                    // Dot for active/upcoming
-                    <div className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-indigo-600" : "bg-gray-300"}`} />
+                    <div
+                      className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-indigo-600" : "bg-gray-300"
+                        }`}
+                    />
                   )}
                 </div>
 
@@ -186,8 +188,9 @@ export default function Register() {
       </div>
 
       {/* MAIN CONTENT AREA */}
-      <div className="flex-1 flex justify-center items-center p-6">
+      <div className="flex-1 flex flex-col items-center p-6">
 
+        {/* MODAL CARD */}
         <div className="w-full max-w-xl bg-white p-10 rounded-xl border border-gray-200 shadow-sm relative">
 
           {/* ALERTS */}
@@ -197,7 +200,8 @@ export default function Register() {
                     mb-6 p-4 rounded-lg text-sm font-medium
                     ${alert.includes("successfully")
                   ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"}
+                  : "bg-red-100 text-red-700"
+                }
                   `}
             >
               {alert}
@@ -205,52 +209,76 @@ export default function Register() {
           )}
 
           {/* STEP CONTENT */}
-          <div className={`animate-step`}>
+          <div className="animate-step">
             {step === 0 && (
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  Business Info
-                </h2>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Business Info</h2>
 
                 <input
                   name="name"
                   value={form.name}
                   onChange={handleChange}
                   placeholder="Business Name"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
-                />
+                  className="
+  w-full px-4 py-3.5
+  rounded-lg border border-gray-300
+  text-[15px] font-medium text-gray-900
+  placeholder:text-gray-400
+  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+  transition
+  font-[var(--vercel-font)]
+"                   />
 
                 <input
                   name="email"
                   value={form.email}
                   onChange={handleChange}
                   placeholder="Email"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
-                />
+                  className="
+  w-full px-4 py-3.5
+  rounded-lg border border-gray-300
+  text-[15px] font-medium text-gray-900
+  placeholder:text-gray-400
+  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+  transition
+  font-[var(--vercel-font)]
+"                   />
 
                 <input
                   name="phone"
                   value={form.phone}
                   onChange={handleChange}
                   placeholder="Phone Number"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
-                />
+                  className="
+  w-full px-4 py-3.5
+  rounded-lg border border-gray-300
+  text-[15px] font-medium text-gray-900
+  placeholder:text-gray-400
+  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+  transition
+  font-[var(--vercel-font)]
+"                   />
 
                 <input
                   name="google_review_link"
                   value={form.google_review_link}
                   onChange={handleChange}
                   placeholder="Google Review Link"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
-                />
+                  className="
+  w-full px-4 py-3.5
+  rounded-lg border border-gray-300
+  text-[15px] font-medium text-gray-900
+  placeholder:text-gray-400
+  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+  transition
+  font-[var(--vercel-font)]
+"                    />
               </div>
             )}
 
             {step === 1 && (
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  Brand Color
-                </h2>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Brand Color</h2>
 
                 <input
                   type="color"
@@ -264,9 +292,7 @@ export default function Register() {
 
             {step === 2 && (
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  QR Fill Color
-                </h2>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">QR Fill Color</h2>
 
                 <input
                   type="color"
@@ -275,6 +301,7 @@ export default function Register() {
                   onChange={handleChange}
                   className="w-20 h-12 rounded-lg border border-gray-300 cursor-pointer"
                 />
+
                 <div className="mt-6 flex justify-center">
                   <div className="p-4 rounded-xl border bg-white shadow-sm">
                     <QRCodeCanvas
@@ -292,9 +319,7 @@ export default function Register() {
 
             {step === 3 && (
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  QR Background Color
-                </h2>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">QR Background Color</h2>
 
                 <input
                   type="color"
@@ -303,6 +328,7 @@ export default function Register() {
                   onChange={handleChange}
                   className="w-20 h-12 rounded-lg border border-gray-300 cursor-pointer"
                 />
+
                 <div className="mt-6 flex justify-center">
                   <div className="p-4 rounded-xl border bg-white shadow-sm">
                     <QRCodeCanvas
@@ -320,9 +346,7 @@ export default function Register() {
 
             {step === 4 && (
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  QR Settings
-                </h2>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">QR Settings</h2>
 
                 <input
                   type="number"
@@ -346,9 +370,7 @@ export default function Register() {
 
             {step === 5 && (
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  Review Your Info
-                </h2>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Review Your Info</h2>
 
                 <pre className="bg-gray-50 p-4 rounded-lg border text-sm text-gray-700">
                   {JSON.stringify(form, null, 2)}
@@ -391,7 +413,21 @@ export default function Register() {
             )}
           </div>
         </div>
+
+        {/* LOGIN LINK UNDER MODAL */}
+        <div className="w-full text-center mt-6 mb-10">
+          <p className="text-sm text-gray-600">
+            Already have an account?
+            <Link
+              to="/login"
+              className="ml-1 font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
+            >
+              Log in
+            </Link>
+          </p>
+        </div>
+
       </div>
     </div>
-  )
+  );
 }

@@ -16,6 +16,14 @@ export default function Dashboard() {
   const showEmptyState =
     data.device_breakdown === 0 && data.total_reviews === 0;
 
+    const getRatingIcon = (rating) => {
+      if (rating >= 4.5) return "🤩";     // amazing
+      if (rating >= 3.5) return "😄";     // good
+      if (rating >= 2.5) return "🙂";     // okay
+      if (rating >= 1.5) return "😕";     // not great
+      return "😡";                        // bad
+    };
+
   return (
     <div className="min-h-screen bg-gray-50">
 
@@ -92,7 +100,7 @@ export default function Dashboard() {
             {/* KPI ROW */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-8">
               <DashboardCard label="Total Reviews" value={data.total_reviews} icon="⭐" delay={0} />
-              <DashboardCard label="Avg Rating" value={data.avg_rating} icon="🌟" delay={100} />
+              <DashboardCard label="Avg Rating" value={data.avg_rating}   icon={getRatingIcon(data.avg_rating)} delay={100} />
               <DashboardCard label="Last 7 Days" value={data.last_7_days} icon="📅" delay={200} />
               <DashboardCard label="Public Reviews" value={data.public_reviews} icon="🌐" delay={300} />
             </div>

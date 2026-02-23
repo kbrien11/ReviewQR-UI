@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+body {
+  font-family: var(--vercel-font);
+}
+
 
 @keyframes fadeInUp {
     0% {

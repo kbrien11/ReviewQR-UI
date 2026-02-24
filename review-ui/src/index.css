@@ -188,3 +188,11 @@ body {
   .animate-bar3 { animation: barGrow3 1s ease forwards; }
   .animate-bar4 { animation: barGrow4 1s ease forwards; }
   .animate-bar5 { animation: barGrow5 1s ease forwards; }
+
+
+
+  @keyframes pop {
+    0% { transform: scale(0.4); opacity: 0; }
+    60% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); }
+  }

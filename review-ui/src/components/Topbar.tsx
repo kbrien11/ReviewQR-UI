@@ -1,6 +1,7 @@
 import { useAuth } from "../context/AuthContext";
 import { useApp } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
+import { SiGoogle } from "react-icons/si";
 
 export default function TopBar() {
   const { user, logout } = useAuth();
@@ -32,18 +33,18 @@ export default function TopBar() {
       {/* Right: Actions */}
       <div className="flex items-center gap-6">
 
-        {/* Inbox / Notifications */}
         <button
           onClick={handleInboxClick}
-          className="relative p-2 rounded-md hover:bg-gray-100 transition"
+          className="relative p-2 rounded-md hover:bg-gray-100 transition group"
         >
+          {/* Bell Icon */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="none"
             strokeWidth={1.8}
             stroke="currentColor"
-            className="w-5 h-5 text-gray-700"
+            className="w-6 h-6 text-gray-700 group-hover:text-black transition"
           >
             <path
               strokeLinecap="round"
@@ -52,14 +53,39 @@ export default function TopBar() {
             />
           </svg>
 
+          {/* Notification Badge */}
           {unreadGoogleReviews > 0 && (
-            <span className="
-      absolute -top-1 -right-1
-      bg-red-600 text-white text-xs font-semibold
-      px-1.5 py-0.5 rounded-full shadow-sm
-    ">
+            <span
+              className="
+        absolute -top-1 -right-1
+        bg-red-500 text-white
+        text-[10px] font-semibold
+        px-1.5 py-[1px]
+        rounded-full
+        shadow-md
+        ring-1 ring-white
+        animate-[pop_0.25s_ease-out]
+      "
+            >
               {unreadGoogleReviews}
             </span>
+          )}
+
+          {/* Hover Tooltip */}
+          {unreadGoogleReviews > 0 && (
+            <div
+              className="
+        absolute left-1/2 -translate-x-1/2 top-9
+        opacity-0 group-hover:opacity-100
+        transition-opacity duration-200
+        bg-black text-white text-xs
+        py-1 px-2 rounded-md shadow-lg
+        whitespace-nowrap pointer-events-none
+      "
+            >
+              You have {unreadGoogleReviews} new review
+              {unreadGoogleReviews > 1 ? "s" : ""}
+            </div>
           )}
         </button>
 
@@ -86,7 +112,7 @@ export default function TopBar() {
         >
           {user?.email?.[0]?.toUpperCase()}
         </div>
-      </div>
-    </header>
+      </div >
+    </header >
   );
 }

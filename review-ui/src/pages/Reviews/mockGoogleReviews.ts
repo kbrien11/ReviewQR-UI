@@ -21,6 +21,14 @@ export const mockGoogleReviews = [
       author: "Sarah Lee",
       rating: 1,
       comment: "Horrible experience overall.",
-      created_at: "2024-03-08T09:30:00Z"
+      created_at: "2026-02-23T09:30:00Z"
+    },
+    {
+      id: "g4",
+      source: "google",
+      author: "Sarah Lee",
+      rating: 1,
+      comment: "Horrible experience overall.",
+      created_at: "2026-03-22T10:30:00Z"
     }
   ];

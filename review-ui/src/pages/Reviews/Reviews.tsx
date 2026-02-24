@@ -27,8 +27,7 @@ const initialTab = params.get("tab") || "all";
 
 const [activeTab, setActiveTab] = useState(initialTab);
 
-const { unreadGoogleReviews, markGoogleReviewsAsRead,setUnreadGoogleReviews } = useApp();
-
+const { businessSlug, markGoogleReviewsAsRead,setUnreadGoogleReviews } = useApp();
 
 
 
@@ -39,6 +38,14 @@ useEffect(() => {
 useEffect(() => {
   if (activeTab === "google") {
     markGoogleReviewsAsRead();
+
+    fetch(`http://127.0.0.1:8000/api/business/${businessSlug}/google-reviews/mark-read/`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`,"Content-Type": "application/json" },
+      body: JSON.stringify({
+        last_seen_google_review: new Date().toISOString()
+      })
+    });
   }
 }, [activeTab]);
 

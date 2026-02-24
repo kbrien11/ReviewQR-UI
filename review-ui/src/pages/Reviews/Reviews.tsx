@@ -39,7 +39,7 @@ useEffect(() => {
   if (activeTab === "google") {
     markGoogleReviewsAsRead();
 
-    fetch(`http://127.0.0.1:8000/api/business/${businessSlug}/google-reviews/mark-read/`, {
+    fetch(`https://reviewqrapi.onrender.com/api/business/${businessSlug}/google-reviews/mark-read/`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}`,"Content-Type": "application/json" },
       body: JSON.stringify({

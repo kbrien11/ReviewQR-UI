@@ -13,7 +13,7 @@ export function useDashboardSummary() {
   useEffect(() => {
     async function fetchDashboard() {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/dashboard/summary/", {
+        const response = await fetch("https://reviewqrapi.onrender.com/api/dashboard/summary/", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const json = await response.json();

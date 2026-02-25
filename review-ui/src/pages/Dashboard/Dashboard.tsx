@@ -48,7 +48,7 @@ export default function Dashboard() {
   if (loading || !data) return <DashboardSkeleton />;
 
   return (
-    <AppLayout slug={data.business_slug}>
+    <AppLayout slug={data.business_slug} business = {data.business_name}>
       <DashboardContent data={data} />
     </AppLayout>
   );

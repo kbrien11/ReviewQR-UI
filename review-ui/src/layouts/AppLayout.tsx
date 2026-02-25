@@ -1,7 +1,7 @@
 import Sidebar from "../components/Sidebar";
 import TopBar from "../components/Topbar";
 
-export default function AppLayout({ children, slug }) {
+export default function AppLayout({ children, slug,business }) {
   return (
     <div className="flex min-h-screen bg-gray-50">
   
@@ -10,7 +10,7 @@ export default function AppLayout({ children, slug }) {
         w-64 border-r border-gray-200 bg-white
         flex-shrink-0
       ">
-        <Sidebar slug={slug} />
+        <Sidebar slug={slug} business ={business} />
       </div>
   
       {/* MAIN AREA */}

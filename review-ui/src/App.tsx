@@ -9,6 +9,7 @@ import LeaveReviewPage from "./pages/Reviews/LeaveReviewPage";
 import BusinessQRPage from "./pages/BusinessQRPage/BusinessQRPage";
 import ProtectedRoute from "./context/ProtectedRoute";
 import Register from "./pages/Register/Register";
+import TeamMembers from "./pages/TeamMembers/TeamMembers";
 // import Dashboard from './pages/Dashboard/Dashboard'
 // import Reviews from './pages/Reviews/Reviews'
 // import Analytics from './pages/Analytics/Analytics'
@@ -26,7 +27,7 @@ export default function App() {
       <Dashboard />
     </ProtectedRoute>
   } />
-        <Route path="/reviews" element={
+        <Route path="/reviews/:business" element={
     <ProtectedRoute>
       <Reviews />
     </ProtectedRoute>
@@ -38,6 +39,7 @@ export default function App() {
   } />
         <Route path="/review/:slug" element={<LeaveReviewPage />} />
         <Route path="/business/:slug/qr" element={<BusinessQRPage />} />
+        <Route path="/admin/team/:business" element={<TeamMembers />} />
         {/* <Route path="/dashboard" element={<Dashboard /
         {/* <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/reviews" element={<Reviews />} />

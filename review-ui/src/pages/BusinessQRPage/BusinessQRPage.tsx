@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { QRCodeCanvas } from "qrcode.react";
 import { Link } from "react-router-dom";
+import PageHeader from "../../layouts/PageHeader";
 
 
 export default function BusinessQRPage() {
@@ -77,45 +78,7 @@ export default function BusinessQRPage() {
   return (
     <div className="min-h-screen bg-gray-50">
 
-      {/* TOP HEADER — Vercel style */}
-      <div className="bg-white border-b border-gray-200 px-6 py-6">
-        <div className="max-w-5xl mx-auto flex justify-between items-center">
-
-          {/* Back + Title */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => window.history.back()}
-              className="p-2 rounded-md hover:bg-gray-100 transition"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-5 h-5 text-gray-700"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 19.5L8.25 12l7.5-7.5"
-                />
-              </svg>
-            </button>
-
-            <h1 className="text-2xl font-bold text-gray-900">
-              {businessName} — QR Code
-            </h1>
-          </div>
-
-          <Link
-            to="/"
-            className="text-gray-600 hover:text-gray-900 font-medium transition"
-          >
-            ReviewQR
-          </Link>
-        </div>
-      </div>
+<PageHeader businessName={businessName} title="QR Code" />
 
       {/* MAIN CONTENT */}
       <div className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-2 gap-10">

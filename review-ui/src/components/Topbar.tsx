@@ -1,7 +1,8 @@
 import { useAuth } from "../context/AuthContext";
 import { useApp } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
-import { SiGoogle } from "react-icons/si";
+import { motion } from "framer-motion";
+
 
 export default function TopBar() {
   const { user, logout } = useAuth();
@@ -21,7 +22,9 @@ export default function TopBar() {
   return (
     <header
       className="
-        h-16 px-6 flex items-center justify-between
+        w-full
+        h-16 px-6
+        flex items-center
         bg-white border-b border-gray-200
       "
     >
@@ -31,13 +34,12 @@ export default function TopBar() {
       </h2>
 
       {/* Right: Actions */}
-      <div className="flex items-center gap-6">
-
+      <div className="flex items-center gap-5 ml-auto">
+        {/* Bell Icon */}
         <button
           onClick={handleInboxClick}
-          className="relative p-2 rounded-md hover:bg-gray-100 transition group"
+          className="relative p-2 rounded-lg hover:bg-gray-100 transition group"
         >
-          {/* Bell Icon */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -53,66 +55,50 @@ export default function TopBar() {
             />
           </svg>
 
-          {/* Notification Badge */}
           {unreadGoogleReviews > 0 && (
             <span
               className="
-        absolute -top-1 -right-1
-        bg-red-500 text-white
-        text-[10px] font-semibold
-        px-1.5 py-[1px]
-        rounded-full
-        shadow-md
-        ring-1 ring-white
-        animate-[pop_0.25s_ease-out]
-      "
+                absolute -top-1 -right-1
+                bg-red-500 text-white text-[10px] font-semibold
+                px-1.5 py-[1px] rounded-full shadow-md ring-1 ring-white
+                animate-[pop_0.25s_ease-out]
+              "
             >
               {unreadGoogleReviews}
             </span>
           )}
-
-          {/* Hover Tooltip */}
-          {unreadGoogleReviews > 0 && (
-            <div
-              className="
-        absolute left-1/2 -translate-x-1/2 top-9
-        opacity-0 group-hover:opacity-100
-        transition-opacity duration-200
-        bg-black text-white text-xs
-        py-1 px-2 rounded-md shadow-lg
-        whitespace-nowrap pointer-events-none
-      "
-            >
-              You have {unreadGoogleReviews} new review
-              {unreadGoogleReviews > 1 ? "s" : ""}
-            </div>
-          )}
         </button>
 
-        {/* Logout Button */}
-        <button
-          onClick={handleLogout}
-          className="
-            px-4 py-2 rounded-md text-sm font-medium
-            bg-gray-100 text-gray-700
-            hover:bg-gray-200 hover:text-gray-900
-            transition-all shadow-sm
-          "
+        {/* Avatar + User Info (no background card) */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.35 }}
+          className="flex items-center gap-3 cursor-pointer"
         >
-          Logout
-        </button>
+          {/* Avatar Circle */}
+          <div
+            className="
+              w-9 h-9 rounded-full
+              bg-gradient-to-br from-indigo-500 to-purple-500
+              flex items-center justify-center
+              text-white text-sm font-semibold
+            "
+          >
+            {user?.name?.charAt(0)?.toUpperCase() || "U"}
+          </div>
 
-        {/* Avatar */}
-        <div
-          className="
-            w-10 h-10 rounded-full bg-gray-100 border border-gray-300
-            flex items-center justify-center text-gray-700 font-semibold
-            shadow-sm
-          "
-        >
-          {user?.email?.[0]?.toUpperCase()}
-        </div>
-      </div >
-    </header >
+          {/* User Info */}
+          <div className="leading-tight">
+            <p className="text-sm font-semibold text-gray-900">
+              {user?.name || "User"}
+            </p>
+            <p className="text-xs text-gray-500">
+              {user?.email}
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    </header>
   );
 }

@@ -137,27 +137,58 @@ export default function LandingPage() {
             <div
               key={i}
               className="
-                p-8 rounded-2xl bg-white border border-gray-200 shadow-sm
-                hover:shadow-md hover:-translate-y-[2px] hover:scale-[1.01]
-                transition-all duration-300 opacity-0 animate-fadeUp
-              "
+              group relative p-8 rounded-2xl bg-white/80 backdrop-blur-xl
+              border border-gray-200 shadow-sm
+              transition-all duration-500
+              hover:shadow-xl hover:-translate-y-2
+              hover:bg-white
+            "
               style={{ animationDelay: `${300 + i * 150}ms` }}
             >
-              <div className="text-4xl mb-4">{item.icon}</div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{item.desc}</p>
+              {/* Glow */}
+              <div className="
+              absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-40
+              bg-gradient-to-br from-indigo-200 to-purple-200
+              blur-2xl transition-all duration-500
+            " />
+
+              {/* Icon */}
+              <div className="relative text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                {item.icon}
+              </div>
+
+              <h3 className="relative text-xl font-bold text-gray-900 mb-2">
+                {item.title}
+              </h3>
+
+              <p className="relative text-gray-600 leading-relaxed">
+                {item.desc}
+              </p>
             </div>
           ))}
         </div>
       </div>
 
 
-      <div className="py-24 bg-white border-t border-gray-200">
-        <h3 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-16 animate-fadeUp">
+      {/* HOW IT WORKS */}
+      <div className="py-24 bg-white border-t border-gray-200 relative">
+
+        {/* Section Title */}
+        <h3
+          className="
+    text-3xl md:text-4xl font-bold text-center text-gray-900 mb-16
+    animate-fadeUp opacity-0
+  "
+        >
           How It Works
         </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-5xl mx-auto">
+        {/* Connector Line (Desktop Only) */}
+        <div className="hidden md:block absolute left-1/2 top-[260px] -translate-x-1/2 w-[60%] h-[2px] bg-gray-200"></div>
+
+        {/* Steps */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto relative z-10">
+
           {[
             { icon: "📱", title: "Scan the QR", desc: "Customers scan your branded QR code." },
             { icon: "⭐", title: "Leave a Review", desc: "They’re guided to your review funnel." },
@@ -165,45 +196,79 @@ export default function LandingPage() {
           ].map((step, i) => (
             <div
               key={i}
-              className="text-center animate-fadeUp opacity-0"
+              className="text-center opacity-0 animate-fadeUp"
               style={{ animationDelay: `${200 + i * 200}ms` }}
             >
+              {/* Step Number Ring */}
+              <div className="relative mx-auto mb-6 w-16 h-16 flex items-center justify-center">
+                <div className="
+          absolute inset-0 rounded-full border-2 border-indigo-300
+          opacity-30 animate-ping
+        "></div>
+
+                <div className="
+          relative w-16 h-16 rounded-full bg-white border border-gray-300
+          shadow-sm flex items-center justify-center text-lg font-bold text-gray-700
+        ">
+                  {i + 1}
+                </div>
+              </div>
+
+              {/* Icon */}
               <div className="text-5xl mb-4 animate-pop">{step.icon}</div>
-              <h4 className="text-xl font-semibold text-gray-900 mb-2">{step.title}</h4>
-              <p className="text-gray-600">{step.desc}</p>
+
+              {/* Title */}
+              <h4 className="text-xl font-semibold text-gray-900 mb-2">
+                {step.title}
+              </h4>
+
+              {/* Description */}
+              <p className="text-gray-600 max-w-xs mx-auto">
+                {step.desc}
+              </p>
             </div>
           ))}
+
         </div>
       </div>
+      {/* SEE IT IN ACTION */}
+      <div className="py-28 bg-white border-t border-gray-200 relative overflow-hidden">
 
-      {/* LIVE DEMO — Animated Phone Preview */}
-      <div className="py-28 bg-white border-t border-gray-200">
+        {/* Section Title */}
         <h3 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-20 animate-fadeUp">
           See It In Action
         </h3>
 
+        {/* Background Glow */}
+        <div className="absolute inset-0 bg-gradient-to-b from-indigo-50/40 to-transparent blur-3xl pointer-events-none"></div>
+
+        {/* Phone Wrapper */}
         <div className="flex justify-center">
           <div
             className="
-        relative w-[320px] h-[600px]
-        rounded-[2.2rem] bg-black shadow-[0_20px_40px_rgba(0,0,0,0.15)]
-        overflow-hidden animate-float
-        border border-gray-800
-      "
+      relative w-[320px] h-[600px]
+      rounded-[2.2rem] bg-black shadow-[0_20px_40px_rgba(0,0,0,0.25)]
+      overflow-hidden border border-gray-800
+      transition-transform duration-700
+      hover:-translate-y-2 hover:rotate-1
+    "
           >
+
+            {/* Reflection Layer */}
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none"></div>
 
             {/* Screen 1 — Scan QR */}
             <div
-              className="
-          absolute inset-0 flex flex-col items-center justify-center
-          bg-white transition-opacity duration-700 px-6
-        "
-              style={{ opacity: demoStep === 0 ? 1 : 0 }}
+              className={`
+        absolute inset-0 flex flex-col items-center justify-center
+        bg-white px-6 transition-all duration-700
+        ${demoStep === 0 ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}
+      `}
             >
-              <div className="text-6xl mb-4">📱</div>
+              <div className="text-6xl mb-4 animate-pop">📱</div>
               <p className="text-gray-700 font-medium mb-4">Scan the QR Code</p>
 
-              <div className="bg-white p-3 rounded-xl shadow-md border border-gray-200">
+              <div className="bg-white p-3 rounded-xl shadow-md border border-gray-200 animate-float">
                 <QRCodeCanvas
                   value="https://reviewqr.com/demo"
                   size={150}
@@ -218,34 +283,34 @@ export default function LandingPage() {
 
             {/* Screen 2 — Review Page */}
             <div
-              className="
-          absolute inset-0 flex flex-col items-center justify-center
-          bg-white transition-opacity duration-700 px-6
-        "
-              style={{ opacity: demoStep === 1 ? 1 : 0 }}
+              className={`
+        absolute inset-0 flex flex-col items-center justify-center
+        bg-white px-6 transition-all duration-700
+        ${demoStep === 1 ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}
+      `}
             >
-              <div className="text-5xl mb-3">⭐️⭐️⭐️⭐️⭐️</div>
+              <div className="text-5xl mb-3 animate-pop">⭐️⭐️⭐️⭐️⭐️</div>
               <p className="text-gray-700 font-medium mb-4">Leave a Review</p>
 
               <input
                 type="text"
                 placeholder="Write your feedback..."
                 className="
-            w-full px-4 py-2 rounded-xl border border-gray-300
-            text-gray-700 placeholder-gray-400
-            focus:outline-none focus:ring-2 focus:ring-indigo-500
-            transition-all shadow-sm
-          "
+          w-full px-4 py-2 rounded-xl border border-gray-300
+          text-gray-700 placeholder-gray-400
+          focus:outline-none focus:ring-2 focus:ring-indigo-500
+          transition-all shadow-sm
+        "
               />
             </div>
 
             {/* Screen 3 — Success */}
             <div
-              className="
-          absolute inset-0 flex flex-col items-center justify-center
-          bg-white transition-opacity duration-700
-        "
-              style={{ opacity: demoStep === 2 ? 1 : 0 }}
+              className={`
+        absolute inset-0 flex flex-col items-center justify-center
+        bg-white transition-all duration-700
+        ${demoStep === 2 ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}
+      `}
             >
               <svg
                 className="w-20 h-20 text-green-500 animate-draw"
@@ -259,13 +324,13 @@ export default function LandingPage() {
               <p className="text-gray-700 font-medium mt-4">Success!</p>
             </div>
 
-            {/* Screen 4 — Track Analytics */}
+            {/* Screen 4 — Analytics */}
             <div
-              className="
-          absolute inset-0 flex flex-col items-center justify-center
-          bg-white transition-opacity duration-700 px-6
-        "
-              style={{ opacity: demoStep === 3 ? 1 : 0 }}
+              className={`
+        absolute inset-0 flex flex-col items-center justify-center
+        bg-white px-6 transition-all duration-700
+        ${demoStep === 3 ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}
+      `}
             >
               <p className="text-gray-700 font-medium mb-4">Track Your Analytics</p>
 
@@ -286,18 +351,25 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* TESTIMONIALS — fade-up stagger */}
-      <div className="bg-gray-50 py-20 px-6 border-t border-gray-200">
+      {/* TESTIMONIALS */}
+      <div className="relative bg-gray-50 py-24 px-6 border-t border-gray-200 overflow-hidden">
+
+        {/* Soft Background Glow */}
+        <div className="absolute inset-0 bg-gradient-to-b from-indigo-100/40 to-transparent blur-3xl opacity-60 pointer-events-none"></div>
+
+        {/* Section Title */}
         <h3
           className="
-            text-3xl md:text-4xl font-bold text-center text-gray-900 mb-14
-            animate-fadeUp opacity-0
-          "
+    text-3xl md:text-4xl font-bold text-center text-gray-900 mb-16
+    animate-fadeUp opacity-0
+  "
         >
           Loved by Local Businesses
         </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto">
+        {/* Testimonials Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto relative z-10">
+
           {[
             {
               name: "Sarah M.",
@@ -318,61 +390,105 @@ export default function LandingPage() {
             <div
               key={i}
               className="
-                p-8 bg-white rounded-2xl border border-gray-200 shadow-sm
-                hover:shadow-md hover:-translate-y-[2px]
-                transition-all duration-300 opacity-0 animate-fadeUp
-              "
-              style={{ animationDelay: `${500 + i * 150}ms` }}
+        group relative p-8 bg-white rounded-2xl border border-gray-200
+        shadow-sm transition-all duration-500 opacity-0 animate-fadeUp
+        hover:shadow-xl hover:-translate-y-2 hover:rotate-[0.3deg]
+      "
+              style={{ animationDelay: `${400 + i * 150}ms` }}
             >
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">
-                  {t.name[0]}
+
+              {/* Glow Behind Card */}
+              <div className="
+        absolute inset-0 rounded-2xl bg-gradient-to-br
+        from-indigo-200/30 to-purple-200/30 blur-2xl opacity-0
+        group-hover:opacity-40 transition-all duration-500
+      "></div>
+
+              {/* Avatar + Info */}
+              <div className="relative flex items-center gap-4 mb-4">
+
+                {/* Avatar Container */}
+                <div className="relative">
+                  {/* Glow Ring */}
+                  <div className="
+            absolute inset-0 rounded-full border-2 border-indigo-400
+            opacity-30 animate-ping
+          "></div>
+
+                  {/* Avatar */}
+                  <div className="
+            relative w-12 h-12 rounded-full bg-indigo-600
+            flex items-center justify-center text-white font-bold shadow-md
+          ">
+                    {t.name[0]}
+                  </div>
                 </div>
+
                 <div>
                   <div className="font-semibold text-gray-900">{t.name}</div>
                   <div className="text-sm text-gray-500">{t.role}</div>
                 </div>
               </div>
 
-              <p className="text-gray-700 italic leading-relaxed">“{t.text}”</p>
+              {/* Testimonial Text */}
+              <p className="relative text-gray-700 italic leading-relaxed">
+                “{t.text}”
+              </p>
             </div>
           ))}
+
         </div>
       </div>
 
 
       {/* FOOTER */}
-      <footer className="bg-white border-t border-gray-200 text-gray-700 py-10 mt-10">
-        <div className="max-w-5xl mx-auto px-6 flex flex-col md:flex-row justify-between">
-          <div>
-            <h4 className="text-xl font-bold mb-2 text-gray-900">ReviewQR</h4>
-            <p className="text-gray-500 max-w-xs">
+      <footer className="relative bg-white border-t border-gray-200 pt-20 pb-10 overflow-hidden">
+
+        {/* Soft Background Glow */}
+        <div className="absolute inset-0 bg-gradient-to-b from-indigo-100/40 to-transparent blur-3xl opacity-60 pointer-events-none"></div>
+
+        {/* Content */}
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 relative z-10">
+
+          {/* Brand Block */}
+          <div className="
+    p-6 rounded-2xl bg-white/70 backdrop-blur-xl border border-gray-200 shadow-sm
+    hover:shadow-md transition-all
+  ">
+            <h4 className="text-2xl font-bold text-gray-900 mb-3">ReviewQR</h4>
+            <p className="text-gray-600 leading-relaxed">
               Helping small businesses grow through the power of customer reviews.
             </p>
           </div>
 
-          <div className="flex gap-10 mt-6 md:mt-0">
-            <div>
-              <h5 className="font-semibold mb-2 text-gray-900">Product</h5>
-              <ul className="space-y-1 text-gray-500">
-                <li>Features</li>
-                <li>Pricing</li>
-                <li>FAQ</li>
-              </ul>
-            </div>
+          {/* Product Links */}
+          <div>
+            <h5 className="font-semibold text-gray-900 mb-3">Product</h5>
+            <ul className="space-y-2 text-gray-600">
+              <li className="hover:text-gray-900 transition cursor-pointer">Features</li>
+              <li className="hover:text-gray-900 transition cursor-pointer">Pricing</li>
+              <li className="hover:text-gray-900 transition cursor-pointer">FAQ</li>
+            </ul>
+          </div>
 
-            <div>
-              <h5 className="font-semibold mb-2 text-gray-900">Company</h5>
-              <ul className="space-y-1 text-gray-500">
-                <li>About</li>
-                <li>Contact</li>
-                <li>Support</li>
-              </ul>
-            </div>
+          {/* Company Links */}
+          <div>
+            <h5 className="font-semibold text-gray-900 mb-3">Company</h5>
+            <ul className="space-y-2 text-gray-600">
+              <li className="hover:text-gray-900 transition cursor-pointer">About</li>
+              <li className="hover:text-gray-900 transition cursor-pointer">Contact</li>
+              <li className="hover:text-gray-900 transition cursor-pointer">Support</li>
+            </ul>
           </div>
         </div>
 
-        <p className="text-center text-gray-400 mt-8 text-sm">
+        {/* Divider */}
+        <div className="max-w-6xl mx-auto px-6 mt-16">
+          <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+        </div>
+
+        {/* Copyright */}
+        <p className="text-center text-gray-400 mt-6 text-sm relative z-10">
           © {new Date().getFullYear()} ReviewQR. All rights reserved.
         </p>
       </footer>

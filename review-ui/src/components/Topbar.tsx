@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 export default function TopBar() {
   const { user, logout } = useAuth();
-  const { unreadGoogleReviews, markGoogleReviewsAsRead } = useApp();
+  const { unreadGoogleReviews, markGoogleReviewsAsRead ,businessSlug,businessName} = useApp();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -16,7 +16,7 @@ export default function TopBar() {
 
   const handleInboxClick = () => {
     markGoogleReviewsAsRead();
-    navigate("/reviews?tab=google");
+    navigate(`/reviews/${businessName}?tab=google`);
   };
 
   return (

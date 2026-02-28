@@ -29,9 +29,16 @@ const initialTab = params.get("tab") || "all";
 const [activeTab, setActiveTab] = useState(initialTab);
 
 const { business } = useParams();
+console.log(activeTab)
 
 
 const { businessSlug, markGoogleReviewsAsRead,setUnreadGoogleReviews } = useApp();
+
+useEffect(() => {
+  const params = new URLSearchParams(location.search);
+  const tab = params.get("tab") || "all";
+  setActiveTab(tab);
+}, [location.search]);
 
 
 

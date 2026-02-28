@@ -7,6 +7,8 @@ interface AppContextType {
   markGoogleReviewsAsRead: () => void;
   businessSlug: string | null;
   setBusinessSlug: (slug: string) => void;
+  businessName: string | null;
+  setBusinessName: (slug: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -15,6 +17,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [unreadGoogleReviews, setUnreadGoogleReviews] = useState(0);
 
   const [businessSlug, setBusinessSlug] = useState<string | null>(null)
+  const [businessName, setBusinessName] = useState<string | null>(null)
 
   const markGoogleReviewsAsRead = () => {
     setUnreadGoogleReviews(0);
@@ -27,7 +30,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setUnreadGoogleReviews,
         markGoogleReviewsAsRead,
         setBusinessSlug,
-        businessSlug
+        businessSlug,
+        setBusinessName,
+        businessName
       }}
     >
       {children}

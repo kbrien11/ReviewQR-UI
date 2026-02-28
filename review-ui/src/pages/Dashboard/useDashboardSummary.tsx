@@ -9,7 +9,7 @@ export function useDashboardSummary() {
   const [lastGoogleReview, setLastGoogleReview] = useState("");
   const { unreadGoogleReviews, markGoogleReviewsAsRead } = useApp();
 
-  const { setBusinessSlug } = useApp();
+  const { setBusinessSlug,setBusinessName } = useApp();
   useEffect(() => {
     async function fetchDashboard() {
       try {
@@ -19,6 +19,7 @@ export function useDashboardSummary() {
         const json = await response.json();
         setData(json);
         setBusinessSlug(json.business_slug);
+        setBusinessName(json.business_name)
         setLastGoogleReview(json.last_google_review_date)
       } catch (err) {
         console.error("Dashboard fetch error:", err);

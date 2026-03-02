@@ -24,21 +24,46 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
 
-      {/* NAVBAR — Linear style with scroll blur */}
-      <nav className="
-        w-full flex justify-between items-center px-6 py-4 fixed top-0 left-0
-        bg-white/80 border-b border-gray-200 backdrop-blur-xl
-        shadow-sm z-50 transition-all duration-300
-      ">
-        <h1 className="text-xl font-bold tracking-tight text-gray-900">ReviewQR</h1>
+      {/* NAVBAR — Premium SaaS style */}
+      <nav
+        className="
+    fixed top-0 left-0 w-full z-50
+    bg-white/70 backdrop-blur-xl
+    border-b border-gray-200
+    px-8 py-5 flex items-center justify-between
+    transition-all duration-300
+  "
+      >
+        {/* Brand */}
+        <Link to="/" className="flex items-center gap-3 group">
+          <div
+            className="
+        h-9 w-9 rounded-xl bg-indigo-600 flex items-center justify-center
+        text-white font-bold text-lg shadow-sm
+        group-hover:scale-105 transition-transform
+      "
+          >
+            R
+          </div>
 
-        <div className="flex gap-4">
+          <span
+            className="
+        text-2xl font-semibold tracking-tight text-gray-900
+        group-hover:text-indigo-600 transition-colors
+      "
+          >
+            ReviewQR
+          </span>
+        </Link>
+
+        {/* Actions */}
+        <div className="flex items-center gap-4">
           <Link
             to="/login"
             className="
-              px-4 py-2 rounded-lg font-medium text-gray-700
-              hover:bg-gray-100 transition-all
-            "
+        px-4 py-2 rounded-lg font-medium text-gray-700
+        hover:bg-gray-100 transition-all
+      "
           >
             Login
           </Link>
@@ -46,9 +71,11 @@ export default function LandingPage() {
           <Link
             to="/register"
             className="
-              px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium
-              hover:bg-indigo-700 transition-all active:scale-[.98]
-            "
+        px-5 py-2.5 rounded-lg font-semibold text-white
+        bg-indigo-600 hover:bg-indigo-700
+        shadow-sm hover:shadow-md
+        transition-all active:scale-[.97]
+      "
           >
             Register
           </Link>
@@ -172,7 +199,7 @@ export default function LandingPage() {
 
       {/* HOW IT WORKS */}
       <div className="py-24 bg-white border-t border-gray-200 relative">
-
+      <div className="absolute inset-0 pointer-events-none animate-pulseSlow bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.10),transparent_75%)]"></div>
         {/* Section Title */}
         <h3
           className="
@@ -185,6 +212,7 @@ export default function LandingPage() {
 
         {/* Connector Line (Desktop Only) */}
         <div className="hidden md:block absolute left-1/2 top-[260px] -translate-x-1/2 w-[60%] h-[2px] bg-gray-200"></div>
+        
 
         {/* Steps */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto relative z-10">

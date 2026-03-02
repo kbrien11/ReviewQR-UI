@@ -45,13 +45,35 @@ export default function Login() {
       {/* Background Glow */}
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-200/40 to-purple-200/40 blur-3xl opacity-40 pointer-events-none"></div>
 
-      {/* Logo */}
-      <Link
-        to="/"
-        className="absolute top-6 right-6 text-[17px] font-semibold tracking-tight text-gray-800 hover:text-indigo-600 transition"
+      {/* Top‑Left Brand Header */}
+      <div
+        className="
+    fixed top-6 left-6 z-50
+    flex items-center gap-3
+    
+  "
       >
-        ReviewQR
-      </Link>
+        <Link to="/" className="flex items-center gap-3 group">
+          <div
+            className="
+        h-9 w-9 rounded-xl bg-indigo-600 flex items-center justify-center
+        text-white font-bold text-lg shadow-sm
+        group-hover:scale-105 transition-transform
+      "
+          >
+            R
+          </div>
+
+          <span
+            className="
+        text-xl font-semibold tracking-tight text-gray-900
+        group-hover:text-indigo-600 transition-colors
+      "
+          >
+            ReviewQR
+          </span>
+        </Link>
+      </div>
 
       {/* Logging In Toast */}
       {loading && (

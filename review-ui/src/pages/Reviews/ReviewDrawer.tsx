@@ -91,31 +91,19 @@ export default function ReviewDrawer({ review, onClose }) {
           </div>
         </div>
 
-        {/* SECTION: Review Content */}
-        <div className="space-y-4">
-          <h3 className="text-xs font-semibold text-gray-500 tracking-wide uppercase">
+        <div className="space-y-3">
+          <h3 className="text-[11px] font-semibold text-gray-500 tracking-wider uppercase">
             Review Content
           </h3>
 
-          <div
-            className="
-                  bg-white
-                  border border-gray-200
-                  rounded-2xl
-                  p-5
-                  shadow-sm
-                  text-[15px]
-                  leading-relaxed
-                  text-gray-900
-                  whitespace-pre-line
-                "
-          >
-            <p className="font-[450] tracking-[0.1px]">
+          <div className="relative pl-5">
+            <div className="absolute left-0 top-0 bottom-0 w-1 rounded-full bg-indigo-500/70"></div>
+
+            <p className="text-[15px] leading-relaxed text-gray-900 font-[460] whitespace-pre-line">
               {review.comment}
             </p>
           </div>
         </div>
-
 
       </div>
 

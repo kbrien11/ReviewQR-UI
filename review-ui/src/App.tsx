@@ -21,6 +21,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/reviews" element={<Reviews />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={
     <ProtectedRoute>
@@ -42,7 +43,7 @@ export default function App() {
         <Route path="/admin/team/:business" element={<TeamMembers />} />
         {/* <Route path="/dashboard" element={<Dashboard /
         {/* <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/reviews" element={<Reviews />} />
+        <Route path="/reviews" element={<Reviews} 
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/qr-preview" element={<QRPreview />} /> */}
       </Routes>

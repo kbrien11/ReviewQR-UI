@@ -137,7 +137,7 @@ export default function Dashboard() {
 
             <motion.div variants={staggerItem}>
               <DashboardCard
-                label="Last 7 Days"
+                label="Reviews Last 7 Days"
                 value={data.last_7_days}
                 icon="📅"
                 trend={data.last_7_days_trend}

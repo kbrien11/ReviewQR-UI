@@ -41,116 +41,103 @@ export default function FuturisticKPI({
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{
-        scale: 1.02,
+        scale: 1.015,
         y: -2,
         boxShadow: "0 12px 28px rgba(0,0,0,0.08)",
       }}
       transition={{ duration: 0.35, ease: "easeOut" }}
       className="
-        relative p-5 rounded-2xl
+        relative p-6 rounded-2xl
         bg-white
         border border-gray-200
         shadow-sm
-        flex flex-col gap-5
-        transition-all
+        flex flex-col gap-4
       "
     >
-      {/* Top Row: Icon + Label */}
-      <div className="flex items-center justify-between">
-        <div className="w-12 h-12 flex items-left justify-center text-gray-700">
-          {icon}
-        </div>
 
-        <div className="text-right">
-          <p className="text-sm font-medium text-gray-700">{label}</p>
-          {subtext && (
-            <p className="text-xs text-gray-400">{subtext}</p>
-          )}
-        </div>
+      {/* VALUE (Top Left) */}
+      <p className="text-4xl font-semibold text-gray-900 tracking-tight leading-none">
+        {value}
+      </p>
+
+      {/* LABEL + SUBTEXT */}
+      <div className="flex flex-col leading-tight">
+        <p className="text-sm font-semibold text-gray-900 tracking-tight">
+          {label}
+        </p>
+        {subtext && (
+          <p className="text-xs text-gray-400">{subtext}</p>
+        )}
       </div>
 
-      {/* Main Value */}
-      <motion.p
-        initial={{ opacity: 0, y: 4 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35 }}
-        className="text-4xl font-semibold text-gray-900 tracking-tight"
-      >
-        {value}
-      </motion.p>
+      {/* TREND */}
+      <div className="flex items-center gap-2 mt-1">
+        <span
+          className={`
+            text-sm font-semibold
+            ${trend > 0 ? "text-green-600" :
+              trend < 0 ? "text-red-600" :
+                "text-gray-500"}
+          `}
+        >
+          {trend > 0 ? "▲" : trend < 0 ? "▼" : "—"}
+        </span>
 
-      {/* Trend Block */}
-      <div className="flex flex-col gap-1">
+        <span
+          className={`
+            text-sm font-semibold
+            ${trend > 0 ? "text-green-600" :
+              trend < 0 ? "text-red-600" :
+                "text-gray-600"}
+          `}
+        >
+          {trend > 0 ? `+${trend}%` : `${trend}%`}
+        </span>
 
-        {/* Arrow + Percent + Status Badge */}
-        <div className="flex items-center gap-2">
+        <span
+          className={`
+            px-2 py-0.5 rounded-full text-xs font-medium
+            ${trend > 0 ? "bg-green-100 text-green-700" :
+              trend < 0 ? "bg-red-100 text-red-700" :
+                "bg-gray-100 text-gray-600"}
+          `}
+        >
+          {trend > 0 ? "Growing" : trend < 0 ? "Declining" : "Stable"}
+        </span>
+      </div>
 
-          {/* Arrow Icon */}
-          {trend > 0 && (
-            <span className="text-green-600 text-sm font-semibold">▲</span>
-          )}
-          {trend < 0 && (
-            <span className="text-red-600 text-sm font-semibold">▼</span>
-          )}
-          {trend === 0 && (
-            <span className="text-gray-500 text-sm font-semibold">—</span>
-          )}
-
-          {/* Percent */}
-          <span
-            className={`
-              text-sm font-semibold
-              ${trend > 0 ? "text-green-600" :
-                trend < 0 ? "text-red-600" :
-                  "text-gray-600"}
-            `}
-          >
-            {trend > 0 ? `+${trend}%` : `${trend}%`}
-          </span>
-
-          {/* Status Badge */}
-          <span
-            className={`
-              px-2 py-0.5 rounded-full text-xs font-medium
-              ${trend > 0 ? "bg-green-100 text-green-700" :
-                trend < 0 ? "bg-red-100 text-red-700" :
-                  "bg-gray-100 text-gray-600"}
-            `}
-          >
-            {trend > 0 ? "Growing" : trend < 0 ? "Declining" : "Stable"}
-          </span>
-        </div>
-
-        {/* Sparkline */}
+      {/* SPARKLINE */}
+      <div className="mt-2">
         <svg
           className={`
-    w-20 h-6
-    ${trend > 0 ? "text-green-500" :
+            w-full h-12
+            ${trend > 0 ? "text-green-500" :
               trend < 0 ? "text-red-500" :
-                "text-gray-400"}
-    opacity-70
-  `}
+                "text-gray-300"}
+            opacity-80
+          `}
           viewBox="0 0 100 30"
         >
           <polyline
             fill="none"
-            style={{ transition: "all 0.4s ease" }}
             stroke="currentColor"
             strokeWidth="2"
+            style={{ transition: "all 0.4s ease" }}
             points={
               trend > 0
-                ? "0,25 20,20 40,18 60,12 80,10 100,5"        // upward
+                ? "0,25 20,20 40,18 60,12 80,10 100,5"
                 : trend < 0
-                  ? "0,5 20,10 40,12 60,18 80,22 100,25"      // downward
-                  : "0,15 20,15 40,15 60,15 80,15 100,15"     // flat
+                  ? "0,5 20,10 40,12 60,18 80,22 100,25"
+                  : "0,15 20,15 40,15 60,15 80,15 100,15"
             }
           />
         </svg>
-        {/* Context Label */}
-        <p className="text-[11px] text-gray-400">
+
+        <p className="text-[11px] text-gray-400 mt-1">
           vs previous 3 days
         </p>
       </div>
+
     </motion.div>
   );
 }

@@ -57,14 +57,7 @@ export default function FuturisticKPI({
     >
       {/* Top Row: Icon + Label */}
       <div className="flex items-center justify-between">
-        <div
-          className="
-            w-12 h-12 rounded-xl
-            bg-gray-100
-            flex items-center justify-center
-            text-2xl text-gray-700
-          "
-        >
+        <div className="w-12 h-12 flex items-left justify-center text-gray-700">
           {icon}
         </div>
 
@@ -131,22 +124,28 @@ export default function FuturisticKPI({
         {/* Sparkline */}
         <svg
           className={`
-            w-20 h-6
-            ${trend > 0 ? "text-green-500" :
+    w-20 h-6
+    ${trend > 0 ? "text-green-500" :
               trend < 0 ? "text-red-500" :
                 "text-gray-400"}
-            opacity-70
-          `}
+    opacity-70
+  `}
           viewBox="0 0 100 30"
         >
           <polyline
             fill="none"
+            style={{ transition: "all 0.4s ease" }}
             stroke="currentColor"
             strokeWidth="2"
-            points="0,20 20,15 40,18 60,10 80,12 100,5"
+            points={
+              trend > 0
+                ? "0,25 20,20 40,18 60,12 80,10 100,5"        // upward
+                : trend < 0
+                  ? "0,5 20,10 40,12 60,18 80,22 100,25"      // downward
+                  : "0,15 20,15 40,15 60,15 80,15 100,15"     // flat
+            }
           />
         </svg>
-
         {/* Context Label */}
         <p className="text-[11px] text-gray-400">
           vs previous 3 days

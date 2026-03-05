@@ -33,6 +33,9 @@ export default function Register() {
     qr_border: 2,
   });
 
+  const params = new URLSearchParams(window.location.search);
+const googleConnected = params.get("google") === "connected";
+
   // Load saved progress
   useEffect(() => {
     const saved = localStorage.getItem("reviewqr_onboarding");
@@ -273,6 +276,31 @@ export default function Register() {
   transition
   font-[var(--vercel-font)]
 "                    />
+                {/* GOOGLE REVIEWS CONNECT */}
+                <div className="mt-6 p-4 border rounded-lg bg-gray-50">
+                  <h3 className="text-sm font-semibold text-gray-800 mb-2">
+                    Connect Google Reviews (optional)
+                  </h3>
+
+                  <p className="text-xs text-gray-600 mb-3">
+                    Connect your Google Business Profile to automatically sync reviews and reply directly from your dashboard.
+                  </p>
+
+                  {googleConnected ? (
+                    <div className="px-4 py-2 rounded-lg bg-green-100 text-green-700 text-sm font-medium">
+                      ✓ Google Reviews Connected
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        window.location.href = "http://127.0.0.1:8000/googleAuth/google/oauth/start/";
+                      }}
+                      className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition"
+                    >
+                      Connect Google Business Profile
+                    </button>
+                  )}
+                </div>
               </div>
             )}
 

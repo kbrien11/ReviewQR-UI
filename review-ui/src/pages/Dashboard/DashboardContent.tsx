@@ -88,34 +88,34 @@ export default function Dashboard() {
 
       {/* HEADER */}
       <FadeIn>
-        <div className="bg-white border-b border-gray-200 px-6 py-8 shadow-sm">
-          <div className="flex items-center justify-between py-4">
-            <div className="flex items-center gap-4">
-              {/* Finance Accent Bar */}
-              <div className="w-1 h-10 bg-gradient-to-b from-indigo-500 to-indigo-600 rounded-full" />
+        <div className="bg-white border-b border-gray-200 px-4 py-5 md:px-6 md:py-8 shadow-sm">
+          <div className="flex items-center justify-between py-2">
+            <div className="flex items-center gap-3 md:gap-4">
+              <div className="w-1 h-8 md:h-10 bg-gradient-to-b from-indigo-500 to-indigo-600 rounded-full" />
+
               <div className="flex flex-col">
                 <h1 className="
-        text-3xl md:text-4xl font-semibold tracking-tight
-        bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent
-      ">
+                  text-2xl md:text-4xl font-semibold tracking-tight
+                  bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent
+                ">
                   {data.business_name} Analytics
                 </h1>
               </div>
             </div>
           </div>
 
-          <p className="mt-2 text-gray-500 text-sm md:text-base">
+          <p className="mt-1 text-gray-500 text-sm md:text-base">
             {data.status_message}
           </p>
         </div>
       </FadeIn>
 
       {/* MAIN CONTENT */}
-      <div className="p-8 w-full max-w-[1600px]">
+      <div className="px-4 py-6 md:px-8 w-full max-w-screen-xl mx-auto">
 
         {/* KPI ROW */}
         <Stagger>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-10">
 
             <motion.div variants={staggerItem}>
               <DashboardCard
@@ -157,17 +157,15 @@ export default function Dashboard() {
         </Stagger>
 
         {/* MAIN GRID */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mt-6 md:mt-10">
 
           {/* LEFT COLUMN */}
-          <div className="space-y-8 lg:col-span-2">
+          <div className="space-y-6 md:space-y-8 lg:col-span-2">
 
-            {/* Sentiment */}
             <FadeIn delay={0.1}>
               <SentimentOverview data={data} />
             </FadeIn>
 
-            {/* Device Breakdown */}
             {data?.device_breakdown && (
               <FadeIn delay={0.2}>
                 <DeviceBreakdown
@@ -178,12 +176,13 @@ export default function Dashboard() {
             )}
           </div>
 
-          {/* RIGHT COLUMN — Latest Reviews */}
+          {/* RIGHT COLUMN */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
+            className="space-y-6"
           >
             <LatestReview reviews={data.latest_reviews} />
           </motion.div>

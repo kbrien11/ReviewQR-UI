@@ -14,6 +14,7 @@ export default function LeaveReviewPage() {
 
   const [businessId, setBusinessId] = useState(null);
   const [businessName, setBusinessName] = useState("");
+  const [googleReviewUrl, setGooleReviewUrl] = useState("");
 
   useEffect(() => {
     fetch(`https://reviewqrapi.onrender.com/api/business/${slug}/`)
@@ -46,6 +47,7 @@ export default function LeaveReviewPage() {
 
     const json = await response.json();
     setLoading(false);
+    setGooleReviewUrl(json.google_review_url)
 
   if (!response.ok) {
     alert("Something went wrong submitting your review.");
@@ -144,7 +146,7 @@ export default function LeaveReviewPage() {
             </p>
             {rating >= 4 && (
             <a
-              href="https://google.com" // Replace with business.google_review_url
+              href={googleReviewUrl} // Replace with business.google_review_url
               target="_blank"
               rel="noopener noreferrer"
               className="block bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"

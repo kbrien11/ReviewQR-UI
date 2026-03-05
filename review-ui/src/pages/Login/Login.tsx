@@ -40,128 +40,103 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden bg-gradient-to-br from-indigo-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 relative overflow-hidden">
 
       {/* Background Glow */}
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-200/40 to-purple-200/40 blur-3xl opacity-40 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-200/40 to-purple-200/40 blur-3xl opacity-40 pointer-events-none" />
 
-      {/* Top‑Left Brand Header */}
-      <div
-        className="
-    fixed top-6 left-6 z-50
-    flex items-center gap-3
-    
-  "
-      >
+      {/* Brand Header */}
+      <div className="px-4 pt-6 flex items-center gap-3">
         <Link to="/" className="flex items-center gap-3 group">
-          <div
-            className="
-        h-9 w-9 rounded-xl bg-indigo-600 flex items-center justify-center
-        text-white font-bold text-lg shadow-sm
-        group-hover:scale-105 transition-transform
-      "
-          >
+          <div className="h-8 w-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-base shadow-sm group-hover:scale-105 transition-transform">
             R
           </div>
-
-          <span
-            className="
-        text-xl font-semibold tracking-tight text-gray-900
-        group-hover:text-indigo-600 transition-colors
-      "
-          >
+          <span className="text-lg font-semibold tracking-tight text-gray-900 group-hover:text-indigo-600 transition-colors">
             ReviewQR
           </span>
         </Link>
       </div>
 
-      {/* Logging In Toast */}
-      {loading && (
-        <div className="
-          absolute top-6 left-1/2 -translate-x-1/2
-          bg-white/90 backdrop-blur-xl border border-gray-200 shadow-lg
-          px-4 py-2 rounded-lg flex items-center gap-3 animate-fadeIn
-        ">
-          <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-sm font-medium text-gray-700">Logging in…</span>
-        </div>
-      )}
-
       {/* Login Card */}
-      <div className="
-        w-full max-w-md bg-white/80 backdrop-blur-xl p-10 rounded-2xl
-        border border-gray-200 shadow-xl animate-fadeUp
-      ">
-        <h1 className="text-3xl font-bold text-center mb-6 text-gray-900 tracking-tight">
-          Welcome Back
-        </h1>
+      <div className="mt-10 px-4">
+        <div className="w-full max-w-sm mx-auto bg-white/80 backdrop-blur-xl p-6 rounded-2xl border border-gray-200 shadow-xl">
 
-        {error && (
-          <div className="mb-4 p-3 rounded-lg bg-red-100 text-red-700 text-sm font-medium text-center animate-shake">
-            {error}
-          </div>
-        )}
+          <h1 className="text-2xl font-bold text-center mb-5 text-gray-900 tracking-tight">
+            Welcome Back
+          </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+          {error && (
+            <div className="mb-4 p-3 rounded-lg bg-red-100 text-red-700 text-sm font-medium text-center animate-shake">
+              {error}
+            </div>
+          )}
 
-          {/* Username */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
-            <input
-              type="text"
-              placeholder="Enter your username"
-              className="
-                w-full px-4 py-3.5 rounded-lg border border-gray-300
-                text-[15px] font-medium text-gray-900 placeholder-gray-400
-                focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
-                transition-all shadow-sm
-              "
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
 
-          {/* Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input
-              type="password"
-              placeholder="Enter your password"
-              className="
-                w-full px-4 py-3.5 rounded-lg border border-gray-300
-                text-[15px] font-medium text-gray-900 placeholder-gray-400
-                focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
-                transition-all shadow-sm
-              "
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+            {/* Username */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+              <input
+                type="text"
+                placeholder="Enter your username"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 text-[15px] font-medium text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-sm"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
 
-          {/* Submit */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="
-              w-full py-3 bg-indigo-600 text-white rounded-lg
-              font-semibold text-base shadow-md
-              hover:bg-indigo-700 active:scale-[.98]
-              transition-all duration-200
-              disabled:opacity-60 disabled:cursor-not-allowed
-            "
-          >
-            Log In
-          </button>
-        </form>
+            {/* Password */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <input
+                type="password"
+                placeholder="Enter your password"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 text-[15px] font-medium text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-sm"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
 
-        {/* Footer */}
-        <p className="text-center text-sm text-gray-500 mt-6">
-          Don’t have an account?{" "}
-          <Link to="/register" className="text-indigo-600 font-medium hover:text-indigo-800">
-            Register
-          </Link>
-        </p>
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 bg-indigo-600 text-white rounded-lg font-semibold text-base shadow-md hover:bg-indigo-700 active:scale-[.98] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              Log In
+            </button>
+          </form>
+
+          {/* Footer */}
+          <p className="text-center text-sm text-gray-500 mt-5">
+            Don’t have an account?{" "}
+            <Link to="/register" className="text-indigo-600 font-medium hover:text-indigo-800">
+              Register
+            </Link>
+          </p>
+        </div>
       </div>
+
+      {loading && (
+        <>
+
+
+          {/* LOGGING IN TOAST */}
+          <div
+            className="
+        fixed left-1/2 -translate-x-1/2
+        top-[55px] sm:top-[80px]
+        z-50
+        bg-indigo-600 text-white
+        px-4 py-2 rounded-xl shadow-lg
+        text-sm font-medium
+        animate-fadeIn
+      "
+          >
+            Logging in…
+          </div>
+        </>
+      )}
     </div>
   );
 }

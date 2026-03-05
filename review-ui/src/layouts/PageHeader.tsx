@@ -6,23 +6,23 @@ export default function PageHeader({ businessName, title }) {
       className="
         bg-white 
         border-b border-gray-200 
-        px-6 py-5
+        px-4 py-4 md:px-6 md:py-5
         backdrop-blur-xl
       "
     >
-      <div className="max-w-5xl mx-auto flex justify-between items-center">
+      <div className="max-w-5xl mx-auto flex items-center justify-between">
 
-        {/* Left Section: Back + Title */}
-        <div className="flex items-center gap-4">
+        {/* Left Section */}
+        <div className="flex items-center gap-3 md:gap-4">
 
           {/* Back Button */}
           <button
             onClick={() => window.history.back()}
             className="
-              p-2 rounded-md 
+              p-2 rounded-lg 
               hover:bg-gray-100 
-              transition-all 
               active:scale-95
+              transition-all
               text-gray-600
             "
           >
@@ -43,10 +43,10 @@ export default function PageHeader({ businessName, title }) {
           </button>
 
           {/* Title */}
-          <div className="flex flex-col">
+          <div className="flex flex-col leading-tight">
             <h1
               className="
-                text-xl md:text-2xl 
+                text-lg md:text-2xl 
                 font-semibold 
                 text-gray-900 
                 tracking-tight
@@ -57,7 +57,7 @@ export default function PageHeader({ businessName, title }) {
 
             <span
               className="
-                text-sm 
+                text-xs md:text-sm 
                 text-gray-500 
                 font-medium 
                 mt-0.5
@@ -68,10 +68,11 @@ export default function PageHeader({ businessName, title }) {
           </div>
         </div>
 
-        {/* Right Section: Brand */}
+        {/* Right Section */}
         <Link
           to="/"
           className="
+            text-sm md:text-base
             text-gray-600 
             hover:text-gray-900 
             font-medium 

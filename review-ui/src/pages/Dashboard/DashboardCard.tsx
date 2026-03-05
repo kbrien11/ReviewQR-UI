@@ -47,16 +47,25 @@ export default function FuturisticKPI({
       }}
       transition={{ duration: 0.35, ease: "easeOut" }}
       className="
-        relative p-6 rounded-2xl
+        relative 
+        p-4 md:p-6 
+        rounded-2xl
         bg-white
         border border-gray-200
         shadow-sm
-        flex flex-col gap-4
+        flex flex-col 
+        gap-3 md:gap-4
       "
     >
 
-      {/* VALUE (Top Left) */}
-      <p className="text-4xl font-semibold text-gray-900 tracking-tight leading-none">
+      {/* VALUE */}
+      <p className="
+        text-2xl md:text-4xl 
+        font-semibold 
+        text-gray-900 
+        tracking-tight 
+        leading-none
+      ">
         {value}
       </p>
 
@@ -74,7 +83,7 @@ export default function FuturisticKPI({
       <div className="flex items-center gap-2 mt-1">
         <span
           className={`
-            text-sm font-semibold
+            text-xs md:text-sm font-semibold
             ${trend > 0 ? "text-green-600" :
               trend < 0 ? "text-red-600" :
                 "text-gray-500"}
@@ -85,7 +94,7 @@ export default function FuturisticKPI({
 
         <span
           className={`
-            text-sm font-semibold
+            text-xs md:text-sm font-semibold
             ${trend > 0 ? "text-green-600" :
               trend < 0 ? "text-red-600" :
                 "text-gray-600"}
@@ -96,7 +105,8 @@ export default function FuturisticKPI({
 
         <span
           className={`
-            px-2 py-0.5 rounded-full text-xs font-medium
+            px-2 py-0.5 rounded-full 
+            text-[10px] md:text-xs font-medium
             ${trend > 0 ? "bg-green-100 text-green-700" :
               trend < 0 ? "bg-red-100 text-red-700" :
                 "bg-gray-100 text-gray-600"}
@@ -107,10 +117,10 @@ export default function FuturisticKPI({
       </div>
 
       {/* SPARKLINE */}
-      <div className="mt-2">
+      <div className="mt-1 md:mt-2">
         <svg
           className={`
-            w-full h-12
+            w-full h-10 md:h-12
             ${trend > 0 ? "text-green-500" :
               trend < 0 ? "text-red-500" :
                 "text-gray-300"}
@@ -133,7 +143,7 @@ export default function FuturisticKPI({
           />
         </svg>
 
-        <p className="text-[11px] text-gray-400 mt-1">
+        <p className="text-[10px] md:text-[11px] text-gray-400 mt-1">
           vs previous 3 days
         </p>
       </div>

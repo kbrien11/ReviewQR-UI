@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 export default function TopBar() {
   const { user, logout } = useAuth();
-  const { unreadGoogleReviews, markGoogleReviewsAsRead ,businessSlug,businessName} = useApp();
+  const { unreadGoogleReviews, markGoogleReviewsAsRead, businessName } = useApp();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -23,22 +23,30 @@ export default function TopBar() {
     <header
       className="
         w-full
-        h-16 px-6
+        h-14 md:h-16
+        px-4 md:px-6
         flex items-center
         bg-white border-b border-gray-200
+        backdrop-blur-xl
       "
     >
       {/* Left: Page Title */}
-      <h2 className="text-lg font-semibold text-gray-900 tracking-tight">
+      <h2 className="text-base md:text-lg font-semibold text-gray-900 tracking-tight">
         Dashboard
       </h2>
 
       {/* Right: Actions */}
-      <div className="flex items-center gap-5 ml-auto">
+      <div className="flex items-center gap-4 md:gap-5 ml-auto">
+
         {/* Bell Icon */}
         <button
           onClick={handleInboxClick}
-          className="relative p-2 rounded-lg hover:bg-gray-100 transition group"
+          className="
+            relative p-2 rounded-lg 
+            hover:bg-gray-100 
+            active:scale-95
+            transition
+          "
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +54,7 @@ export default function TopBar() {
             fill="none"
             strokeWidth={1.8}
             stroke="currentColor"
-            className="w-6 h-6 text-gray-700 group-hover:text-black transition"
+            className="w-5 h-5 md:w-6 md:h-6 text-gray-700"
           >
             <path
               strokeLinecap="round"
@@ -69,31 +77,32 @@ export default function TopBar() {
           )}
         </button>
 
-        {/* Avatar + User Info (no background card) */}
+        {/* Avatar + User Info */}
         <motion.div
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.35 }}
-          className="flex items-center gap-3 cursor-pointer"
+          className="flex items-center gap-2 md:gap-3 cursor-pointer"
         >
-          {/* Avatar Circle */}
+          {/* Avatar */}
           <div
             className="
-              w-9 h-9 rounded-full
+              w-8 h-8 md:w-9 md:h-9
+              rounded-full
               bg-gradient-to-br from-indigo-500 to-purple-500
               flex items-center justify-center
-              text-white text-sm font-semibold
+              text-white text-xs md:text-sm font-semibold
             "
           >
             {user?.name?.charAt(0)?.toUpperCase() || "U"}
           </div>
 
           {/* User Info */}
-          <div className="leading-tight">
-            <p className="text-sm font-semibold text-gray-900">
+          <div className="leading-tight hidden sm:block">
+            <p className="text-xs md:text-sm font-semibold text-gray-900">
               {user?.name || "User"}
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-[10px] md:text-xs text-gray-500">
               {user?.email}
             </p>
           </div>

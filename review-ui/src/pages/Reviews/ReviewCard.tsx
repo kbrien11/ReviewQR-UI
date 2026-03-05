@@ -3,38 +3,51 @@ export default function ReviewCard({ review, onClick, delay }) {
         <div
             onClick={onClick}
             className="
-          p-5 bg-white rounded-2xl border border-gray-200
-          shadow-sm hover:shadow-md transition-all hover:-translate-y-[2px]
-          cursor-pointer animate-fadeInUp
-        "
-            style={{ animationDelay: `${delay}ms` }}
+            bg-white/90 backdrop-blur-xl
+            rounded-2xl border border-gray-200
+            shadow-sm active:scale-[.99]
+            transition-all duration-200
+            p-4 space-y-3 cursor-pointer
+          "
+          style={{ animationDelay: window.innerWidth < 640 ? "0ms" : `${delay}ms` }}
         >
-            <div className="flex justify-between items-center mb-2">
-                <p className="text-lg font-semibold text-yellow-500">
+            {/* Header Row */}
+            <div className="flex items-center justify-between">
+
+                {/* Rating */}
+                <p className="text-base font-semibold text-yellow-500 leading-none">
                     {"⭐".repeat(review.rating)}
                 </p>
 
-                <span className="
-            text-xs px-3 py-1 rounded-full font-medium
-            bg-gray-100 text-gray-700
-          ">
-                    {review.source === "google" ? "Google" : "Internal"}
-                </span>
-                {review.source === "google" && (
+                <div className="flex items-center gap-2">
+
+                    {/* Source Badge */}
                     <span className="
-    text-xs font-medium text-indigo-600
-    bg-indigo-50 px-2 py-1 rounded-md
-  ">
-                        Reply
+                text-[11px] px-2.5 py-1 rounded-full font-medium
+                bg-gray-100 text-gray-700
+              ">
+                        {review.source === "google" ? "Google" : "Internal"}
                     </span>
-                )}
+
+                    {/* Reply Badge */}
+                    {review.source === "google" && (
+                        <span className="
+                  text-[11px] font-medium text-indigo-600
+                  bg-indigo-50 px-2 py-1 rounded-md
+                ">
+                            Reply
+                        </span>
+                    )}
+                </div>
             </div>
 
-            <p className="text-gray-800 leading-relaxed text-[15px]">
+            {/* Comment */}
+            <p className="text-gray-800 text-[15px] leading-relaxed">
                 {review.comment}
             </p>
 
-            <p className="text-xs text-gray-400 mt-3">
+            {/* Timestamp */}
+            <p className="text-[11px] text-gray-400">
                 {new Date(review.created_at).toLocaleString()}
             </p>
         </div>

@@ -24,22 +24,22 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
 
-      {/* NAVBAR — Premium SaaS style */}
       <nav
         className="
     fixed top-0 left-0 w-full z-50
-    bg-white/70 backdrop-blur-xl
+    bg-white/80 backdrop-blur-xl
     border-b border-gray-200
-    px-8 py-5 flex items-center justify-between
+    px-4 py-3
+    flex items-center justify-between
     transition-all duration-300
   "
       >
         {/* Brand */}
-        <Link to="/" className="flex items-center gap-3 group">
+        <Link to="/" className="flex items-center gap-2 group">
           <div
             className="
-        h-9 w-9 rounded-xl bg-indigo-600 flex items-center justify-center
-        text-white font-bold text-lg shadow-sm
+        h-8 w-8 rounded-xl bg-indigo-600 flex items-center justify-center
+        text-white font-bold text-base shadow-sm
         group-hover:scale-105 transition-transform
       "
           >
@@ -48,7 +48,7 @@ export default function LandingPage() {
 
           <span
             className="
-        text-2xl font-semibold tracking-tight text-gray-900
+        text-xl font-semibold tracking-tight text-gray-900
         group-hover:text-indigo-600 transition-colors
       "
           >
@@ -57,11 +57,11 @@ export default function LandingPage() {
         </Link>
 
         {/* Actions */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <Link
             to="/login"
             className="
-        px-4 py-2 rounded-lg font-medium text-gray-700
+        px-3 py-1.5 rounded-lg font-medium text-gray-700 text-sm
         hover:bg-gray-100 transition-all
       "
           >
@@ -71,7 +71,7 @@ export default function LandingPage() {
           <Link
             to="/register"
             className="
-        px-5 py-2.5 rounded-lg font-semibold text-white
+        px-4 py-2 rounded-lg font-semibold text-white text-sm
         bg-indigo-600 hover:bg-indigo-700
         shadow-sm hover:shadow-md
         transition-all active:scale-[.97]
@@ -82,16 +82,22 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* HERO — with floating illustration + glow + fade-up */}
-      <div className="flex flex-col-reverse md:flex-row items-center justify-between px-6 mt-32 gap-10 max-w-6xl mx-auto">
+      {/* HERO — Mobile-first premium */}
+      <div className="
+  flex flex-col-reverse md:flex-row
+  items-center justify-between
+  px-5 max-w-6xl mx-auto
+  mt-20 md:mt-32
+  gap-12 md:gap-10
+">
 
         {/* Left: Text */}
-        <div className="text-center md:text-left md:w-1/2">
+        <div className="text-center md:text-left md:w-1/2 space-y-5">
           <h2
-            className={`
-              text-4xl md:text-5xl font-bold tracking-tight text-gray-900
-              transition-all duration-700 animate-fadeUp
-            `}
+            className="
+        text-3xl leading-tight md:text-5xl font-bold tracking-tight text-gray-900
+        animate-fadeUp
+      "
           >
             Get More Reviews Instantly
             <span className="text-indigo-600"> With One Scan</span>
@@ -99,9 +105,10 @@ export default function LandingPage() {
 
           <p
             className="
-              mt-4 text-gray-600 max-w-md animate-fadeUp opacity-0
-              [animation-delay:200ms]
-            "
+        text-gray-600 text-[15px] leading-relaxed
+        max-w-sm mx-auto md:mx-0
+        animate-fadeUp opacity-0 [animation-delay:200ms]
+      "
           >
             ReviewQR helps small businesses collect more 5‑star reviews using
             beautifully branded QR codes and a smart review funnel.
@@ -110,40 +117,62 @@ export default function LandingPage() {
           <Link
             to="/register"
             className="
-              mt-8 inline-block px-6 py-3 bg-indigo-600 text-white rounded-lg
-              text-lg font-semibold shadow-sm hover:bg-indigo-700
-              transition-all duration-300 hover:scale-[1.03] active:scale-[.98]
-              animate-fadeUp opacity-0 [animation-delay:350ms]
-            "
+        inline-block
+        px-5 py-3 rounded-xl
+        bg-indigo-600 text-white font-semibold text-[15px]
+        shadow-md hover:bg-indigo-700
+        transition-all duration-300
+        hover:scale-[1.03] active:scale-[.98]
+        animate-fadeUp opacity-0 [animation-delay:350ms]
+      "
           >
             Get Started Free
           </Link>
         </div>
 
         {/* Right: Illustration */}
-        <div className="relative md:w-1/2 flex justify-center items-center animate-fadeUp opacity-0 [animation-delay:450ms]">
-          <div className="absolute inset-0 bg-indigo-300/30 rounded-3xl blur-3xl opacity-60 animate-pulse-slow"></div>
+        <div className="
+    relative md:w-1/2 flex justify-center items-center
+    animate-fadeUp opacity-0 [animation-delay:450ms]
+  ">
+          <div className="
+      absolute inset-0
+      bg-indigo-300/20 rounded-3xl blur-2xl opacity-60
+      md:blur-3xl md:opacity-70
+      animate-pulse-slow
+    "></div>
 
           <img
             src={qrCartoon}
             alt="QR Illustration"
-            className="w-72 md:w-96 relative z-10 animate-float"
+            className="
+        w-56 md:w-96 relative z-10
+        animate-float
+      "
           />
         </div>
       </div>
 
-      {/* FEATURES — staggered fade-up */}
-      <div className="mt-24 px-6 max-w-6xl mx-auto pb-20">
+      {/* FEATURES — Mobile-first, Desktop-scaled */}
+      <div className="mt-20 px-5 md:px-10 lg:px-20 max-w-6xl mx-auto pb-20">
+
         <h2
           className="
-            text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12
-            animate-fadeUp opacity-0
-          "
+    text-2xl md:text-4xl font-bold text-center text-gray-900
+    mb-10 md:mb-16
+    leading-snug
+    animate-fadeUp opacity-0
+  "
         >
           Powerful Features Built for Local Businesses
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div
+          className="
+    flex flex-col md:grid md:grid-cols-3
+    gap-6 md:gap-10
+  "
+        >
           {[
             {
               title: "Branded QR Codes",
@@ -164,59 +193,64 @@ export default function LandingPage() {
             <div
               key={i}
               className="
-              group relative p-8 rounded-2xl bg-white/80 backdrop-blur-xl
-              border border-gray-200 shadow-sm
-              transition-all duration-500
-              hover:shadow-xl hover:-translate-y-2
-              hover:bg-white
-            "
-              style={{ animationDelay: `${300 + i * 150}ms` }}
+        relative p-5 md:p-7 rounded-2xl
+        bg-white/90 backdrop-blur-xl
+        border border-gray-200 shadow-sm
+        flex items-start gap-4 md:gap-5
+        transition-all duration-500
+        hover:shadow-xl hover:-translate-y-2
+      "
+              style={{ animationDelay: `${200 + i * 120}ms` }}
             >
-              {/* Glow */}
-              <div className="
-              absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-40
-              bg-gradient-to-br from-indigo-200 to-purple-200
-              blur-2xl transition-all duration-500
-            " />
-
-              {/* Icon */}
-              <div className="relative text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
+              {/* Icon container */}
+              <div
+                className="
+          h-12 w-12 md:h-16 md:w-16 rounded-xl
+          bg-indigo-100 text-indigo-600
+          flex items-center justify-center
+          text-2xl md:text-3xl
+          shadow-sm
+        "
+              >
                 {item.icon}
               </div>
 
-              <h3 className="relative text-xl font-bold text-gray-900 mb-2">
-                {item.title}
-              </h3>
-
-              <p className="relative text-gray-600 leading-relaxed">
-                {item.desc}
-              </p>
+              {/* Text */}
+              <div className="flex-1">
+                <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-1">
+                  {item.title}
+                </h3>
+                <p className="text-gray-600 text-[15px] md:text-base leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
+      {/* HOW IT WORKS — Mobile + Desktop Premium */}
+      <div className="py-16 md:py-28  relative">
 
-      {/* HOW IT WORKS */}
-      <div className="py-24 bg-white border-t border-gray-200 relative">
-      <div className="absolute inset-0 pointer-events-none animate-pulseSlow bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.10),transparent_75%)]"></div>
-        {/* Section Title */}
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.08),transparent_75%)]"></div>
+
         <h3
           className="
-    text-3xl md:text-4xl font-bold text-center text-gray-900 mb-16
+    text-2xl md:text-4xl font-bold text-center text-gray-900
+    mb-12 md:mb-20
     animate-fadeUp opacity-0
   "
         >
           How It Works
         </h3>
 
-        {/* Connector Line (Desktop Only) */}
-        <div className="hidden md:block absolute left-1/2 top-[260px] -translate-x-1/2 w-[60%] h-[2px] bg-gray-200"></div>
-        
-
-        {/* Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto relative z-10">
-
+        <div className="
+  grid grid-cols-1 md:grid-cols-3
+  gap-10 md:gap-14
+  max-w-5xl mx-auto
+  px-6 md:px-0
+  relative z-10
+">
           {[
             { icon: "📱", title: "Scan the QR", desc: "Customers scan your branded QR code." },
             { icon: "⭐", title: "Leave a Review", desc: "They’re guided to your review funnel." },
@@ -224,43 +258,40 @@ export default function LandingPage() {
           ].map((step, i) => (
             <div
               key={i}
-              className="text-center opacity-0 animate-fadeUp"
-              style={{ animationDelay: `${200 + i * 200}ms` }}
+              className="
+        bg-white/90 backdrop-blur-xl
+        border border-gray-200 shadow-sm
+        rounded-2xl p-6 md:p-8 text-center
+        animate-fadeUp opacity-0
+        transition-all duration-300
+        hover:shadow-xl hover:-translate-y-2
+      "
+              style={{ animationDelay: `${200 + i * 180}ms` }}
             >
-              {/* Step Number Ring */}
-              <div className="relative mx-auto mb-6 w-16 h-16 flex items-center justify-center">
-                <div className="
-          absolute inset-0 rounded-full border-2 border-indigo-300
-          opacity-30 animate-ping
-        "></div>
-
-                <div className="
-          relative w-16 h-16 rounded-full bg-white border border-gray-300
-          shadow-sm flex items-center justify-center text-lg font-bold text-gray-700
-        ">
+              <div className="relative mx-auto mb-5 md:mb-7 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center">
+                <div className="absolute inset-0 rounded-full border-2 border-indigo-300 opacity-30 animate-ping"></div>
+                <div className="relative w-full h-full rounded-full bg-white border border-gray-300 shadow-sm flex items-center justify-center text-lg md:text-xl font-bold text-gray-700">
                   {i + 1}
                 </div>
               </div>
 
-              {/* Icon */}
-              <div className="text-5xl mb-4 animate-pop">{step.icon}</div>
+              <div className="text-4xl md:text-5xl mb-3 md:mb-4">{step.icon}</div>
 
-              {/* Title */}
-              <h4 className="text-xl font-semibold text-gray-900 mb-2">
+              <h4 className="text-lg md:text-2xl font-semibold text-gray-900 mb-1 md:mb-2">
                 {step.title}
               </h4>
 
-              {/* Description */}
-              <p className="text-gray-600 max-w-xs mx-auto">
+              <p className="text-gray-600 text-[15px] md:text-base leading-relaxed max-w-xs mx-auto">
                 {step.desc}
               </p>
             </div>
           ))}
-
         </div>
       </div>
+
+
       {/* SEE IT IN ACTION */}
-      <div className="py-28 bg-white border-t border-gray-200 relative overflow-hidden">
+      <div className="py-28  relative overflow-hidden">
 
         {/* Section Title */}
         <h3 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-20 animate-fadeUp">

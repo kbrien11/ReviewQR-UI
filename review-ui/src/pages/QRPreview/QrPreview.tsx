@@ -55,11 +55,11 @@ export default function QRPreview() {
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
 
-<PageHeader businessName={data.business} title="All Scans" />
-  
+      <PageHeader businessName={data.business} title="All Scans" />
+
       {/* CONTENT */}
       <div className="p-5 max-w-4xl mx-auto">
-  
+
         {/* METRIC CARDS — Linear style */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-8">
           {[
@@ -82,66 +82,89 @@ export default function QRPreview() {
             </div>
           ))}
         </div>
-  
-        {/* MINI SPARKLINE CHART — Linear style */}
-        <div className="
-          bg-white p-6 rounded-2xl shadow-sm border border-gray-200
-          mt-8 animate-fadeInUp
-        ">
-          <h2 className="text-lg font-bold mb-4">Last 7 Days Trend</h2>
-  
+
+        {/* MINI SPARKLINE CHART — Premium Mobile */}
+        <div
+          className="
+    bg-white/90 backdrop-blur-xl
+    p-5 md:p-6 rounded-2xl shadow-sm border border-gray-200
+    mt-8 animate-fadeInUp
+  "
+        >
+          <h2 className="text-lg md:text-xl font-bold mb-5 md:mb-4">
+            Last 7 Days Trend
+          </h2>
+
           {data.last_7_days === 0 ? (
-            <p className="text-gray-500 text-center py-4">No scan activity yet.</p>
+            <p className="text-gray-500 text-center py-6 text-sm md:text-base">
+              No scan activity yet.
+            </p>
           ) : (
-            <div className="relative w-full h-36 flex items-end gap-3">
-  
+            <div className="relative w-full h-40 md:h-36 flex items-end gap-4 md:gap-3">
+
+              {/* Soft background grid (mobile only) */}
+              <div className="absolute inset-0 pointer-events-none grid grid-rows-4 opacity-20 md:opacity-10">
+                <div className="border-b border-gray-200"></div>
+                <div className="border-b border-gray-200"></div>
+                <div className="border-b border-gray-200"></div>
+                <div></div>
+              </div>
+
               {data.daily_counts?.map((count: number, i: number) => {
                 const day = new Date();
                 day.setDate(day.getDate() - (6 - i));
-  
+
                 const dayLabel = day.toLocaleDateString("en-US", { weekday: "short" });
                 const fullDay = day.toLocaleDateString("en-US", { weekday: "long" });
-  
+
                 return (
-                  <div key={i} className="flex-1 flex flex-col items-center group relative">
-  
+                  <div
+                    key={i}
+                    className="flex-1 flex flex-col items-center group relative"
+                  >
                     {/* Tooltip */}
-                    <div className="
-                      absolute -top-10 px-3 py-1 rounded-md text-xs font-semibold text-white bg-gray-900 
-                      opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none
-                      shadow-lg whitespace-nowrap
-                    ">
+                    <div
+                      className="
+                absolute -top-12 px-3 py-1.5 rounded-lg text-xs font-semibold
+                text-white bg-gray-900 shadow-lg whitespace-nowrap
+                opacity-0 group-hover:opacity-100 transition-all duration-200
+                scale-95 group-hover:scale-100
+              "
+                    >
                       {fullDay}: {count} scans
                     </div>
-  
+
                     {/* Bar */}
                     <div
                       className="
-                        w-full rounded-md bg-indigo-500 shadow-sm 
-                        transition-all duration-500 group-hover:scale-105
-                      "
+                w-full rounded-md bg-indigo-500
+                shadow-sm shadow-indigo-200
+                transition-all duration-500 group-hover:scale-[1.08]
+              "
                       style={{
-                        height: `${Math.max(count * 12, 8)}px`,
-                        animationDelay: `${i * 80}ms`,
+                        height: `${Math.max(count * 14, 10)}px`, // slightly taller on mobile
+                        animationDelay: `${i * 90}ms`,
                       }}
                     ></div>
-  
+
                     {/* Day label */}
-                    <p className="text-xs text-gray-500 mt-2">{dayLabel}</p>
+                    <p className="text-[11px] md:text-xs text-gray-600 mt-2 font-medium">
+                      {dayLabel}
+                    </p>
                   </div>
                 );
               })}
             </div>
           )}
         </div>
-  
+
         {/* DEVICE BREAKDOWN — Linear style */}
         <div className="
           bg-white p-6 rounded-2xl shadow-sm border border-gray-200
           mt-8 animate-fadeInUp
         ">
           <h2 className="text-lg font-bold mb-4">Device Breakdown</h2>
-  
+
           {Object.keys(data.device_breakdown).length === 0 ? (
             <p className="text-gray-500 text-center py-4">No device data yet.</p>
           ) : (
@@ -160,14 +183,14 @@ export default function QRPreview() {
             </div>
           )}
         </div>
-  
+
         {/* RECENT SCANS — Linear style */}
         <div className="
           bg-white p-6 rounded-2xl shadow-sm border border-gray-200
           mt-8 animate-fadeInUp
         ">
           <h2 className="text-lg font-bold mb-4">Recent Scans</h2>
-  
+
           {data.recent_scans.length === 0 ? (
             <div className="
               p-5 bg-yellow-50 border border-yellow-300 text-yellow-800
@@ -180,7 +203,7 @@ export default function QRPreview() {
               {data.recent_scans.map((scan: any, i: number) => {
                 const date = new Date(scan.scanned_at);
                 const relative = date.toLocaleString();
-  
+
                 return (
                   <div
                     key={i}
@@ -194,29 +217,28 @@ export default function QRPreview() {
                   >
                     {/* LEFT SIDE */}
                     <div className="flex items-center gap-4">
-  
+
                       {/* Device Icon */}
                       <div
                         className={`
                           w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-inner
-                          ${
-                            scan.device_type === 'mobile'
-                              ? 'bg-blue-100 text-blue-600'
-                              : 'bg-purple-100 text-purple-600'
+                          ${scan.device_type === 'mobile'
+                            ? 'bg-blue-100 text-blue-600'
+                            : 'bg-purple-100 text-purple-600'
                           }
                         `}
                       >
                         {scan.device_type === "mobile" ? "📱" : "💻"}
                       </div>
-  
+
                       {/* Scan Info */}
                       <div>
                         <p className="font-semibold text-gray-800 capitalize">
                           {scan.device_type === "mobile" ? "Mobile Device" : "Desktop Device"}
                         </p>
-  
+
                         <p className="text-xs text-gray-500 mt-1">{relative}</p>
-  
+
                         {scan.ip_address && (
                           <p className="text-[11px] text-gray-400 mt-1">
                             IP: {scan.ip_address}
@@ -224,15 +246,14 @@ export default function QRPreview() {
                         )}
                       </div>
                     </div>
-  
+
                     {/* RIGHT SIDE BADGE */}
                     <span
                       className={`
                         text-xs px-3 py-1 rounded-full font-semibold whitespace-nowrap
-                        ${
-                          scan.device_type === "mobile"
-                            ? "bg-blue-100 text-blue-700"
-                            : "bg-purple-100 text-purple-700"
+                        ${scan.device_type === "mobile"
+                          ? "bg-blue-100 text-blue-700"
+                          : "bg-purple-100 text-purple-700"
                         }
                       `}
                     >

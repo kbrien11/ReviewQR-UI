@@ -84,7 +84,7 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
 
       {/* HEADER */}
       <FadeIn>
@@ -94,10 +94,12 @@ export default function Dashboard() {
               <div className="w-1 h-8 md:h-10 bg-gradient-to-b from-indigo-500 to-indigo-600 rounded-full" />
 
               <div className="flex flex-col">
-                <h1 className="
-                  text-2xl md:text-4xl font-semibold tracking-tight
-                  bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent
-                ">
+                <h1
+                  className="
+                    text-2xl md:text-4xl font-semibold tracking-tight
+                    bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent
+                  "
+                >
                   {data.business_name} Analytics
                 </h1>
               </div>
@@ -111,11 +113,11 @@ export default function Dashboard() {
       </FadeIn>
 
       {/* MAIN CONTENT */}
-      <div className="px-4 py-6 md:px-8 w-full max-w-screen-xl mx-auto">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
 
         {/* KPI ROW */}
         <Stagger>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
 
             <motion.div variants={staggerItem}>
               <DashboardCard
@@ -157,10 +159,10 @@ export default function Dashboard() {
         </Stagger>
 
         {/* MAIN GRID */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mt-6 md:mt-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
 
           {/* LEFT COLUMN */}
-          <div className="space-y-6 md:space-y-8 lg:col-span-2">
+          <div className="space-y-6 lg:col-span-2">
 
             <FadeIn delay={0.1}>
               <SentimentOverview data={data} />

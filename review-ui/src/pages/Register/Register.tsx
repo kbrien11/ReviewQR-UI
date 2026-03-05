@@ -34,7 +34,7 @@ export default function Register() {
   });
 
   const params = new URLSearchParams(window.location.search);
-const googleConnected = params.get("google") === "connected";
+  const googleConnected = params.get("google") === "connected";
 
   // Load saved progress
   useEffect(() => {
@@ -191,21 +191,31 @@ const googleConnected = params.get("google") === "connected";
       </div>
 
       {/* MAIN CONTENT AREA */}
-      <div className="flex-1 flex flex-col items-center p-6">
+      <div className="flex-1 flex flex-col px-4 py-6">
 
         {/* MODAL CARD */}
-        <div className="w-full max-w-xl bg-white p-10 rounded-xl border border-gray-200 shadow-sm relative">
+        <div
+          className="
+                  w-full max-w-sm sm:max-w-md mx-auto
+                  bg-white/80 backdrop-blur-xl
+                  p-5 sm:p-8
+                  rounded-2xl
+                  border border-gray-200
+                  shadow-xl
+                  animate-fadeUp
+                "
+        >
 
           {/* ALERTS */}
           {alert && (
             <div
               className={`
-                    mb-6 p-4 rounded-lg text-sm font-medium
-                    ${alert.includes("successfully")
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
+        mb-5 px-4 py-3 rounded-xl text-sm font-medium shadow-sm
+        ${alert.includes("successfully")
+                  ? "bg-green-50 text-green-700 border border-green-200"
+                  : "bg-red-50 text-red-700 border border-red-200"
                 }
-                  `}
+      `}
             >
               {alert}
             </div>
@@ -213,78 +223,37 @@ const googleConnected = params.get("google") === "connected";
 
           {/* STEP CONTENT */}
           <div className="animate-step">
+
+            {/* STEP 0 — BUSINESS INFO */}
             {step === 0 && (
-              <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Business Info</h2>
+              <div className="space-y-6">
+                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">Business Info</h2>
 
-                <input
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  placeholder="Business Name"
-                  className="
-  w-full px-4 py-3.5
-  rounded-lg border border-gray-300
-  text-[15px] font-medium text-gray-900
-  placeholder:text-gray-400
-  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
-  transition
-  font-[var(--vercel-font)]
-"                   />
+                <div className="space-y-4">
+                  <input name="name" value={form.name} onChange={handleChange}
+                    placeholder="Business Name"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 transition shadow-sm"
+                  />
 
-                <input
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="Email"
-                  className="
-  w-full px-4 py-3.5
-  rounded-lg border border-gray-300
-  text-[15px] font-medium text-gray-900
-  placeholder:text-gray-400
-  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
-  transition
-  font-[var(--vercel-font)]
-"                   />
+                  <input name="email" value={form.email} onChange={handleChange}
+                    placeholder="Email"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 transition shadow-sm"
+                  />
 
-                <input
-                  name="phone"
-                  value={form.phone}
-                  onChange={handleChange}
-                  placeholder="Phone Number"
-                  className="
-  w-full px-4 py-3.5
-  rounded-lg border border-gray-300
-  text-[15px] font-medium text-gray-900
-  placeholder:text-gray-400
-  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
-  transition
-  font-[var(--vercel-font)]
-"                   />
+                  <input name="phone" value={form.phone} onChange={handleChange}
+                    placeholder="Phone Number"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 transition shadow-sm"
+                  />
 
-                <input
-                  name="google_review_link"
-                  value={form.google_review_link}
-                  onChange={handleChange}
-                  placeholder="Google Review Link"
-                  className="
-  w-full px-4 py-3.5
-  rounded-lg border border-gray-300
-  text-[15px] font-medium text-gray-900
-  placeholder:text-gray-400
-  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
-  transition
-  font-[var(--vercel-font)]
-"                    />
-                {/* GOOGLE REVIEWS CONNECT */}
-                <div className="mt-6 p-4 border rounded-lg bg-gray-50">
-                  <h3 className="text-sm font-semibold text-gray-800 mb-2">
-                    Connect Google Reviews (optional)
-                  </h3>
+                  <input name="google_review_link" value={form.google_review_link} onChange={handleChange}
+                    placeholder="Google Review Link"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 transition shadow-sm"
+                  />
+                </div>
 
-                  <p className="text-xs text-gray-600 mb-3">
-                    Connect your Google Business Profile to automatically sync reviews and reply directly from your dashboard.
-                  </p>
+                <div className="p-4 rounded-xl bg-white/80 backdrop-blur-xl border border-gray-200 shadow-sm space-y-3">
+                  <h3 className="text-sm font-semibold text-gray-800">Connect Google Reviews</h3>
+                  <p className="text-xs text-gray-600">Sync your Google Business Profile to pull reviews automatically.</p>
 
                   {googleConnected ? (
                     <div className="px-4 py-2 rounded-lg bg-green-100 text-green-700 text-sm font-medium">
@@ -292,9 +261,7 @@ const googleConnected = params.get("google") === "connected";
                     </div>
                   ) : (
                     <button
-                      onClick={() => {
-                        window.location.href = "http://127.0.0.1:8000/googleAuth/google/oauth/start/";
-                      }}
+                      onClick={() => window.location.href = "http://127.0.0.1:8000/googleAuth/google/oauth/start/"}
                       className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition"
                     >
                       Connect Google Business Profile
@@ -304,37 +271,37 @@ const googleConnected = params.get("google") === "connected";
               </div>
             )}
 
+            {/* STEP 1 — BRAND COLOR */}
             {step === 1 && (
-              <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Brand Color</h2>
+              <div className="space-y-6">
+                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">Brand Color</h2>
 
-                <input
-                  type="color"
-                  name="brand_color"
-                  value={form.brand_color}
-                  onChange={handleChange}
-                  className="w-20 h-12 rounded-lg border border-gray-300 cursor-pointer"
-                />
+                <div className="p-4 rounded-xl bg-white/80 backdrop-blur-xl border border-gray-200 shadow-sm flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-700">Choose your brand color</span>
+                  <input type="color" name="brand_color" value={form.brand_color} onChange={handleChange}
+                    className="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer shadow-sm"
+                  />
+                </div>
               </div>
             )}
 
+            {/* STEP 2 — QR FILL COLOR */}
             {step === 2 && (
-              <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">QR Fill Color</h2>
+              <div className="space-y-6">
+                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">QR Fill Color</h2>
 
-                <input
-                  type="color"
-                  name="qr_fill_color"
-                  value={form.qr_fill_color}
-                  onChange={handleChange}
-                  className="w-20 h-12 rounded-lg border border-gray-300 cursor-pointer"
-                />
+                <div className="p-4 rounded-xl bg-white/80 backdrop-blur-xl border border-gray-200 shadow-sm flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-700">Fill Color</span>
+                  <input type="color" name="qr_fill_color" value={form.qr_fill_color} onChange={handleChange}
+                    className="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer shadow-sm"
+                  />
+                </div>
 
-                <div className="mt-6 flex justify-center">
-                  <div className="p-4 rounded-xl border bg-white shadow-sm">
+                <div className="flex justify-center">
+                  <div className="p-4 rounded-xl bg-white shadow-sm border">
                     <QRCodeCanvas
                       value="https://reviewqr.com/preview"
-                      size={180}
+                      size={160}
                       bgColor={form.qr_back_color}
                       fgColor={form.qr_fill_color}
                       level="H"
@@ -345,23 +312,23 @@ const googleConnected = params.get("google") === "connected";
               </div>
             )}
 
+            {/* STEP 3 — QR BACKGROUND COLOR */}
             {step === 3 && (
-              <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">QR Background Color</h2>
+              <div className="space-y-6">
+                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">QR Background Color</h2>
 
-                <input
-                  type="color"
-                  name="qr_back_color"
-                  value={form.qr_back_color}
-                  onChange={handleChange}
-                  className="w-20 h-12 rounded-lg border border-gray-300 cursor-pointer"
-                />
+                <div className="p-4 rounded-xl bg-white/80 backdrop-blur-xl border border-gray-200 shadow-sm flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-700">Background Color</span>
+                  <input type="color" name="qr_back_color" value={form.qr_back_color} onChange={handleChange}
+                    className="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer shadow-sm"
+                  />
+                </div>
 
-                <div className="mt-6 flex justify-center">
-                  <div className="p-4 rounded-xl border bg-white shadow-sm">
+                <div className="flex justify-center">
+                  <div className="p-4 rounded-xl bg-white shadow-sm border">
                     <QRCodeCanvas
                       value="https://reviewqr.com/preview"
-                      size={180}
+                      size={160}
                       bgColor={form.qr_back_color}
                       fgColor={form.qr_fill_color}
                       level="H"
@@ -372,46 +339,66 @@ const googleConnected = params.get("google") === "connected";
               </div>
             )}
 
+            {/* STEP 4 — QR SETTINGS */}
             {step === 4 && (
-              <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">QR Settings</h2>
+              <div className="space-y-6">
+                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">QR Settings</h2>
 
-                <input
-                  type="number"
-                  name="qr_box_size"
-                  value={form.qr_box_size}
-                  onChange={handleChange}
+                <input type="number" name="qr_box_size" value={form.qr_box_size} onChange={handleChange}
                   placeholder="QR Box Size"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 transition shadow-sm"
                 />
 
-                <input
-                  type="number"
-                  name="qr_border"
-                  value={form.qr_border}
-                  onChange={handleChange}
+                <input type="number" name="qr_border" value={form.qr_border} onChange={handleChange}
                   placeholder="QR Border Size"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 transition shadow-sm"
                 />
               </div>
             )}
 
+            {/* STEP 5 — REVIEW */}
             {step === 5 && (
-              <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Review Your Info</h2>
+              <div className="space-y-6">
+                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">Review Your Info</h2>
 
-                <pre className="bg-gray-50 p-4 rounded-lg border text-sm text-gray-700">
-                  {JSON.stringify(form, null, 2)}
-                </pre>
+                <div className="bg-white/80 backdrop-blur-xl rounded-xl border border-gray-200 shadow-sm p-4 space-y-4">
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Business Info</p>
+                    <div className="bg-gray-50 rounded-lg p-3 text-sm text-gray-800 space-y-1">
+                      <p><span className="font-medium text-gray-700">Name:</span> {form.name}</p>
+                      <p><span className="font-medium text-gray-700">Email:</span> {form.email}</p>
+                      <p><span className="font-medium text-gray-700">Phone:</span> {form.phone}</p>
+                      <p><span className="font-medium text-gray-700">Google Link:</span> {form.google_review_link}</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Branding</p>
+                    <div className="bg-gray-50 rounded-lg p-3 text-sm text-gray-800 space-y-1">
+                      <p><span className="font-medium text-gray-700">Brand Color:</span> {form.brand_color}</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">QR Settings</p>
+                    <div className="bg-gray-50 rounded-lg p-3 text-sm text-gray-800 space-y-1">
+                      <p><span className="font-medium text-gray-700">Fill Color:</span> {form.qr_fill_color}</p>
+                      <p><span className="font-medium text-gray-700">Background:</span> {form.qr_back_color}</p>
+                      <p><span className="font-medium text-gray-700">Box Size:</span> {form.qr_box_size}</p>
+                      <p><span className="font-medium text-gray-700">Border:</span> {form.qr_border}</p>
+                    </div>
+                  </div>
+                </div>
 
                 <button
                   onClick={handleFinalSubmit}
-                  className="w-full mt-4 px-6 py-3 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition"
+                  className="w-full py-3.5 rounded-lg bg-indigo-600 text-white font-semibold shadow-md hover:bg-indigo-700 active:scale-[.98] transition-all duration-200"
                 >
                   Submit
                 </button>
               </div>
             )}
+
           </div>
 
           {/* NAVIGATION BUTTONS */}
@@ -455,7 +442,7 @@ const googleConnected = params.get("google") === "connected";
           </p>
         </div>
 
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }

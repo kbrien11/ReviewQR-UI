@@ -18,36 +18,56 @@ import TeamMembers from "./pages/TeamMembers/TeamMembers";
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/reviews" element={<Reviews />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={
-    <ProtectedRoute>
-      <Dashboard />
-    </ProtectedRoute>
-  } />
-        <Route path="/reviews/:business" element={
-    <ProtectedRoute>
-      <Reviews />
-    </ProtectedRoute>
-  } />
-        <Route path="/scans/:slug" element={
-    <ProtectedRoute>
-      <QRPreview />
-    </ProtectedRoute>
-  } />
-        <Route path="/review/:slug" element={<LeaveReviewPage />} />
-        <Route path="/business/:slug/qr" element={<BusinessQRPage />} />
-        <Route path="/admin/team/:business" element={<TeamMembers />} />
-        {/* <Route path="/dashboard" element={<Dashboard /
-        {/* <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/reviews" element={<Reviews} 
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/qr-preview" element={<QRPreview />} /> */}
-      </Routes>
+
+      {/* GLOBAL MOBILE WRAPPER */}
+      <div className="
+        min-h-screen bg-gray-50 overflow-x-hidden
+        pt-[env(safe-area-inset-top)]
+        pb-[env(safe-area-inset-bottom)]
+      ">
+        <div className="mx-auto w-full max-w-xl md:max-w-5xl">
+
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/reviews" element={<Reviews />} />
+            <Route path="/register" element={<Register />} />
+
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/reviews/:business"
+              element={
+                <ProtectedRoute>
+                  <Reviews />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/scans/:slug"
+              element={
+                <ProtectedRoute>
+                  <QRPreview />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route path="/review/:slug" element={<LeaveReviewPage />} />
+            <Route path="/business/:slug/qr" element={<BusinessQRPage />} />
+            <Route path="/admin/team/:business" element={<TeamMembers />} />
+          </Routes>
+
+        </div>
+      </div>
+
     </BrowserRouter>
   );
 }
-

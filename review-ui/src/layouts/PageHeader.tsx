@@ -5,15 +5,23 @@ export default function PageHeader({ businessName, title }) {
     <header
       className="
         sticky top-0 z-50
-        bg-white/80 backdrop-blur-xl
-        border-b border-gray-200
-        px-4 py-3 md:px-6 md:py-5
+        bg-white/70 backdrop-blur-xl
+        border-b border-gray-200/70
         shadow-sm
       "
     >
-      <div className="max-w-5xl mx-auto flex items-center justify-between">
+      <div
+        className="
+          w-full
+          px-4 sm:px-6 lg:px-12
+          py-3 md:py-5
+          max-w-full md:max-w-6xl lg:max-w-7xl xl:max-w-[1400px]
+          mx-auto
+          flex items-center justify-between
+        "
+      >
 
-        {/* MOBILE LAYOUT — centered title, app-like */}
+        {/* MOBILE — centered title */}
         <div className="flex md:hidden items-center justify-between w-full">
 
           {/* Back Button */}
@@ -23,6 +31,7 @@ export default function PageHeader({ businessName, title }) {
               h-10 w-10 flex items-center justify-center
               rounded-xl bg-gray-100 text-gray-700
               active:scale-95 transition
+              shadow-sm
             "
           >
             <svg
@@ -55,7 +64,7 @@ export default function PageHeader({ businessName, title }) {
           <div className="h-10 w-10"></div>
         </div>
 
-        {/* DESKTOP LAYOUT — original design */}
+        {/* DESKTOP — left-aligned title */}
         <div className="hidden md:flex items-center gap-4">
           <button
             onClick={() => window.history.back()}
@@ -65,6 +74,7 @@ export default function PageHeader({ businessName, title }) {
               active:scale-95
               transition-all
               text-gray-600
+              shadow-sm
             "
           >
             <svg
@@ -93,7 +103,7 @@ export default function PageHeader({ businessName, title }) {
           </div>
         </div>
 
-        {/* Right Section (desktop only) */}
+        {/* Right Section */}
         <Link
           to="/"
           className="

@@ -1,6 +1,13 @@
 export default function DashboardSkeleton() {
   return (
-    <div className="min-h-screen px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto animate-pulse">
+    <div className="
+  w-full
+  px-4 sm:px-6 lg:px-12
+  py-6
+  max-w-full md:max-w-6xl lg:max-w-7xl xl:max-w-[1400px]
+  mx-auto
+  animate-pulse
+">
 
       {/* KPI Skeleton Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">

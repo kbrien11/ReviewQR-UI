@@ -31,13 +31,11 @@ export default function Sidebar({ slug, business }) {
   return (
     <aside
       className="
-        w-60 md:w-64 min-h-screen flex flex-col
-        bg-[#F8F6FF]        /* <-- move purple background here */
-                    border-r border-gray-200
-        shadow-[0_4px_20px_rgba(0,0,0,0.06)]
-        px-4 py-5
-        md:px-6 md:py-6
-        space-y-6
+        w-64 min-h-screen flex flex-col
+        bg-white
+        border-r border-gray-200
+        px-4 py-6
+        space-y-8
       "
     >
       {/* Logo */}
@@ -45,7 +43,7 @@ export default function Sidebar({ slug, business }) {
         <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-lg font-bold shadow-sm">
           R
         </div>
-        <h1 className="text-lg md:text-xl font-bold tracking-tight text-gray-900">
+        <h1 className="text-xl font-semibold tracking-tight text-gray-900">
           ReviewQR
         </h1>
       </div>
@@ -55,9 +53,9 @@ export default function Sidebar({ slug, business }) {
         <div
           className="
             flex items-center gap-2
-            bg-gray-50
-            rounded-lg px-3 py-2
-            shadow-sm
+            bg-gray-100
+            rounded-xl px-3 py-2.5
+            shadow-inner
             focus-within:ring-2 focus-within:ring-indigo-500
             transition-all
           "
@@ -76,11 +74,11 @@ export default function Sidebar({ slug, business }) {
 
         {/* BUSINESS */}
         <div>
-          <p className="text-[11px] font-semibold text-gray-500 uppercase mb-2 tracking-wide px-1">
+          <p className="text-[12px] font-semibold text-gray-500 uppercase mb-3 tracking-wide px-1">
             Business
           </p>
 
-          <div className="space-y-1">
+          <div className="space-y-1.5">
             {businessLinks.map((item) => (
               <NavLink key={item.label} to={item.to}>
                 {({ isActive }) => (
@@ -89,8 +87,8 @@ export default function Sidebar({ slug, business }) {
                       flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
                       transition-all duration-200
                       ${isActive
-                        ? "bg-indigo-50 text-indigo-700 shadow-sm"
-                        : "text-gray-700 hover:bg-gray-50"
+                        ? "bg-indigo-50 text-indigo-700 shadow-sm ring-1 ring-indigo-200"
+                        : "text-gray-700 hover:bg-gray-100"
                       }
                     `}
                   >
@@ -117,11 +115,11 @@ export default function Sidebar({ slug, business }) {
 
         {/* ADMIN */}
         <div>
-          <p className="text-[11px] font-semibold text-gray-500 uppercase mb-2 tracking-wide px-1">
+          <p className="text-[12px] font-semibold text-gray-500 uppercase mb-3 tracking-wide px-1">
             Admin
           </p>
 
-          <div className="space-y-1">
+          <div className="space-y-1.5">
             {adminLinks.map((item) => (
               <NavLink key={item.label} to={item.to}>
                 {({ isActive }) => (
@@ -130,8 +128,8 @@ export default function Sidebar({ slug, business }) {
                       flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
                       transition-all duration-200
                       ${isActive
-                        ? "bg-indigo-50 text-indigo-700 shadow-sm"
-                        : "text-gray-700 hover:bg-gray-50"
+                        ? "bg-indigo-50 text-indigo-700 shadow-sm ring-1 ring-indigo-200"
+                        : "text-gray-700 hover:bg-gray-100"
                       }
                     `}
                   >

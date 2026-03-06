@@ -19,14 +19,14 @@ export default function App() {
   return (
     <BrowserRouter>
 
-      {/* GLOBAL MOBILE WRAPPER */}
-      <div className="
-        min-h-screen bg-gray-50 overflow-x-hidden
-        pt-[env(safe-area-inset-top)]
-        pb-[env(safe-area-inset-bottom)]
-      ">
-        <div className="mx-auto w-full max-w-xl md:max-w-5xl">
-
+      <div
+        className="
+    min-h-screen bg-gray-50 overflow-x-hidden
+    pt-[env(safe-area-inset-top)]
+    pb-[env(safe-area-inset-bottom)]
+  "
+      >
+        <div className="w-full mx-auto max-w-full md:max-w-6xl lg:max-w-7xl xl:max-w-[1400px]">
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />

@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 export default function TopBar() {
   const { user, logout } = useAuth();
-  const { unreadGoogleReviews, markGoogleReviewsAsRead, businessName } = useApp();
+  const { unreadGoogleReviews, markGoogleReviewsAsRead, businessName, businessSlug } = useApp();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -36,25 +36,61 @@ export default function TopBar() {
       </h2>
 
       {/* Right: Actions */}
-      <div className="flex items-center gap-4 md:gap-5 ml-auto">
+      <div className="flex items-center gap-3 md:gap-5 ml-auto">
 
-        {/* Bell Icon */}
+        {/* Mobile QR Code */}
         <button
-          onClick={handleInboxClick}
+          onClick={() => navigate(`/business/${businessName}/qr`)}
           className="
-            relative p-2 rounded-lg 
-            hover:bg-gray-100 
-            active:scale-95
-            transition
-          "
+      md:hidden
+      h-10 w-10
+      flex items-center justify-center
+      rounded-xl
+      bg-gray-100/80
+      backdrop-blur-md
+      shadow-sm
+      hover:bg-gray-200 active:scale-95
+      transition
+    "
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
             fill="none"
+            viewBox="0 0 24 24"
             strokeWidth={1.8}
             stroke="currentColor"
-            className="w-5 h-5 md:w-6 md:h-6 text-gray-700"
+            className="w-5 h-5 text-gray-700"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3.75 4.5h4.5v4.5h-4.5V4.5zm12 0h4.5v4.5h-4.5V4.5zm-12 12h4.5v4.5h-4.5v-4.5zm12 0h4.5v4.5h-4.5v-4.5z"
+            />
+          </svg>
+        </button>
+
+        {/* Mobile Bell */}
+        <button
+          onClick={handleInboxClick}
+          className="
+      h-10 w-10
+      flex items-center justify-center
+      rounded-xl
+      bg-gray-100/80
+      backdrop-blur-md
+      shadow-sm
+      hover:bg-gray-200 active:scale-95
+      transition
+      relative
+    "
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.8}
+            stroke="currentColor"
+            className="w-5 h-5 text-gray-700"
           >
             <path
               strokeLinecap="round"
@@ -66,47 +102,29 @@ export default function TopBar() {
           {unreadGoogleReviews > 0 && (
             <span
               className="
-                absolute -top-1 -right-1
-                bg-red-500 text-white text-[10px] font-semibold
-                px-1.5 py-[1px] rounded-full shadow-md ring-1 ring-white
-                animate-[pop_0.25s_ease-out]
-              "
+          absolute -top-1 -right-1
+          bg-red-500 text-white text-[10px] font-semibold
+          px-1.5 py-[1px] rounded-full shadow-md ring-1 ring-white
+        "
             >
               {unreadGoogleReviews}
             </span>
           )}
         </button>
 
-        {/* Avatar + User Info */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.35 }}
-          className="flex items-center gap-2 md:gap-3 cursor-pointer"
+        {/* Avatar */}
+        <div
+          className="
+      h-10 w-10
+      rounded-xl
+      bg-gradient-to-br from-indigo-500 to-purple-500
+      flex items-center justify-center
+      text-white text-sm font-semibold
+      shadow-sm
+    "
         >
-          {/* Avatar */}
-          <div
-            className="
-              w-8 h-8 md:w-9 md:h-9
-              rounded-full
-              bg-gradient-to-br from-indigo-500 to-purple-500
-              flex items-center justify-center
-              text-white text-xs md:text-sm font-semibold
-            "
-          >
-            {user?.name?.charAt(0)?.toUpperCase() || "U"}
-          </div>
-
-          {/* User Info */}
-          <div className="leading-tight hidden sm:block">
-            <p className="text-xs md:text-sm font-semibold text-gray-900">
-              {user?.name || "User"}
-            </p>
-            <p className="text-[10px] md:text-xs text-gray-500">
-              {user?.email}
-            </p>
-          </div>
-        </motion.div>
+          {user?.name?.charAt(0)?.toUpperCase() || "U"}
+        </div>
       </div>
     </header>
   );

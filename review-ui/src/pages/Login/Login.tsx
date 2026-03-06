@@ -45,70 +45,105 @@ export default function Login() {
       {/* Background Glow */}
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-200/40 to-purple-200/40 blur-3xl opacity-40 pointer-events-none" />
 
-      {/* Brand Header */}
-      <div className="px-4 pt-6 flex items-center gap-3">
-        <Link to="/" className="flex items-center gap-3 group">
-          <div className="h-8 w-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-base shadow-sm group-hover:scale-105 transition-transform">
+      {/* MOBILE / DESKTOP HEADER */}
+      <div
+        className="
+          sticky top-0 z-50
+          bg-white/70 backdrop-blur-xl
+          border-b border-gray-200
+          px-4 py-4
+          flex items-center justify-between
+          shadow-sm
+        "
+      >
+        <Link to="/" className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">
             R
           </div>
-          <span className="text-lg font-semibold tracking-tight text-gray-900 group-hover:text-indigo-600 transition-colors">
+          <span className="text-lg font-semibold tracking-tight text-gray-900">
             ReviewQR
           </span>
         </Link>
+
+        <Link
+          to="/register"
+          className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
+        >
+          Register
+        </Link>
       </div>
 
-      {/* Login Card */}
-      <div className="mt-10 px-4">
-        <div className="w-full max-w-sm mx-auto bg-white/80 backdrop-blur-xl p-6 rounded-2xl border border-gray-200 shadow-xl">
+      {/* MAIN CONTENT */}
+      <div className="px-5 pt-10 pb-24 w-full max-w-sm mx-auto">
 
-          <h1 className="text-2xl font-bold text-center mb-5 text-gray-900 tracking-tight">
-            Welcome Back
-          </h1>
+        {/* Title */}
+        <h1 className="text-3xl font-bold text-gray-900 text-center tracking-tight mb-8">
+          Welcome Back
+        </h1>
+
+        {/* Card */}
+        <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-200 p-6">
 
           {error && (
-            <div className="mb-4 p-3 rounded-lg bg-red-100 text-red-700 text-sm font-medium text-center animate-shake">
+            <div className="mb-4 p-3 rounded-xl bg-red-100 text-red-700 text-sm font-medium text-center animate-shake">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
 
             {/* Username */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700">Username</label>
               <input
                 type="text"
                 placeholder="Enter your username"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 text-[15px] font-medium text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-sm"
+                className="
+                  w-full px-4 py-3.5 rounded-xl border border-gray-300
+                  text-[15px] font-medium text-gray-900 placeholder-gray-400
+                  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+                  transition-all shadow-sm
+                "
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
 
             {/* Password */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700">Password</label>
               <input
                 type="password"
                 placeholder="Enter your password"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 text-[15px] font-medium text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-sm"
+                className="
+                  w-full px-4 py-3.5 rounded-xl border border-gray-300
+                  text-[15px] font-medium text-gray-900 placeholder-gray-400
+                  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+                  transition-all shadow-sm
+                "
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
-            {/* Submit */}
+            {/* CTA */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-indigo-600 text-white rounded-lg font-semibold text-base shadow-md hover:bg-indigo-700 active:scale-[.98] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="
+                w-full py-3.5 rounded-xl bg-indigo-600 text-white
+                font-semibold text-base shadow-md
+                hover:bg-indigo-700 active:scale-[.98]
+                transition-all duration-200
+                disabled:opacity-60 disabled:cursor-not-allowed
+              "
             >
               Log In
             </button>
           </form>
 
           {/* Footer */}
-          <p className="text-center text-sm text-gray-500 mt-5">
+          <p className="text-center text-sm text-gray-500 mt-6">
             Don’t have an account?{" "}
             <Link to="/register" className="text-indigo-600 font-medium hover:text-indigo-800">
               Register
@@ -117,25 +152,21 @@ export default function Login() {
         </div>
       </div>
 
+      {/* LOADING TOAST */}
       {loading && (
-        <>
-
-
-          {/* LOGGING IN TOAST */}
-          <div
-            className="
-        fixed left-1/2 -translate-x-1/2
-        top-[55px] sm:top-[80px]
-        z-50
-        bg-indigo-600 text-white
-        px-4 py-2 rounded-xl shadow-lg
-        text-sm font-medium
-        animate-fadeIn
-      "
-          >
-            Logging in…
-          </div>
-        </>
+        <div
+          className="
+            fixed left-1/2 -translate-x-1/2
+            top-[70px]
+            z-50
+            bg-indigo-600 text-white
+            px-4 py-2 rounded-xl shadow-lg
+            text-sm font-medium
+            animate-fadeIn
+          "
+        >
+          Logging in…
+        </div>
       )}
     </div>
   );

@@ -105,6 +105,16 @@ export default function Reviews() {
     );
   }, [activeTab, googleReviews, internalReviews]);
 
+  const reviewsToShow = useMemo(() => {
+    // If searching, only show internal search results
+    if (search.trim().length > 0) {
+      return internalReviews;
+    }
+
+    // Otherwise use the normal tab logic
+    return combinedReviews;
+  }, [search, internalReviews, combinedReviews]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-gray-600">
@@ -114,29 +124,39 @@ export default function Reviews() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-10">
+    <div className="min-h-screen bg-gray-50 pb-24 overflow-x-hidden">
 
+      {/* Premium Mobile/Desktop Header */}
       <PageHeader businessName={business} title="All Reviews" />
-      <div className="px-4 pt-6 pb-12 w-full max-w-xl mx-auto flex flex-col gap-7 sm:gap-8">
 
-        <ReviewsTabs active={activeTab} onChange={setActiveTab} />
+      {/* Mobile-safe wrapper */}
+      <div className="
+        px-4 pt-5 pb-24
+        w-full max-w-xl md:max-w-4xl
+        mx-auto flex flex-col gap-8
+      ">
 
+        {/* Tabs — mobile premium spacing */}
+        <div className="mt-2">
+          <ReviewsTabs active={activeTab} onChange={setActiveTab} />
+        </div>
+
+        {/* Mobile-native Search Bar */}
         <div
           className="
-    sticky top-[72px] z-30
-    sm:static sm:top-auto
-    px-1
-  "
+            sticky top-[68px] z-30
+            md:static md:top-auto
+          "
         >
           <div
             className="
-      bg-white/90 backdrop-blur-xl
-      rounded-2xl border border-gray-200
-      shadow-md
-      flex items-center gap-3
-      px-4 py-3
-      transition-all
-    "
+              bg-white/90 backdrop-blur-xl
+              rounded-2xl border border-gray-200 shadow-sm
+              flex items-center gap-3
+              px-4 py-3
+              active:scale-[.99]
+              transition-all
+            "
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -156,24 +176,35 @@ export default function Reviews() {
             <input
               type="text"
               placeholder="Search reviews…"
-              className="flex-1 bg-transparent outline-none text-[15px] placeholder:text-gray-400"
+              className="
+                flex-1 bg-transparent outline-none
+                text-[15px] placeholder:text-gray-400
+              "
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
         </div>
 
-        <ReviewsFilters filter={filter} setFilter={setFilter} />
+        {/* Filters — mobile glass card */}
+        <div className="mt-1">
+          <ReviewsFilters filter={filter} setFilter={setFilter} />
+        </div>
 
-        <ReviewsList
-          reviews={combinedReviews}
-          onSelect={setSelectedReview}
-        />
+        {/* Review List — mobile spacing */}
+        <div className="mt-2">
+          <ReviewsList
+            reviews={reviewsToShow}
+            onSelect={setSelectedReview}
+          />
+        </div>
 
+        {/* Drawer stays the same */}
         <ReviewDrawer
           review={selectedReview}
           onClose={() => setSelectedReview(null)}
         />
+
       </div>
     </div>
   );

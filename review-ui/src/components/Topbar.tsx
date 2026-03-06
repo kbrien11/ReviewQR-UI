@@ -40,7 +40,7 @@ export default function TopBar() {
 
         {/* Mobile QR Code */}
         <button
-          onClick={() => navigate(`/business/${businessName}/qr`)}
+          onClick={() => navigate(`/business/${businessSlug}/qr`)}
           className="
       md:hidden
       h-10 w-10
@@ -64,7 +64,12 @@ export default function TopBar() {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M3.75 4.5h4.5v4.5h-4.5V4.5zm12 0h4.5v4.5h-4.5V4.5zm-12 12h4.5v4.5h-4.5v-4.5zm12 0h4.5v4.5h-4.5v-4.5z"
+              d="M4 4h4v4H4V4zm12 0h4v4h-4V4zM4 16h4v4H4v-4zm12 0h4v4h-4v-4z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10 4h4M4 10h4M16 10h4M10 20h4M10 10h4v4h-4v-4z"
             />
           </svg>
         </button>
@@ -86,17 +91,11 @@ export default function TopBar() {
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            fill="none"
             viewBox="0 0 24 24"
-            strokeWidth={1.8}
-            stroke="currentColor"
+            fill="currentColor"
             className="w-5 h-5 text-gray-700"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M14.25 18.75a2.25 2.25 0 01-4.5 0m8.25-7.5a6 6 0 10-12 0c0 2.485-.75 3.75-1.5 4.5h15c-.75-.75-1.5-2.015-1.5-4.5z"
-            />
+            <path d="M12 24a2.5 2.5 0 002.5-2.5h-5A2.5 2.5 0 0012 24zm6.5-6V11a6.5 6.5 0 10-13 0v7L3 18v1h18v-1l-2.5-0z" />
           </svg>
 
           {unreadGoogleReviews > 0 && (

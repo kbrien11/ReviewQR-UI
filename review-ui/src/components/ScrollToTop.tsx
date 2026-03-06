@@ -5,17 +5,22 @@ export default function ScrollToTop() {
     const { pathname } = useLocation();
 
     useEffect(() => {
-        // First attempt (React render)
+        // Pass 1 — immediately on route change
         window.scrollTo(0, 0);
 
-        // Second attempt (after Safari restores scroll)
+        // Pass 2 — after paint (fixes React Router timing)
+        requestAnimationFrame(() => {
+            window.scrollTo(0, 0);
+        });
+
+        // Pass 3 — after async content loads (fixes iOS Safari)
         const timeout = setTimeout(() => {
             window.scrollTo({
                 top: 0,
                 left: 0,
-                behavior: "instant"
+                behavior: "instant",
             });
-        }, 50); // 50–80ms is the sweet spot for iOS
+        }, 120); // 100–150ms is the sweet spot for iOS + async pages
 
         return () => clearTimeout(timeout);
     }, [pathname]);

@@ -10,6 +10,11 @@ export default function QRPreview() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const { slug } = useParams();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [data]);
+  
   useEffect(() => {
     async function fetchScans() {
       try {

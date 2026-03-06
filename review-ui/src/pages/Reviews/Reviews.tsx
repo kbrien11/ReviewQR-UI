@@ -35,6 +35,10 @@ export default function Reviews() {
   const { businessSlug, markGoogleReviewsAsRead, setUnreadGoogleReviews } = useApp();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [internalReviews]);
+
+  useEffect(() => {
     const params = new URLSearchParams(location.search);
     const tab = params.get("tab") || "all";
     setActiveTab(tab);

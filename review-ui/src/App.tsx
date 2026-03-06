@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 import { AuthProvider } from "./context/AuthContext";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -14,6 +15,18 @@ import Register from "./pages/Register/Register";
 import TeamMembers from "./pages/TeamMembers/TeamMembers";
 
 export default function App() {
+
+  // 🌙 Initialize theme on first load
+  useEffect(() => {
+    const theme = localStorage.getItem("theme") || "light";
+
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
   return (
     <BrowserRouter>
       <AuthProvider>
@@ -21,7 +34,8 @@ export default function App() {
 
         <div
           className="
-            min-h-screen bg-gray-50 overflow-x-hidden
+            min-h-screen bg-gray-50 dark:bg-gray-900
+            overflow-x-hidden
             pt-[env(safe-area-inset-top)]
             pb-[env(safe-area-inset-bottom)]
           "

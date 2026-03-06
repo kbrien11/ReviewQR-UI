@@ -3,7 +3,6 @@ import { useApp } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-
 export default function TopBar() {
   const { user, logout } = useAuth();
   const { unreadGoogleReviews, markGoogleReviewsAsRead, businessName, businessSlug } = useApp();
@@ -18,6 +17,21 @@ export default function TopBar() {
     markGoogleReviewsAsRead();
     navigate(`/reviews/${businessName}?tab=google`);
   };
+
+  // 🌙 Theme toggle
+  const toggleTheme = () => {
+    const isDark = document.documentElement.classList.contains("dark");
+
+    if (isDark) {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    } else {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    }
+  };
+
+  const isDark = document.documentElement.classList.contains("dark");
 
   return (
     <header
@@ -103,6 +117,48 @@ export default function TopBar() {
             >
               {unreadGoogleReviews}
             </span>
+          )}
+        </button>
+
+        {/* 🌙 Theme Toggle */}
+        <button
+          onClick={toggleTheme}
+          className="
+            h-10 w-10 md:h-11 md:w-11
+            flex items-center justify-center
+            rounded-2xl
+            bg-white/60 dark:bg-gray-800/60
+            backdrop-blur-xl
+            border border-gray-200/60 dark:border-gray-700/60
+            shadow-sm
+            hover:bg-white/80 active:scale-95
+            transition-all
+          "
+        >
+          {isDark ? (
+            // Sun icon for light mode
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-5 h-5 text-gray-700 dark:text-gray-200"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.8}
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0l-1.414-1.414M7.05 7.05L5.636 5.636M12 8a4 4 0 100 8 4 4 0 000-8z" />
+            </svg>
+          ) : (
+            // Moon icon for dark mode
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-5 h-5 text-gray-700"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.8}
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
+            </svg>
           )}
         </button>
 

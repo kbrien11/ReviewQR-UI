@@ -40,90 +40,129 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 relative overflow-hidden">
+    <div
+      className="
+        min-h-screen relative overflow-hidden
+        bg-gradient-to-b from-gray-50 to-gray-100
+        dark:from-gray-900 dark:to-black
+        flex flex-col
+      "
+    >
+      {/* Parallax Glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-300/30 dark:bg-indigo-500/20 blur-[120px] rounded-full animate-float-slow" />
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-300/30 dark:bg-purple-500/20 blur-[120px] rounded-full animate-float-slower" />
+      </div>
 
-      {/* Background Glow */}
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-200/40 to-purple-200/40 blur-3xl opacity-40 pointer-events-none" />
-
-      {/* MOBILE / DESKTOP HEADER */}
+      {/* Header */}
       <div
         className="
-          sticky top-0 z-50
-          bg-white/70 backdrop-blur-xl
-          border-b border-gray-200
-          px-4 py-4
+          sticky top-0 z-40
+          bg-white/70 dark:bg-gray-900/60 backdrop-blur-xl
+          border-b border-gray-200 dark:border-gray-700
+          px-5 py-4
           flex items-center justify-between
-          shadow-sm
         "
       >
         <Link to="/" className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">
             R
           </div>
-          <span className="text-lg font-semibold tracking-tight text-gray-900">
+          <span className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
             ReviewQR
           </span>
         </Link>
 
         <Link
           to="/register"
-          className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
+          className="text-sm font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400"
         >
           Register
         </Link>
       </div>
 
-      {/* MAIN CONTENT */}
-      <div className="px-5 pt-10 pb-24 w-full max-w-sm mx-auto">
+      {/* Main Content */}
+      <div className="flex-1 flex items-center justify-center px-5 py-12">
+        <div
+          className="
+            w-full max-w-sm
+            bg-white/80 dark:bg-gray-900/70 backdrop-blur-xl
+            border border-gray-200/70 dark:border-gray-700
+            shadow-[0_8px_30px_rgba(0,0,0,0.06)]
+            rounded-3xl
+            p-8
+            animate-fadeIn
+          "
+        >
+          {/* Title */}
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white text-center mb-6">
+            Welcome Back
+          </h1>
 
-        {/* Title */}
-        <h1 className="text-3xl font-bold text-gray-900 text-center tracking-tight mb-8">
-          Welcome Back
-        </h1>
-
-        {/* Card */}
-        <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-200 p-6">
-
+          {/* Error */}
           {error && (
-            <div className="mb-4 p-3 rounded-xl bg-red-100 text-red-700 text-sm font-medium text-center animate-shake">
+            <div className="mb-4 p-3 rounded-xl bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 text-sm font-medium text-center animate-shake">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
 
-            {/* Username */}
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700">Username</label>
+            {/* Floating Label Input */}
+            <div className="relative">
               <input
                 type="text"
-                placeholder="Enter your username"
-                className="
-                  w-full px-4 py-3.5 rounded-xl border border-gray-300
-                  text-[15px] font-medium text-gray-900 placeholder-gray-400
-                  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
-                  transition-all shadow-sm
-                "
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-
-            {/* Password */}
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700">Password</label>
-              <input
-                type="password"
-                placeholder="Enter your password"
                 className="
-                  w-full px-4 py-3.5 rounded-xl border border-gray-300
-                  text-[15px] font-medium text-gray-900 placeholder-gray-400
+                  peer w-full px-4 py-4 rounded-xl border border-gray-300 dark:border-gray-700
+                  bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm
+                  text-[15px] font-medium text-gray-900 dark:text-gray-100
                   focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
                   transition-all shadow-sm
                 "
+              />
+              <label
+                className="
+                  absolute left-4 top-1/2 -translate-y-1/2
+                  text-gray-500 dark:text-gray-400
+                  pointer-events-none
+                  transition-all duration-200
+                  peer-focus:top-2 peer-focus:text-xs peer-focus:text-indigo-600
+                  peer-not-placeholder-shown:top-2 peer-not-placeholder-shown:text-xs
+                "
+              >
+                Username
+              </label>
+            </div>
+
+            {/* Floating Label Input */}
+            <div className="relative">
+              <input
+                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="
+                  peer w-full px-4 py-4 rounded-xl border border-gray-300 dark:border-gray-700
+                  bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm
+                  text-[15px] font-medium text-gray-900 dark:text-gray-100
+                  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+                  transition-all shadow-sm
+                "
               />
+              <label
+                className="
+                  absolute left-4 top-1/2 -translate-y-1/2
+                  text-gray-500 dark:text-gray-400
+                  pointer-events-none
+                  transition-all duration-200
+                  peer-focus:top-2 peer-focus:text-xs peer-focus:text-indigo-600
+                  peer-not-placeholder-shown:top-2 peer-not-placeholder-shown:text-xs
+                "
+              >
+                Password
+              </label>
             </div>
 
             {/* CTA */}
@@ -131,41 +170,43 @@ export default function Login() {
               type="submit"
               disabled={loading}
               className="
-                w-full py-3.5 rounded-xl bg-indigo-600 text-white
-                font-semibold text-base shadow-md
+                w-full py-3.5 rounded-xl
+                bg-indigo-600 text-white
+                font-semibold text-base
+                shadow-md
                 hover:bg-indigo-700 active:scale-[.98]
                 transition-all duration-200
                 disabled:opacity-60 disabled:cursor-not-allowed
+                flex items-center justify-center gap-2
               "
             >
-              Log In
+              {loading && (
+                <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              )}
+              {loading ? "Logging in…" : "Log In"}
             </button>
           </form>
 
           {/* Footer */}
-          <p className="text-center text-sm text-gray-500 mt-6">
+          <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
             Don’t have an account?{" "}
-            <Link to="/register" className="text-indigo-600 font-medium hover:text-indigo-800">
+            <Link to="/register" className="text-indigo-600 dark:text-indigo-400 font-medium hover:text-indigo-800">
               Register
             </Link>
           </p>
         </div>
       </div>
 
-      {/* LOADING TOAST */}
+      {/* FaceID-style loading pulse */}
       {loading && (
         <div
           className="
-            fixed left-1/2 -translate-x-1/2
-            top-[70px]
-            z-50
-            bg-indigo-600 text-white
-            px-4 py-2 rounded-xl shadow-lg
-            text-sm font-medium
-            animate-fadeIn
+            fixed inset-0 flex items-center justify-center
+            pointer-events-none
+            animate-faceid-pulse
           "
         >
-          Logging in…
+          <div className="w-24 h-24 rounded-3xl border-4 border-indigo-500/40" />
         </div>
       )}
     </div>

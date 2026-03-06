@@ -34,7 +34,7 @@ export default function Reviews() {
 
   const { businessSlug, markGoogleReviewsAsRead, setUnreadGoogleReviews } = useApp();
 
- 
+
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -146,23 +146,27 @@ export default function Reviews() {
         {/* Mobile-native Search Bar */}
         <div
           className="
-            sticky top-[68px] z-30
-            md:static md:top-auto
-          "
+    sticky top-[68px] z-30
+    md:static md:top-auto
+  "
         >
           <div
             className="
-              bg-white/90 backdrop-blur-xl
-              rounded-2xl border border-gray-200 shadow-sm
-              flex items-center gap-3
-              px-4 py-3
-              active:scale-[.99]
-              transition-all
-            "
+      md:hidden
+      flex items-center gap-3
+      px-4 py-2.5
+      rounded-full
+      bg-white/70 dark:bg-gray-900/40
+      backdrop-blur-2xl
+      border border-gray-200/60 dark:border-gray-700/60
+      shadow-[inset_0_1px_2px_rgba(255,255,255,0.6),0_2px_8px_rgba(0,0,0,0.06)]
+      transition-all
+      active:scale-[.98]
+    "
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="w-5 h-5 text-gray-500"
+              className="w-5 h-5 text-gray-500 dark:text-gray-400"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={2}
@@ -177,14 +181,52 @@ export default function Reviews() {
 
             <input
               type="text"
-              placeholder="Search reviews…"
+              placeholder="Search"
               className="
-                flex-1 bg-transparent outline-none
-                text-[15px] placeholder:text-gray-400
-              "
+        flex-1 bg-transparent outline-none
+        text-[15px] placeholder:text-gray-400 dark:placeholder:text-gray-500
+      "
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
+          </div>
+
+          {/* Desktop version stays exactly the same */}
+          <div className="hidden md:block">
+            <div
+              className="
+        bg-white/90 backdrop-blur-xl
+        rounded-2xl border border-gray-200 shadow-sm
+        flex items-center gap-3
+        px-4 py-3
+      "
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5 text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18a7.5 7.5 0 006.15-3.35z"
+                />
+              </svg>
+
+              <input
+                type="text"
+                placeholder="Search reviews…"
+                className="
+          flex-1 bg-transparent outline-none
+          text-[15px] placeholder:text-gray-400
+        "
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
           </div>
         </div>
 

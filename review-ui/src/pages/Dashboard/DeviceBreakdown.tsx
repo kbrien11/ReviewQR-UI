@@ -1,169 +1,67 @@
 import { Link } from "react-router-dom";
+import DeviceRing from "./DeviceRing";
 
-export default function DeviceBreakdown({
-  slug,
-  data,
-  mobilePct,
-  desktopPct,
-  mobileTrend,
-  desktopTrend,
-}: {
-  slug: string;
-  data: any;
-  mobilePct: number;
-  desktopPct: number;
-  mobileTrend: number[];
-  desktopTrend: number[];
-}) {
+export default function DeviceBreakdown({ data, slug }) {
+  const mobile = data.mobile || 0;
+  const desktop = data.desktop || 0;
+
+  // THE FIX — correct total
+  const total = mobile + desktop;
+
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-6">
+    <div
+      className="
+        relative overflow-hidden
+        bg-white/80 dark:bg-gray-900/60
+        backdrop-blur-2xl
+        rounded-3xl
+        border border-gray-200/70 dark:border-gray-700/60
+        shadow-[0_8px_24px_rgba(0,0,0,0.06)]
+        p-6 space-y-8
+      "
+    >
+      {/* Soft background glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-20 -left-20 w-40 h-40 bg-blue-300/20 blur-3xl rounded-full" />
+        <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-purple-300/20 blur-3xl rounded-full" />
+      </div>
 
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold text-gray-900 tracking-tight">
+      <div className="flex justify-between items-center relative z-10">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white tracking-tight">
           Device Breakdown
         </h2>
 
         <Link
           to={`/scans/${slug}`}
-          className="text-sm text-gray-600 hover:text-gray-900 transition"
+          className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:opacity-80 transition"
         >
           View More →
         </Link>
       </div>
 
-      {/* Device Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      {/* Device Rings */}
+      <div className="grid grid-cols-2 gap-6 relative z-10">
 
-        {/* MOBILE */}
-        <DeviceCard
+        <DeviceRing
           label="Mobile"
           icon="📱"
-          value={data.mobile || 0}
-          percent={mobilePct}
-          color="stroke-blue-500"
-          barColor="bg-blue-500"
-          trend={mobileTrend || []}
+          value={mobile}
+          total={total}
+          from="#60A5FA"   // blue-400
+          to="#2563EB"     // blue-600
         />
 
-        {/* DESKTOP */}
-        <DeviceCard
+        <DeviceRing
           label="Desktop"
           icon="💻"
-          value={data.desktop || 0}
-          percent={desktopPct}
-          color="stroke-purple-500"
-          barColor="bg-purple-500"
-          trend={desktopTrend || []}
+          value={desktop}
+          total={total}
+          from="#C084FC"   // purple-400
+          to="#7C3AED"     // purple-600
         />
 
       </div>
     </div>
-  );
-}
-
-function DeviceCard({
-  label,
-  icon,
-  value,
-  percent,
-  color,
-  barColor,
-  trend,
-}: {
-  label: string;
-  icon: string;
-  value: number;
-  percent: number;
-  color: string;
-  barColor: string;
-  trend: number[];
-}) {
-  return (
-    <div
-      className="
-        p-5 rounded-xl border border-gray-200 shadow-sm bg-white
-        space-y-4 transition-all hover:shadow-md hover:-translate-y-[2px]
-      "
-    >
-      {/* Icon + Label */}
-      <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center text-2xl">
-          {icon}
-        </div>
-
-        <div>
-          <p className="text-gray-700 font-medium">{label}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
-        </div>
-      </div>
-
-      {/* Sparkline */}
-      <div className="w-full h-16">
-        <Sparkline data={trend} strokeColor={color} />
-      </div>
-
-      {/* Percent Bar */}
-      <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
-        <div
-          className={`h-full rounded-full ${barColor}`}
-          style={{ width: `${percent}%` }}
-        />
-      </div>
-
-      <p className="text-sm text-gray-500">{percent}% of total scans</p>
-    </div>
-  );
-}
-
-function Sparkline({
-  data,
-  strokeColor,
-}: {
-  data: number[];
-  strokeColor: string;
-}) {
-  // Prevent crash if data is empty or undefined
-  if (!data || data.length === 0) {
-    return (
-      <svg viewBox="0 0 100 100" className="w-full h-full">
-        <line
-          x1="0"
-          y1="50"
-          x2="100"
-          y2="50"
-          strokeWidth="3"
-          className={strokeColor}
-          strokeLinecap="round"
-        />
-      </svg>
-    );
-  }
-
-  const max = Math.max(...data);
-  const min = Math.min(...data);
-
-  const points = data
-    .map((value, i) => {
-      const x = (i / (data.length - 1)) * 100;
-      const y = 100 - ((value - min) / (max - min)) * 100;
-      return `${x},${y}`;
-    })
-    .join(" ");
-
-  return (
-    <svg
-      viewBox="0 0 100 100"
-      preserveAspectRatio="none"
-      className="w-full h-full"
-    >
-      <polyline
-        fill="none"
-        strokeWidth="3"
-        strokeLinecap="round"
-        className={strokeColor}
-        points={points}
-      />
-    </svg>
   );
 }

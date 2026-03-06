@@ -39,96 +39,118 @@ export default function DashboardCard({
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{
-        scale: 1.02,
-        y: -2,
-        boxShadow: "0 12px 32px rgba(0,0,0,0.10)",
+        scale: 1.025,
+        y: -3,
+        boxShadow: "0 18px 40px rgba(0,0,0,0.12)",
       }}
       transition={{ duration: 0.35, ease: "easeOut" }}
       className="
-        w-full
-        relative 
-        p-5 md:p-6 
-        rounded-2xl
-        bg-white/95 md:bg-white
-        backdrop-blur-md md:backdrop-blur-none
-        border border-gray-200/70 md:border-gray-200
-        shadow-[0_6px_18px_rgba(0,0,0,0.06)]
-        flex flex-col 
-        gap-4
-      "
+    w-full relative overflow-hidden
+    p-5 md:p-6
+    rounded-3xl
+    bg-white/80 dark:bg-gray-900/60
+    backdrop-blur-2xl
+    border border-gray-200/60 dark:border-gray-700/60
+    shadow-[0_8px_24px_rgba(0,0,0,0.06)]
+    flex flex-col gap-5
+  "
     >
 
+      {/* Soft gradient glow */}
+      <div className="
+    absolute inset-0 pointer-events-none
+    bg-gradient-to-br from-white/40 to-transparent
+    dark:from-gray-800/40
+  " />
+
+      {/* Subtle top highlight */}
+      <div className="
+    absolute top-0 left-0 right-0 h-[1px]
+    bg-gradient-to-r from-transparent via-white/60 to-transparent
+    dark:via-gray-600/40
+  " />
+
       {/* VALUE */}
-      <p
-        className="
-          text-3xl md:text-4xl 
-          font-semibold 
-          text-gray-900 
-          tracking-tight 
-          leading-none
-        "
-      >
+      <p className="
+    text-4xl md:text-5xl font-semibold
+    text-gray-900 dark:text-white
+    tracking-tight leading-none
+  ">
         {value}
       </p>
 
       {/* LABEL + SUBTEXT */}
       <div className="flex flex-col leading-tight">
-        <p className="text-sm font-semibold text-gray-900 tracking-tight">
+        <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 tracking-tight">
           {label}
         </p>
         {subtext && (
-          <p className="text-xs text-gray-400">{subtext}</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500">
+            {subtext}
+          </p>
         )}
       </div>
 
       {/* TREND */}
       <div className="flex items-center gap-2 mt-1">
-        <span
+
+        {/* Trend Icon */}
+        <motion.span
+          animate={{ y: trend > 0 ? -2 : trend < 0 ? 2 : 0 }}
+          transition={{ duration: 0.3 }}
           className={`
-            text-sm font-semibold
-            ${trend > 0 ? "text-green-600" :
+        text-sm font-semibold
+        ${trend > 0 ? "text-green-600" :
               trend < 0 ? "text-red-600" :
-                "text-gray-500"}
-          `}
+                "text-gray-500 dark:text-gray-400"}
+      `}
         >
           {trend > 0 ? "▲" : trend < 0 ? "▼" : "—"}
-        </span>
+        </motion.span>
 
+        {/* Trend % */}
         <span
           className={`
-            text-sm font-semibold
-            ${trend > 0 ? "text-green-600" :
+        text-sm font-semibold
+        ${trend > 0 ? "text-green-600" :
               trend < 0 ? "text-red-600" :
-                "text-gray-600"}
-          `}
+                "text-gray-600 dark:text-gray-400"}
+      `}
         >
           {trend > 0 ? `+${trend}%` : `${trend}%`}
         </span>
 
+        {/* Trend Badge */}
         <span
           className={`
-            px-2 py-0.5 rounded-full 
-            text-[11px] md:text-xs font-medium
-            shadow-sm
-            ${trend > 0 ? "bg-green-100 text-green-700" :
+        px-2 py-0.5 rounded-full text-[11px] font-medium
+        shadow-sm
+        ${trend > 0 ? "bg-green-100 text-green-700" :
               trend < 0 ? "bg-red-100 text-red-700" :
-                "bg-gray-100 text-gray-600"}
-          `}
+                "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300"}
+      `}
         >
           {trend > 0 ? "Growing" : trend < 0 ? "Declining" : "Stable"}
         </span>
       </div>
 
       {/* SPARKLINE */}
-      <div className="mt-2">
+      <div className="mt-1 relative">
+        {/* Glow behind sparkline */}
+        <div className={`
+      absolute inset-0 blur-xl opacity-30
+      ${trend > 0 ? "bg-green-400/40" :
+            trend < 0 ? "bg-red-400/40" :
+              "bg-gray-300/40"}
+    `} />
+
         <svg
           className={`
-            w-full h-12 md:h-12
-            ${trend > 0 ? "text-green-500" :
+        w-full h-14 md:h-16 relative
+        ${trend > 0 ? "text-green-500" :
               trend < 0 ? "text-red-500" :
-                "text-gray-300"}
-            opacity-90
-          `}
+                "text-gray-300 dark:text-gray-600"}
+      `}
           viewBox="0 0 100 30"
         >
           <polyline
@@ -147,7 +169,7 @@ export default function DashboardCard({
           />
         </svg>
 
-        <p className="text-[11px] md:text-[11px] text-gray-400 mt-1">
+        <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">
           vs previous 3 days
         </p>
       </div>

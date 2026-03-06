@@ -89,22 +89,34 @@ export default function Dashboard() {
       <FadeIn>
         <div
           className="
-      bg-white/80 backdrop-blur-xl
-      border-b border-gray-200/70
-      px-4 py-4 md:px-6 md:py-8
-      shadow-sm
-      rounded-b-2xl
+      relative
+      px-4 py-5 md:px-6 md:py-8
+      rounded-b-3xl
+      bg-white/80 dark:bg-gray-900/50
+      backdrop-blur-2xl
+      border-b border-gray-200/60 dark:border-gray-700/60
+      shadow-[0_4px_20px_rgba(0,0,0,0.04)]
+      overflow-hidden
     "
         >
-          <div className="flex items-center gap-3 md:gap-4">
+          {/* Soft background glow */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute -top-16 -left-16 w-40 h-40 bg-indigo-300/20 blur-3xl rounded-full" />
+            <div className="absolute -bottom-16 -right-16 w-40 h-40 bg-purple-300/20 blur-3xl rounded-full" />
+          </div>
+
+          {/* Content */}
+          <div className="relative flex items-center gap-4 z-10">
 
             {/* Premium Accent Bar */}
-            <div className="
-        w-1.5 h-10 md:h-12 
-        rounded-full 
-        bg-gradient-to-b from-indigo-500 to-indigo-600
-        shadow-sm
-      " />
+            <div
+              className="
+          w-1.5 h-10 md:h-14
+          rounded-full
+          bg-gradient-to-b from-indigo-500 to-indigo-600
+          shadow-[0_0_12px_rgba(99,102,241,0.35)]
+        "
+            />
 
             {/* Title Block */}
             <div className="flex flex-col">
@@ -112,6 +124,7 @@ export default function Dashboard() {
                 className="
             text-xl md:text-4xl font-semibold tracking-tight
             bg-gradient-to-r from-slate-900 to-slate-700 
+            dark:from-white dark:to-gray-300
             bg-clip-text text-transparent
             leading-tight
           "
@@ -119,7 +132,7 @@ export default function Dashboard() {
                 {data.business_name} Analytics
               </h1>
 
-              <p className="text-xs md:text-base text-gray-500 mt-1">
+              <p className="text-xs md:text-base text-gray-500 dark:text-gray-400 mt-1">
                 {data.status_message}
               </p>
             </div>

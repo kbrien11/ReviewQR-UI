@@ -10,53 +10,58 @@ export default function SentimentOverview({ data }: { data: any }) {
   return (
     <div
       className="
-        bg-white rounded-2xl border border-gray-200 shadow-sm
-        p-4 md:p-6
-        space-y-4 md:space-y-6
+        relative overflow-hidden
+        bg-white/80 dark:bg-gray-900/60
+        backdrop-blur-2xl
+        rounded-3xl
+        border border-gray-200/70 dark:border-gray-700/60
+        shadow-[0_8px_24px_rgba(0,0,0,0.06)]
+        p-5 md:p-6
+        space-y-6
       "
     >
+      {/* Soft background glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-20 -left-20 w-40 h-40 bg-indigo-300/20 blur-3xl rounded-full" />
+        <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-purple-300/20 blur-3xl rounded-full" />
+      </div>
 
       {/* Header */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4 relative z-10">
         <div
           className="
-            w-10 h-10 md:w-12 md:h-12
-            rounded-xl bg-indigo-100
+            w-12 h-12 rounded-2xl
+            bg-gradient-to-br from-indigo-100 to-indigo-200
             flex items-center justify-center
-            text-xl md:text-2xl
+            text-2xl shadow-inner
           "
         >
           😊
         </div>
 
         <div>
-          <h2 className="text-base md:text-lg font-semibold text-gray-900">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white tracking-tight">
             Sentiment Summary
           </h2>
-          <p className="text-xs md:text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             The brand is being well‑received this week
           </p>
         </div>
       </div>
 
       {/* Main Percentage */}
-      <div className="flex items-end gap-2 md:gap-3">
-        <p
-          className="
-            text-3xl md:text-5xl
-            font-bold text-gray-900 leading-none
-          "
-        >
+      <div className="flex items-end gap-2 relative z-10">
+        <p className="text-5xl font-bold text-gray-900 dark:text-white leading-none tracking-tight">
           {positive}%
         </p>
-        <span className="text-gray-500 text-xs md:text-sm mb-1 md:mb-2">
+        <span className="text-gray-500 dark:text-gray-400 text-sm mb-2">
           Positive
         </span>
       </div>
 
       {/* Gauge */}
-      <div className="w-full flex justify-center">
-        <div className="w-full max-w-[220px] md:max-w-[260px]">
+      <div className="w-full flex justify-center relative z-10">
+        <div className="w-full max-w-[240px]">
           <HalfCircleGauge
             positive={positive}
             privateFeedback={privateFeedback}
@@ -68,13 +73,25 @@ export default function SentimentOverview({ data }: { data: any }) {
       <div
         className="
           flex flex-col sm:flex-row
-          gap-3 sm:gap-8
-          pt-1 md:pt-2
+          gap-4 sm:gap-8
+          pt-2 relative z-10
         "
       >
-        <Legend label="Positive" value={positive} color="bg-blue-500" />
-        <Legend label="Private Feedback" value={privateFeedback} color="bg-purple-500" />
-        <Legend label="Neutral" value={neutral} color="bg-orange-500" />
+        <Legend
+          label="Positive"
+          value={positive}
+          color="bg-blue-500"
+        />
+        <Legend
+          label="Private Feedback"
+          value={privateFeedback}
+          color="bg-purple-500"
+        />
+        <Legend
+          label="Neutral"
+          value={neutral}
+          color="bg-orange-500"
+        />
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
 import { useParams, Link } from "react-router-dom";
-import DashboardCard from "./DashboardCard";
 import DashboardSkeleton from "./DashboardSkeleton";
 import DeviceBreakdown from "./DeviceBreakdown";
 import LatestReview from "./LatestReview";
@@ -9,6 +8,7 @@ import { useDashboardSummary } from "./useDashboardSummary";
 import { motion } from "framer-motion";
 import FadeIn from "../../components/animations/FadeIn";
 import Stagger, { staggerItem } from "../../components/Stagger";
+import DashboardCard from "./DashboardCard";
 
 
 export default function Dashboard() {
@@ -86,32 +86,46 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
 
-      {/* HEADER */}
       <FadeIn>
-        <div className="bg-white border-b border-gray-200 px-4 py-5 md:px-6 md:py-8 shadow-sm">
-          <div className="flex items-center justify-between py-2">
-            <div className="flex items-center gap-3 md:gap-4">
-              <div className="w-1 h-8 md:h-10 bg-gradient-to-b from-indigo-500 to-indigo-600 rounded-full" />
+        <div
+          className="
+      bg-white/80 backdrop-blur-xl
+      border-b border-gray-200/70
+      px-4 py-4 md:px-6 md:py-8
+      shadow-sm
+      rounded-b-2xl
+    "
+        >
+          <div className="flex items-center gap-3 md:gap-4">
 
-              <div className="flex flex-col">
-                <h1
-                  className="
-                    text-2xl md:text-4xl font-semibold tracking-tight
-                    bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent
-                  "
-                >
-                  {data.business_name} Analytics
-                </h1>
-              </div>
+            {/* Premium Accent Bar */}
+            <div className="
+        w-1.5 h-10 md:h-12 
+        rounded-full 
+        bg-gradient-to-b from-indigo-500 to-indigo-600
+        shadow-sm
+      " />
+
+            {/* Title Block */}
+            <div className="flex flex-col">
+              <h1
+                className="
+            text-xl md:text-4xl font-semibold tracking-tight
+            bg-gradient-to-r from-slate-900 to-slate-700 
+            bg-clip-text text-transparent
+            leading-tight
+          "
+              >
+                {data.business_name} Analytics
+              </h1>
+
+              <p className="text-xs md:text-base text-gray-500 mt-1">
+                {data.status_message}
+              </p>
             </div>
           </div>
-
-          <p className="mt-1 text-gray-500 text-sm md:text-base">
-            {data.status_message}
-          </p>
         </div>
       </FadeIn>
-
       {/* MAIN CONTENT */}
       <div className="
         w-full 

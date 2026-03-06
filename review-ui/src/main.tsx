@@ -9,9 +9,7 @@ import { AppProvider } from "./context/AppContext";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AppProvider>
-    <AuthProvider>
       <App />
-    </AuthProvider>
     </AppProvider>
   </React.StrictMode>
 );

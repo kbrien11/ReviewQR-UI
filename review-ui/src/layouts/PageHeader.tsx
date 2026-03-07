@@ -21,47 +21,59 @@ export default function PageHeader({ businessName, title }) {
         "
       >
 
-        {/* MOBILE — centered title */}
-        <div className="flex md:hidden items-center justify-between w-full">
-
-          {/* Back Button */}
-          <button
-            onClick={() => window.history.back()}
+        {/* MOBILE HEADER — iOS Floating Glass */}
+        <div className="md:hidden w-full px-4 pt-3 pb-2">
+          <div
             className="
-              h-10 w-10 flex items-center justify-center
-              rounded-xl bg-gray-100 text-gray-700
-              active:scale-95 transition
-              shadow-sm
-            "
+      relative mx-auto w-full
+      rounded-[28px]
+      bg-[linear-gradient(135deg,rgba(255,255,255,0.75),rgba(255,255,255,0.55))]
+      backdrop-blur-2xl
+      border border-white/40
+      shadow-[0_4px_18px_rgba(0,0,0,0.06)]
+      flex items-center justify-between
+      px-3 py-2
+    "
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.8}
-              stroke="currentColor"
-              className="w-5 h-5"
+            {/* Back Button */}
+            <button
+              onClick={() => window.history.back()}
+              className="
+        h-10 w-10 flex items-center justify-center
+        rounded-2xl
+        bg-white/60 backdrop-blur-xl
+        shadow-[0_2px_6px_rgba(0,0,0,0.08)]
+        active:scale-95 transition
+      "
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 19.5L8.25 12l7.5-7.5"
-              />
-            </svg>
-          </button>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                strokeWidth={1.8}
+                stroke='currentColor'
+                className='w-5 h-5 text-gray-700'
+              >
+                <path strokeLinecap='round' strokeLinejoin='round' d='M15.75 19.5L8.25 12l7.5-7.5' />
+              </svg>
+            </button>
 
-          {/* Centered Title */}
-          <div className="flex flex-col items-center -ml-10">
-            <h1 className="text-base font-semibold text-gray-900 leading-tight">
-              {businessName}
-            </h1>
-            <span className="text-[11px] text-gray-500 font-medium">
-              {title}
-            </span>
+            {/* Centered Title */}
+            <div className="flex flex-col items-center -ml-6">
+              <h1 className="text-[15px] font-semibold text-gray-900 tracking-tight">
+                {businessName}
+              </h1>
+              <span className="text-[11px] text-gray-500 font-medium">
+                {title}
+              </span>
+            </div>
+
+            {/* Placeholder for symmetry */}
+            <div className="h-10 w-10"></div>
           </div>
 
-          {/* Placeholder for symmetry */}
-          <div className="h-10 w-10"></div>
+          {/* Soft bottom divider glow */}
+          <div className="h-[10px] w-full bg-gradient-to-b from-white/40 to-transparent -mt-1" />
         </div>
 
         {/* DESKTOP — left-aligned title */}

@@ -92,9 +92,9 @@ export default function Dashboard() {
       relative
       px-4 py-5 md:px-6 md:py-8
       rounded-b-3xl
-      bg-white/80 dark:bg-gray-900/50
+      bg-white/80 
       backdrop-blur-2xl
-      border-b border-gray-200/60 dark:border-gray-700/60
+      border-b border-gray-200/60 
       shadow-[0_4px_20px_rgba(0,0,0,0.04)]
       overflow-hidden
     "
@@ -124,7 +124,7 @@ export default function Dashboard() {
                 className="
             text-xl md:text-4xl font-semibold tracking-tight
             bg-gradient-to-r from-slate-900 to-slate-700 
-            dark:from-white dark:to-gray-300
+            
             bg-clip-text text-transparent
             leading-tight
           "
@@ -132,7 +132,7 @@ export default function Dashboard() {
                 {data.business_name} Analytics
               </h1>
 
-              <p className="text-xs md:text-base text-gray-500 dark:text-gray-400 mt-1">
+              <p className="text-xs md:text-base text-gray-500 ">
                 {data.status_message}
               </p>
             </div>

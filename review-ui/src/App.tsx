@@ -16,16 +16,7 @@ import TeamMembers from "./pages/TeamMembers/TeamMembers";
 
 export default function App() {
 
-  // 🌙 Initialize theme on first load
-  useEffect(() => {
-    const theme = localStorage.getItem("theme") || "light";
 
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, []);
 
   return (
     <BrowserRouter>
@@ -34,7 +25,7 @@ export default function App() {
 
         <div
           className="
-            min-h-screen bg-gray-50 dark:bg-gray-900
+            min-h-screen bg-gray-50
             overflow-x-hidden
             pt-[env(safe-area-inset-top)]
             pb-[env(safe-area-inset-bottom)]

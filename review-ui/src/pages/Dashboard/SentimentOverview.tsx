@@ -11,10 +11,10 @@ export default function SentimentOverview({ data }: { data: any }) {
     <div
       className="
         relative overflow-hidden
-        bg-white/80 dark:bg-gray-900/60
+        bg-white/80 
         backdrop-blur-2xl
         rounded-3xl
-        border border-gray-200/70 dark:border-gray-700/60
+        border border-gray-200/70 
         shadow-[0_8px_24px_rgba(0,0,0,0.06)]
         p-5 md:p-6
         space-y-6

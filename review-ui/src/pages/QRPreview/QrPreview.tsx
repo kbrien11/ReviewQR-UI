@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 import PageHeader from "../../layouts/PageHeader";
 
@@ -11,7 +11,7 @@ export default function QRPreview() {
   const [loading, setLoading] = useState(true);
   const { slug } = useParams();
 
- 
+
 
   useEffect(() => {
     async function fetchScans() {
@@ -55,6 +55,40 @@ export default function QRPreview() {
     );
   }
 
+  function generateSmoothPath(values) {
+    const max = Math.max(...values);
+    const min = Math.min(...values);
+
+    const points = values.map((v, i) => {
+      const x = (i / (values.length - 1)) * 100;
+      const y = 40 - ((v - min) / (max - min || 1)) * 30 - 5;
+      return [x, y];
+    });
+
+    return points.reduce((acc, [x, y], i) => {
+      if (i === 0) return `M ${x},${y}`;
+      const [prevX, prevY] = points[i - 1];
+      const cx = (prevX + x) / 2;
+      return `${acc} Q ${prevX},${prevY} ${cx},${y}`;
+    }, "");
+  }
+
+  function generateSmoothFill(values) {
+    const path = generateSmoothPath(values);
+    return `${path} L 100,40 L 0,40 Z`;
+  }
+
+  function generatePoints(values) {
+    const max = Math.max(...values);
+    const min = Math.min(...values);
+
+    return values.map((v, i) => {
+      const x = (i / (values.length - 1)) * 100;
+      const y = 40 - ((v - min) / (max - min || 1)) * 30 - 5;
+      return { x, y };
+    });
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 pb-24 overflow-x-hidden">
 
@@ -88,15 +122,16 @@ export default function QRPreview() {
           ))}
         </div>
 
-        {/* CHART — premium mobile + desktop-safe */}
+        {/* FINANCE‑STYLE BAR CHART */}
         <div
           className="
-            bg-white/90 backdrop-blur-xl
-            p-5 md:p-6 rounded-3xl shadow-sm border border-gray-200
-            animate-fadeInUp
-          "
+    bg-white/90 backdrop-blur-2xl
+    p-5 md:p-6 rounded-3xl shadow-[0_8px_24px_rgba(0,0,0,0.06)]
+    border border-white/60
+    animate-fadeInUp
+  "
         >
-          <h2 className="text-lg md:text-xl font-bold mb-5 md:mb-4">
+          <h2 className="text-lg md:text-xl font-bold mb-5 md:mb-4 tracking-tight">
             Last 7 Days Trend
           </h2>
 
@@ -105,17 +140,19 @@ export default function QRPreview() {
               No scan activity yet.
             </p>
           ) : (
-            <div className="relative w-full h-44 md:h-40 flex items-end gap-4 md:gap-3">
+            <div className="relative w-full h-48 md:h-44 flex items-end gap-4 md:gap-5">
 
-              {/* Background grid */}
-              <div className="absolute inset-0 pointer-events-none grid grid-rows-4 opacity-20 md:opacity-10">
-                <div className="border-b border-gray-200"></div>
-                <div className="border-b border-gray-200"></div>
-                <div className="border-b border-gray-200"></div>
+              {/* GRID */}
+              <div className="absolute inset-0 pointer-events-none grid grid-rows-4 opacity-[0.10]">
+                <div className="border-b border-gray-300/50"></div>
+                <div className="border-b border-gray-300/50"></div>
+                <div className="border-b border-gray-300/50"></div>
                 <div></div>
               </div>
 
-              {data.daily_counts?.map((count, i) => {
+             
+
+              {data.daily_counts.map((count, i) => {
                 const day = new Date();
                 day.setDate(day.getDate() - (6 - i));
 
@@ -127,14 +164,18 @@ export default function QRPreview() {
                     key={i}
                     className="flex-1 flex flex-col items-center group relative"
                   >
-                    {/* Tooltip */}
+                    {/* DESKTOP TOOLTIP */}
                     <div
                       className="
-                        absolute -top-12 px-3 py-1.5 rounded-lg text-xs font-semibold
-                        text-white bg-gray-900 shadow-lg whitespace-nowrap
-                        opacity-0 group-hover:opacity-100 transition-all duration-200
-                        scale-95 group-hover:scale-100
-                      "
+                hidden md:block
+                absolute -top-12 px-3 py-1.5 rounded-xl text-xs font-semibold
+                text-gray-900 bg-white/95 backdrop-blur-xl
+                border border-white/60 shadow-[0_4px_12px_rgba(0,0,0,0.12)]
+                whitespace-nowrap
+                opacity-0 group-hover:opacity-100
+                scale-95 group-hover:scale-100
+                transition-all duration-200
+              "
                     >
                       {fullDay}: {count} scans
                     </div>
@@ -142,30 +183,33 @@ export default function QRPreview() {
                     {/* BAR */}
                     <div
                       className="
-                        w-full rounded-md bg-indigo-500
-                        shadow-sm shadow-indigo-200
-                        transition-all duration-500 group-hover:scale-[1.08]
-                        relative
-                      "
+                w-full rounded-xl
+                bg-gradient-to-t from-indigo-600 to-indigo-400
+                shadow-[0_4px_12px_rgba(99,102,241,0.25)]
+                transition-all duration-500 group-hover:scale-[1.05]
+                relative
+              "
                       style={{
                         height: `${Math.max(count * 14, 10)}px`,
                         animationDelay: `${i * 90}ms`,
                       }}
                     >
-                      {/* NUMBER ON BAR (mobile only) */}
+                      {/* MOBILE NUMBER */}
                       <span
                         className="
-                          absolute -top-5 left-1/2 -translate-x-1/2
-                          text-[11px] font-semibold text-gray-700
-                          md:hidden
-                        "
+                  md:hidden
+                  absolute -top-5 left-1/2 -translate-x-1/2
+                  text-[12px] font-semibold text-gray-800
+                  bg-white/90 backdrop-blur-xl
+                  px-1.5 py-[1px] rounded-md shadow-sm
+                "
                       >
                         {count}
                       </span>
                     </div>
 
-                    {/* Day label */}
-                    <p className="text-[11px] md:text-xs text-gray-600 mt-2 font-medium">
+                    {/* DAY LABEL */}
+                    <p className="text-[11px] md:text-xs text-gray-600 mt-2 font-medium tracking-tight">
                       {dayLabel}
                     </p>
                   </div>

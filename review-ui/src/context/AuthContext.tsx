@@ -96,7 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           fixed inset-0 z-[9999]
           flex items-center justify-center
           px-6
-          bg-black/30 backdrop-blur-sm
+          
         "
       >
         <div

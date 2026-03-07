@@ -48,9 +48,9 @@ export default function DashboardCard({
     w-full relative overflow-hidden
     p-5 md:p-6
     rounded-3xl
-    bg-white/80 dark:bg-gray-900/60
+    bg-white/85
     backdrop-blur-2xl
-    border border-gray-200/60 dark:border-gray-700/60
+    border border-white/60
     shadow-[0_8px_24px_rgba(0,0,0,0.06)]
     flex flex-col gap-5
   "
@@ -59,21 +59,19 @@ export default function DashboardCard({
       {/* Soft gradient glow */}
       <div className="
     absolute inset-0 pointer-events-none
-    bg-gradient-to-br from-white/40 to-transparent
-    dark:from-gray-800/40
+    bg-gradient-to-br from-white/50 to-transparent
   " />
 
       {/* Subtle top highlight */}
       <div className="
     absolute top-0 left-0 right-0 h-[1px]
-    bg-gradient-to-r from-transparent via-white/60 to-transparent
-    dark:via-gray-600/40
+    bg-gradient-to-r from-transparent via-white/70 to-transparent
   " />
 
       {/* VALUE */}
       <p className="
     text-4xl md:text-5xl font-semibold
-    text-gray-900 dark:text-white
+    text-gray-900
     tracking-tight leading-none
   ">
         {value}
@@ -81,11 +79,11 @@ export default function DashboardCard({
 
       {/* LABEL + SUBTEXT */}
       <div className="flex flex-col leading-tight">
-        <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 tracking-tight">
+        <p className="text-sm font-semibold text-gray-800 tracking-tight">
           {label}
         </p>
         {subtext && (
-          <p className="text-xs text-gray-400 dark:text-gray-500">
+          <p className="text-xs text-gray-400">
             {subtext}
           </p>
         )}
@@ -102,7 +100,7 @@ export default function DashboardCard({
         text-sm font-semibold
         ${trend > 0 ? "text-green-600" :
               trend < 0 ? "text-red-600" :
-                "text-gray-500 dark:text-gray-400"}
+                "text-gray-500"}
       `}
         >
           {trend > 0 ? "▲" : trend < 0 ? "▼" : "—"}
@@ -114,7 +112,7 @@ export default function DashboardCard({
         text-sm font-semibold
         ${trend > 0 ? "text-green-600" :
               trend < 0 ? "text-red-600" :
-                "text-gray-600 dark:text-gray-400"}
+                "text-gray-600"}
       `}
         >
           {trend > 0 ? `+${trend}%` : `${trend}%`}
@@ -127,7 +125,7 @@ export default function DashboardCard({
         shadow-sm
         ${trend > 0 ? "bg-green-100 text-green-700" :
               trend < 0 ? "bg-red-100 text-red-700" :
-                "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300"}
+                "bg-gray-100 text-gray-600"}
       `}
         >
           {trend > 0 ? "Growing" : trend < 0 ? "Declining" : "Stable"}
@@ -136,6 +134,7 @@ export default function DashboardCard({
 
       {/* SPARKLINE */}
       <div className="mt-1 relative">
+
         {/* Glow behind sparkline */}
         <div className={`
       absolute inset-0 blur-xl opacity-30
@@ -149,7 +148,7 @@ export default function DashboardCard({
         w-full h-14 md:h-16 relative
         ${trend > 0 ? "text-green-500" :
               trend < 0 ? "text-red-500" :
-                "text-gray-300 dark:text-gray-600"}
+                "text-gray-300"}
       `}
           viewBox="0 0 100 30"
         >
@@ -169,7 +168,7 @@ export default function DashboardCard({
           />
         </svg>
 
-        <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">
+        <p className="text-[11px] text-gray-400 mt-1">
           vs previous 3 days
         </p>
       </div>

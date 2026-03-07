@@ -50,10 +50,10 @@ function DeviceRing({
         <div
             className="
         flex flex-col items-center text-center
-        bg-white/70 dark:bg-gray-900/50
+        bg-white/70 
         backdrop-blur-xl
         rounded-2xl p-5
-        border border-gray-200/60 dark:border-gray-700/60
+        border border-gray-200/60 
         shadow-sm relative overflow-hidden
       "
         >
@@ -103,16 +103,16 @@ function DeviceRing({
                 </svg>
 
                 <div className="absolute inset-0 flex items-center justify-center">
-                    <p className="text-xl font-semibold text-gray-900 dark:text-white">
+                    <p className="text-xl font-semibold text-gray-900 ">
                         {displayValue}%
                     </p>
                 </div>
             </div>
 
-            <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <p className="text-sm font-medium text-gray-700 ">
                 {label}
             </p>
-            <p className="text-lg font-bold text-gray-900 dark:text-white">
+            <p className="text-lg font-bold text-gray-900 ">
                 {value} scans
             </p>
         </div>

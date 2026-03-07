@@ -45,14 +45,16 @@ export default function DashboardCard({
       }}
       transition={{ duration: 0.35, ease: "easeOut" }}
       className="
-    w-full relative overflow-hidden
-    p-5 md:p-6
-    rounded-3xl
-    bg-white/85
-    backdrop-blur-2xl
-    border border-white/60
-    shadow-[0_8px_24px_rgba(0,0,0,0.06)]
-    flex flex-col gap-5
+      w-full relative overflow-hidden
+      p-5 md:p-6
+      rounded-[28px]
+      bg-white/65
+      backdrop-blur-3xl
+      border border-white/50
+      shadow-[0_6px_28px_rgba(0,0,0,0.05)]
+      flex flex-col gap-6
+      transition-all duration-300
+      active:scale-[.98]
   "
     >
 
@@ -68,18 +70,30 @@ export default function DashboardCard({
     bg-gradient-to-r from-transparent via-white/70 to-transparent
   " />
 
-      {/* VALUE */}
-      <p className="
-    text-4xl md:text-5xl font-semibold
-    text-gray-900
-    tracking-tight leading-none
-  ">
+      <p
+        className="
+            text-[2.6rem] md:text-[3rem]
+            font-semibold
+            text-black-900
+            tracking-[-0.02em]
+            leading-none
+            font-[system-ui,-apple-system,'SF Pro Display','SF Pro Text']
+          "
+      >
         {value}
       </p>
 
       {/* LABEL + SUBTEXT */}
       <div className="flex flex-col leading-tight">
-        <p className="text-sm font-semibold text-gray-800 tracking-tight">
+        <p
+          className="
+              text-[0.78rem] md:text-sm
+              font-medium
+              text-black-700
+              tracking-tight
+              font-[system-ui,-apple-system,'SF Pro Text']
+            "
+        >
           {label}
         </p>
         {subtext && (
@@ -168,8 +182,8 @@ export default function DashboardCard({
           />
         </svg>
 
-        <p className="text-[11px] text-gray-400 mt-1">
-          vs previous 3 days
+        <p className="text-[11px] text-gray-900 mt-1">
+          vs previous 7 days
         </p>
       </div>
 

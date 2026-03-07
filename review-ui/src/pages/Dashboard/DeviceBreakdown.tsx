@@ -11,13 +11,15 @@ export default function DeviceBreakdown({ data, slug }) {
   return (
     <div
       className="
-        relative overflow-hidden
-        bg-white/80 
-        backdrop-blur-2xl
-        rounded-3xl
-        border border-gray-200/70
-        shadow-[0_8px_24px_rgba(0,0,0,0.06)]
-        p-6 space-y-8
+      relative overflow-hidden
+      bg-white/60 
+      backdrop-blur-3xl
+      rounded-[28px]
+      border border-white/50
+      shadow-[0_6px_28px_rgba(0,0,0,0.05)]
+      p-6 space-y-7
+      transition-all duration-300
+      active:scale-[.98]
       "
     >
       {/* Soft background glow */}

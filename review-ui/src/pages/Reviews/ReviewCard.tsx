@@ -2,11 +2,14 @@ export default function ReviewCard({ review, onClick, delay }) {
     return (
         <div
             className="
-            bg-white/90 backdrop-blur-xl
-            rounded-2xl border border-gray-200
-            shadow-sm active:scale-[.99]
-            transition-all duration-200
-            p-4 space-y-3
+            bg-white/70 
+                backdrop-blur-2xl
+                rounded-3xl 
+                border border-white/60 
+                shadow-[0_4px_20px_rgba(0,0,0,0.06)]
+                active:scale-[.98]
+                transition-all duration-300
+                p-5 space-y-4
           "
             style={{ animationDelay: window.innerWidth < 640 ? "0ms" : `${delay}ms` }}
         >

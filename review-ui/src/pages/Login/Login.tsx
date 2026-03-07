@@ -153,7 +153,19 @@ export default function Login() {
                 disabled:opacity-60 disabled:cursor-not-allowed
               "
             >
-              {loading ? "Logging in…" : "Log In"}
+              {loading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div className="
+                        h-4 w-4
+                        border-2 border-white/40 border-t-white
+                        rounded-full
+                        animate-spin
+                      " />
+                  <span>Logging in…</span>
+                </div>
+              ) : (
+                "Log In"
+              )}
             </button>
           </form>
 
@@ -169,23 +181,6 @@ export default function Login() {
           </p>
         </div>
       </div>
-
-      {/* Loading Toast */}
-      {loading && (
-        <div
-          className="
-            fixed left-1/2 -translate-x-1/2
-            top-[70px]
-            z-50
-            bg-indigo-600 text-white
-            px-4 py-2 rounded-xl shadow-lg
-            text-sm font-medium
-            animate-fadeIn
-          "
-        >
-          Logging in…
-        </div>
-      )}
     </div>
   );
 }

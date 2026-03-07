@@ -6,7 +6,7 @@ import PageHeader from "../../layouts/PageHeader";
 
 
 export default function QRPreview() {
-  const { token } = useAuth();
+  const { token, setApiOffline, setApiBackendError } = useAuth();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const { slug } = useParams();
@@ -16,8 +16,6 @@ export default function QRPreview() {
   useEffect(() => {
     async function fetchScans() {
       try {
-
-
         const response = await fetch(
           `https://reviewqrapi.onrender.com/api/business/${slug}/analytics/summary/`,
           {
@@ -27,17 +25,36 @@ export default function QRPreview() {
           }
         );
 
+        // 🔥 Backend reachable but failing
+        if (!response.ok) {
+          if ([401, 403, 500, 503].includes(response.status)) {
+            setApiBackendError(true); // server issue
+          }
+          throw new Error("API error");
+        }
+
         const json = await response.json();
         setData(json);
-      } catch (err) {
+
+      } catch (err: any) {
         console.error("Scan analytics fetch error:", err);
+
+        // 🔥 Network unreachable / CORS / timeout
+        if (
+          err.message.includes("Network") ||
+          err.message.includes("Failed to fetch") ||
+          err.message.includes("timeout")
+        ) {
+          setApiOffline(true); // network issue
+        }
+
       } finally {
         setLoading(false);
       }
     }
 
     fetchScans();
-  }, [token]);
+  }, [token, slug]);
 
   if (loading) {
     return (
@@ -55,39 +72,7 @@ export default function QRPreview() {
     );
   }
 
-  function generateSmoothPath(values) {
-    const max = Math.max(...values);
-    const min = Math.min(...values);
 
-    const points = values.map((v, i) => {
-      const x = (i / (values.length - 1)) * 100;
-      const y = 40 - ((v - min) / (max - min || 1)) * 30 - 5;
-      return [x, y];
-    });
-
-    return points.reduce((acc, [x, y], i) => {
-      if (i === 0) return `M ${x},${y}`;
-      const [prevX, prevY] = points[i - 1];
-      const cx = (prevX + x) / 2;
-      return `${acc} Q ${prevX},${prevY} ${cx},${y}`;
-    }, "");
-  }
-
-  function generateSmoothFill(values) {
-    const path = generateSmoothPath(values);
-    return `${path} L 100,40 L 0,40 Z`;
-  }
-
-  function generatePoints(values) {
-    const max = Math.max(...values);
-    const min = Math.min(...values);
-
-    return values.map((v, i) => {
-      const x = (i / (values.length - 1)) * 100;
-      const y = 40 - ((v - min) / (max - min || 1)) * 30 - 5;
-      return { x, y };
-    });
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 pb-24 overflow-x-hidden">
@@ -150,7 +135,7 @@ export default function QRPreview() {
                 <div></div>
               </div>
 
-             
+
 
               {data.daily_counts.map((count, i) => {
                 const day = new Date();

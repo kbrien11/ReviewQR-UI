@@ -12,7 +12,7 @@ import PageHeader from "../../layouts/PageHeader";
 
 
 export default function Reviews() {
-  const { token } = useAuth();
+  const { token, setApiOffline, setApiBackendError } = useAuth();
 
   const [internalReviews, setInternalReviews] = useState([]);
   const [googleReviews, setGoogleReviews] = useState(mockGoogleReviews);
@@ -48,17 +48,62 @@ export default function Reviews() {
     setUnreadGoogleReviews(mockGoogleReviews.length);
   }, []);
 
+  // useEffect(() => {
+  //   if (activeTab === "google") {
+  //     markGoogleReviewsAsRead();
+
+  //     fetch(`https://reviewqrapi.onrender.com/api/business/${businessSlug}/google-reviews/mark-read/`, {
+  //       method: "POST",
+  //       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         last_seen_google_review: new Date().toISOString()
+  //       })
+  //     });
+  //   }
+  // }, [activeTab]);
+
   useEffect(() => {
+    async function markRead() {
+      try {
+        const response = await fetch(
+          `https://reviewqrapi.onrender.com/api/business/${businessSlug}/google-reviews/mark-read/`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              last_seen_google_review: new Date().toISOString(),
+            }),
+          }
+        );
+
+        // 🔥 Backend reachable but failing
+        if (!response.ok) {
+          if ([401, 403, 500, 503].includes(response.status)) {
+            setApiBackendError(true);
+          }
+          throw new Error("API error");
+        }
+
+      } catch (err: any) {
+        console.error("Google mark-read error:", err);
+
+        // 🔥 Network unreachable / CORS / timeout
+        if (
+          err.message.includes("Network") ||
+          err.message.includes("Failed to fetch") ||
+          err.message.includes("timeout")
+        ) {
+          setApiOffline(true);
+        }
+      }
+    }
+
     if (activeTab === "google") {
       markGoogleReviewsAsRead();
-
-      fetch(`https://reviewqrapi.onrender.com/api/business/${businessSlug}/google-reviews/mark-read/`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          last_seen_google_review: new Date().toISOString()
-        })
-      });
+      markRead();
     }
   }, [activeTab]);
 
@@ -76,22 +121,38 @@ export default function Reviews() {
       if (filter === "mobile") params.append("device", "mobile");
       if (filter === "desktop") params.append("device", "desktop");
 
-      const res = await fetch(
+      const response = await fetch(
         `https://reviewqrapi.onrender.com/api/reviews/search/?${params.toString()}`,
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
 
-      const json = await res.json();
-
-      if (json.count === 0) {
-        setInternalReviews(json.results || []);
-        setStatusMessage(json.status_message);
-      } else {
-        setInternalReviews(json.results || []);
-        setStatusMessage(json.status_message);
+      // 🔥 Backend reachable but failing
+      if (!response.ok) {
+        if ([401, 403, 500, 503].includes(response.status)) {
+          setApiBackendError(true);
+        }
+        throw new Error("API error");
       }
-    } catch (err) {
+
+      const json = await response.json();
+
+      setInternalReviews(json.results || []);
+      setStatusMessage(json.status_message);
+
+    } catch (err: any) {
       console.error("Review search error:", err);
+
+      // 🔥 Network unreachable / CORS / timeout
+      if (
+        err.message.includes("Network") ||
+        err.message.includes("Failed to fetch") ||
+        err.message.includes("timeout")
+      ) {
+        setApiOffline(true);
+      }
+
     } finally {
       setLoading(false);
     }

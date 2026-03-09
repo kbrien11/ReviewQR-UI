@@ -4,14 +4,19 @@ import DeviceBreakdown from "./DeviceBreakdown";
 import LatestReview from "./LatestReview";
 import SentimentOverview from "./SentimentOverview";
 import { useDashboardSummary } from "./useDashboardSummary";
-
 import { motion } from "framer-motion";
 import FadeIn from "../../components/animations/FadeIn";
 import Stagger, { staggerItem } from "../../components/Stagger";
 import DashboardCard from "./DashboardCard";
+import { UseAIReviews } from './UseAIReviews'
+import ReviewInsightsCard from "./ReviewInsightsCard";
+
+
+
 
 
 export default function Dashboard() {
+  const { insights, loadingInsights } = UseAIReviews();
   const { slug } = useParams();
   const { data, loading } = useDashboardSummary();
 
@@ -86,72 +91,59 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
 
+      {/* HEADER */}
       <FadeIn>
-        <div
-          className="
-      relative
-      px-4 py-5 md:px-6 md:py-8
-      rounded-b-3xl
-      bg-white/80 
-      backdrop-blur-2xl
-      border-b border-gray-200/60 
-      shadow-[0_4px_20px_rgba(0,0,0,0.04)]
-      overflow-hidden
-    "
-        >
-          {/* Soft background glow */}
+        <div className="
+          relative px-4 py-6 md:px-8 md:py-10
+          rounded-b-3xl
+          bg-white/70 backdrop-blur-2xl
+          border-b border-gray-200/60
+          shadow-[0_8px_30px_rgba(0,0,0,0.04)]
+          overflow-hidden
+        ">
+          {/* Glow */}
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute -top-16 -left-16 w-40 h-40 bg-indigo-300/20 blur-3xl rounded-full" />
-            <div className="absolute -bottom-16 -right-16 w-40 h-40 bg-purple-300/20 blur-3xl rounded-full" />
+            <div className="absolute -top-20 -left-20 w-56 h-56 bg-indigo-300/20 blur-3xl rounded-full" />
+            <div className="absolute -bottom-20 -right-20 w-56 h-56 bg-purple-300/20 blur-3xl rounded-full" />
           </div>
 
           {/* Content */}
           <div className="relative flex items-center gap-4 z-10">
+            <div className="
+              w-1.5 h-12 md:h-16 rounded-full
+              bg-gradient-to-b from-indigo-500 to-indigo-600
+              shadow-[0_0_14px_rgba(99,102,241,0.35)]
+            " />
 
-            {/* Premium Accent Bar */}
-            <div
-              className="
-          w-1.5 h-10 md:h-14
-          rounded-full
-          bg-gradient-to-b from-indigo-500 to-indigo-600
-          shadow-[0_0_12px_rgba(99,102,241,0.35)]
-        "
-            />
-
-            {/* Title Block */}
             <div className="flex flex-col">
-              <h1
-                className="
-            text-xl md:text-4xl font-semibold tracking-tight
-            bg-gradient-to-r from-slate-900 to-slate-700 
-            
-            bg-clip-text text-transparent
-            leading-tight
-          "
-              >
+              <h1 className="
+                text-2xl md:text-4xl font-semibold tracking-tight
+                bg-gradient-to-r from-slate-900 to-slate-700
+                bg-clip-text text-transparent
+              ">
                 {data.business_name} Analytics
               </h1>
-
-              <p className="text-xs md:text-base text-gray-500 ">
+              <p className="text-xs md:text-base text-gray-500">
                 {data.status_message}
               </p>
             </div>
           </div>
         </div>
       </FadeIn>
+
       {/* MAIN CONTENT */}
       <div className="
-        w-full 
-        px-4 sm:px-6 lg:px-12 
-        py-6 
-        max-w-full md:max-w-6xl lg:max-w-7xl xl:max-w-[1400px] 
-        mx-auto
+        w-full px-4 sm:px-6 lg:px-10 xl:px-14
+        py-6
+        max-w-[1500px] mx-auto
       ">
 
         {/* KPI ROW */}
         <Stagger>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
-
+          <div className="
+            grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4
+            gap-4 sm:gap-6 mb-10
+          ">
             <motion.div variants={staggerItem}>
               <DashboardCard
                 label="Total Reviews"
@@ -187,20 +179,50 @@ export default function Dashboard() {
                 trend={data.public_reviews_trend}
               />
             </motion.div>
-
           </div>
         </Stagger>
 
-        {/* MAIN GRID */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+        {/* GRID: LEFT (2) + RIGHT (1) */}
+        <div className="
+          grid grid-cols-1 lg:grid-cols-3
+          gap-6 lg:gap-8
+        ">
 
           {/* LEFT COLUMN */}
           <div className="space-y-6 lg:col-span-2">
 
-            <FadeIn delay={0.1}>
-              <SentimentOverview data={data} />
-            </FadeIn>
+            {/* AI INSIGHTS — MOBILE FIRST */}
+            <motion.div
+              className="lg:hidden"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+            >
+              {/* Floating mobile header */}
+              <div className="mb-2 text-xs font-semibold text-gray-500 tracking-wide">
+                AI Insights
+              </div>
 
+              {loadingInsights && (
+                <div className="animate-pulse h-48 bg-gray-200 rounded-2xl" />
+              )}
+
+              {!loadingInsights && insights && (
+                <ReviewInsightsCard insights={insights} />
+              )}
+            </motion.div>
+
+            {/* LATEST REVIEWS */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              <LatestReview reviews={data.latest_reviews} />
+            </motion.div>
+
+            {/* DEVICE BREAKDOWN */}
             {data?.device_breakdown && (
               <FadeIn delay={0.2}>
                 <DeviceBreakdown
@@ -211,19 +233,28 @@ export default function Dashboard() {
             )}
           </div>
 
-          {/* RIGHT COLUMN */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="space-y-6"
-          >
-            <LatestReview reviews={data.latest_reviews} />
-          </motion.div>
+          {/* RIGHT COLUMN — AI INSIGHTS ONLY (DESKTOP) */}
+          <div className="space-y-6">
 
+            <motion.div
+              className="hidden lg:block"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+            >
+              {loadingInsights && (
+                <div className="animate-pulse h-48 bg-gray-200 rounded-2xl" />
+              )}
+
+              {!loadingInsights && insights && (
+                <ReviewInsightsCard insights={insights} />
+              )}
+            </motion.div>
+
+          </div>
         </div>
       </div>
     </div>
   );
 }
+

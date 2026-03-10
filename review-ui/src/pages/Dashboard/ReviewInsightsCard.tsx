@@ -102,6 +102,11 @@ export default function ReviewInsightsCard({ insights }) {
         return "from-gray-50 to-gray-100 border-gray-200";
     };;
 
+    const isTouch = typeof window !== "undefined" &&
+        ("ontouchstart" in window || navigator.maxTouchPoints > 0);
+
+    const [openIndex, setOpenIndex] = useState(null);
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -147,50 +152,63 @@ export default function ReviewInsightsCard({ insights }) {
                 <h3 className="text-sm font-semibold text-gray-700 mb-3">
                     Key Topics
                 </h3>
+                {/* KEY TOPICS */}
+                <div className="w-full flex justify-center">
+                    <div
+                        className="
+      grid 
+      grid-cols-2 
+      gap-3 sm:gap-4 
+      w-full 
+      max-w-[480px] 
+      mx-auto
+    "
+                    >
+                        {keyTopics.map((item, i) => {
+                            const short = shortenTopic(item.topic);
 
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
-                    {keyTopics.map((item, i) => {
-                        const short = shortenTopic(item.topic);
+                            return (
+                                <div
+                                    key={i}
+                                    className={`
+            flex flex-nowrap items-center
+            px-3 py-3
+            rounded-2xl
+            bg-gradient-to-br ${topicColor(item.topic)}
+            border
+            shadow-[inset_0_1px_1px_rgba(255,255,255,0.7),0_1px_3px_rgba(0,0,0,0.05)]
+            transition-all duration-200
 
-                        return (
-                            <div
-                                key={i}
-                                className={`
-                                    flex items-center
-                                    px-3 py-3
-                                    rounded-2xl
-                                    bg-gradient-to-br ${topicColor(item.topic)}
-                                    border
-                                    shadow-[inset_0_1px_1px_rgba(255,255,255,0.7),0_1px_3px_rgba(0,0,0,0.05)]
-                                    hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.8),0_4px_10px_rgba(0,0,0,0.08)]
-                                    active:scale-[0.97]
-                                    transition-all duration-200
+            w-full
+            whitespace-normal
+            break-words
 
-                                    w-full
-                                    min-h-[46px]
-                                    whitespace-normal
-                                    break-words
-                                `}
-                            >
-                                {/* Icon */}
-                                <div className="text-base sm:text-lg opacity-80 shrink-0">
-                                    {getTopicEmoji(item.topic)}
+            sm:hover:-translate-y-[2px]
+            sm:hover:shadow-md
+          `}
+                                >
+                                    {/* Icon */}
+                                    <div className="text-base sm:text-lg opacity-80 shrink-0 mr-2">
+                                        {getTopicEmoji(item.topic)}
+                                    </div>
+
+                                    {/* Text */}
+                                    <span
+                                        className="
+              flex-1 min-w-0
+              text-[13px] sm:text-[14px]
+              font-medium text-gray-800
+              leading-tight
+              break-words
+              whitespace-normal
+            "
+                                    >
+                                        {short}
+                                    </span>
                                 </div>
-
-                                {/* Text */}
-                                <span className="
-                                    text-[13px] sm:text-[14px]
-                                    font-medium text-gray-800
-                                    leading-tight
-                                    ml-2
-                                    break-words
-                                    whitespace-normal
-                                ">
-                                    {short}
-                                </span>
-                            </div>
-                        );
-                    })}
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
 
@@ -282,9 +300,11 @@ export default function ReviewInsightsCard({ insights }) {
                     Trends
                 </h3>
 
+
+
                 <ul className="space-y-3">
                     {normalizeTrends(safeInsights.trends).map((trend, i) => {
-                        const [open, setOpen] = useState(false);
+                        const isOpen = openIndex === i;
 
                         return (
                             <motion.li
@@ -292,52 +312,37 @@ export default function ReviewInsightsCard({ insights }) {
                                 initial={{ opacity: 0, y: 6 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.35, delay: i * 0.05 }}
-                                onClick={() => setOpen(!open)}
-                                onMouseEnter={() => setOpen(true)}
-                                onMouseLeave={() => setOpen(false)}
+                                onClick={() => setOpenIndex(isOpen ? null : i)}
+                                onMouseEnter={() => !isTouch && setOpenIndex(i)}
+                                onMouseLeave={() => !isTouch && setOpenIndex(null)}
                                 className="
-                                    relative cursor-pointer
-                                    bg-white
-                                    rounded-2xl p-4 pl-12
-                                    border border-gray-200
-                                    shadow-[0_1px_3px_rgba(0,0,0,0.06)]
-                                    hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]
-                                    transition-all duration-300
-          "
+          relative cursor-pointer
+          rounded-2xl p-4 pl-5
+          bg-gradient-to-br from-white to-gray-50
+          border border-gray-200
+          shadow-[inset_0_1px_1px_rgba(255,255,255,0.7),0_1px_3px_rgba(0,0,0,0.05)]
+          hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.8),0_3px_8px_rgba(0,0,0,0.08)]
+          transition-all duration-300
+        "
                             >
-                                {/* Accent bar (iOS subtle version) */}
-                                <div className="
-                                    absolute left-0 top-0 bottom-0 w-1
-                                    bg-gray-200
-                                    rounded-l-2xl
-                                " />
+                                <div className="absolute left-3 top-4 w-2.5 h-2.5 rounded-full bg-indigo-400 opacity-80" />
 
-                                {/* Icon (iOS emoji style) */}
-                                <div className="
-                                absolute left-4 top-4
-                                text-xl
-                            ">
-                                    📈
-                                </div>
-
-                                {/* Text */}
                                 <motion.div
-                                    animate={{ height: open ? "auto" : "40px" }}
+                                    animate={{ height: isOpen ? "auto" : "42px" }}
                                     transition={{ duration: 0.3, ease: "easeOut" }}
-                                    className="overflow-hidden"
+                                    className="overflow-hidden pl-6"
                                 >
-                                    <p className="text-[15px] text-gray-800 leading-snug">
-                                        {typeof trend === "string" ? trend : trend.text}
+                                    <p className="text-[15px] text-gray-800 leading-relaxed">
+                                        {trend.text}
                                     </p>
                                 </motion.div>
 
-                                {/* Fade mask when collapsed */}
-                                {!open && (
+                                {!isOpen && (
                                     <div className="
-                                absolute bottom-0 left-0 right-0 h-6
-                                bg-gradient-to-t from-white to-transparent
-                                pointer-events-none
-                                " />
+            absolute bottom-0 left-0 right-0 h-6
+            bg-gradient-to-t from-white to-transparent
+            pointer-events-none
+          " />
                                 )}
                             </motion.li>
                         );

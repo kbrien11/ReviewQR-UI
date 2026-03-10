@@ -2,6 +2,16 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 export default function LatestReview({ reviews }) {
+
+  const formatDateTime = (date) => {
+    const d = new Date(date);
+    return d.toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  };
   return (
     <motion.div
       initial={{ opacity: 0, y: 18 }}
@@ -65,8 +75,8 @@ export default function LatestReview({ reviews }) {
               </div>
 
               {/* Timestamp */}
-              <span className="text-xs text-black-400 ">
-                {new Date(review.created_at).toLocaleString()}
+              <span className="text-[11px] text-gray-500 tracking-tight">
+                {formatDateTime(review.created_at)}
               </span>
             </div>
 

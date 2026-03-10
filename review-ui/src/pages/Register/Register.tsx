@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { QRCodeCanvas } from "qrcode.react";
 import { Link } from "react-router-dom";
+import StyledQRPreview from "../../components/StyledQRPreview";
 
 
 export default function Register() {
@@ -70,7 +71,10 @@ export default function Register() {
       const res = await fetch("https://reviewqrapi.onrender.com/api/business/create/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          qr_fill_color: form.qr_fill_color || form.brand_color,   // fallback applied here
+        }),
       });
 
       await res.json();
@@ -116,7 +120,8 @@ export default function Register() {
       case 1:
         return form.brand_color.trim() !== "";
       case 2:
-        return form.qr_fill_color.trim() !== "";
+        return true; // fill color is optional
+
       case 3:
         return form.qr_back_color.trim() !== "";
       case 4:
@@ -189,6 +194,8 @@ export default function Register() {
           })}
         </div>
       </div>
+
+      
 
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col px-4 py-6">
@@ -274,13 +281,34 @@ export default function Register() {
             {/* STEP 1 — BRAND COLOR */}
             {step === 1 && (
               <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">Brand Color</h2>
+                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">
+                  Brand Color
+                </h2>
 
                 <div className="p-4 rounded-xl bg-white/80 backdrop-blur-xl border border-gray-200 shadow-sm flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Choose your brand color</span>
-                  <input type="color" name="brand_color" value={form.brand_color} onChange={handleChange}
+                  <span className="text-sm font-medium text-gray-700">
+                    Choose your brand color
+                  </span>
+
+                  <input
+                    type="color"
+                    name="brand_color"
+                    value={form.brand_color}
+                    onChange={handleChange}
                     className="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer shadow-sm"
                   />
+                </div>
+
+                {/* QR PREVIEW USING BRAND COLOR */}
+                <div className="flex justify-center">
+                  <div className="p-4 rounded-xl bg-white shadow-sm border">
+                    <StyledQRPreview
+                      fill={form.brand_color}          // brand color becomes QR fill
+                      back="#FFFFFF"                   // default background
+                      brand={form.brand_color}         // brand color for gradient + capsule
+                      text={form.name || "Your Business"}
+                    />
+                  </div>
                 </div>
               </div>
             )}
@@ -288,51 +316,71 @@ export default function Register() {
             {/* STEP 2 — QR FILL COLOR */}
             {step === 2 && (
               <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">QR Fill Color</h2>
+                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">
+                  QR Fill Color <span className="text-gray-500 text-sm">(optional)</span>
+                </h2>
 
                 <div className="p-4 rounded-xl bg-white/80 backdrop-blur-xl border border-gray-200 shadow-sm flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-700">Fill Color</span>
-                  <input type="color" name="qr_fill_color" value={form.qr_fill_color} onChange={handleChange}
+
+                  <input
+                    type="color"
+                    name="qr_fill_color"
+                    value={form.qr_fill_color || form.brand_color}   // visually shows brand color
+                    onChange={handleChange}                           // only sets if user picks
                     className="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer shadow-sm"
                   />
                 </div>
 
                 <div className="flex justify-center">
                   <div className="p-4 rounded-xl bg-white shadow-sm border">
-                    <QRCodeCanvas
-                      value="https://reviewqr.com/preview"
-                      size={160}
-                      bgColor={form.qr_back_color}
-                      fgColor={form.qr_fill_color}
-                      level="H"
-                      includeMargin={true}
+                    <StyledQRPreview
+                      fill={form.qr_fill_color || form.brand_color}   // optional override
+                      back={form.qr_back_color}
+                      brand={form.brand_color}
+                      text={form.name || "Your Business"}
                     />
                   </div>
                 </div>
+
+                {/* Optional reset */}
+                {form.qr_fill_color && (
+                  <button
+                    type="button"
+                    onClick={() => setForm(prev => ({ ...prev, qr_fill_color: "" }))}
+                    className="text-xs text-gray-500 underline"
+                  >
+                    Reset to brand color
+                  </button>
+                )}
               </div>
             )}
-
             {/* STEP 3 — QR BACKGROUND COLOR */}
             {step === 3 && (
               <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">QR Background Color</h2>
+                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">
+                  QR Background Color
+                </h2>
 
                 <div className="p-4 rounded-xl bg-white/80 backdrop-blur-xl border border-gray-200 shadow-sm flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-700">Background Color</span>
-                  <input type="color" name="qr_back_color" value={form.qr_back_color} onChange={handleChange}
+
+                  <input
+                    type="color"
+                    name="qr_back_color"
+                    value={form.qr_back_color || "#FFFFFF"}   // fallback so input never breaks
+                    onChange={handleChange}
                     className="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer shadow-sm"
                   />
                 </div>
 
                 <div className="flex justify-center">
                   <div className="p-4 rounded-xl bg-white shadow-sm border">
-                    <QRCodeCanvas
-                      value="https://reviewqr.com/preview"
-                      size={160}
-                      bgColor={form.qr_back_color}
-                      fgColor={form.qr_fill_color}
-                      level="H"
-                      includeMargin={true}
+                    <StyledQRPreview
+                      fill={form.qr_fill_color || form.brand_color}   // optional override
+                      back={form.qr_back_color || "#FFFFFF"}          // SAFE fallback
+                      brand={form.brand_color}
+                      text={form.name || "Your Business"}
                     />
                   </div>
                 </div>

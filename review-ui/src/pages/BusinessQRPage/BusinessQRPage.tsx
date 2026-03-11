@@ -37,7 +37,7 @@ export default function BusinessQRPage() {
 
   const saveChanges = async (payload) => {
     const response = await fetch(
-      `http://127.0.0.1:8000/api/business/${slug}/qr/`,
+      `https://reviewqrapi.onrender.com/api/business/${slug}/qr/`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -54,7 +54,7 @@ export default function BusinessQRPage() {
 
   const fetchNewQrFromBackend = async () => {
     const res = await fetch(
-      `http://127.0.0.1:8000/api/business/${slug}/qr/`
+      `https://reviewqrapi.onrender.com/api/business/${slug}/qr/`
     );
 
     const data = await res.json();

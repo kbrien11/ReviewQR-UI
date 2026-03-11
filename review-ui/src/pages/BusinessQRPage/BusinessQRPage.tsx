@@ -25,7 +25,7 @@ export default function BusinessQRPage() {
       .then(res => res.json())
       .then(data => {
         setBusinessName(data.name);
-        setQrCodeUrl(data.qr_code);
+        setQrCodeUrl(`${data.qr_code}?t=${Date.now()}`);
 
         setBrandColor(data.brand_color);
         setFillColor(data.qr_fill_color);
@@ -60,7 +60,7 @@ export default function BusinessQRPage() {
     const data = await res.json();
 
     return {
-      qr_code_url: data.qr_code,
+      qr_code_url: `${data.qr_code}?t=${Date.now()}`,
       fill: data.qr_fill_color,
       back: data.qr_back_color,
       box: data.qr_box_size,
@@ -68,7 +68,6 @@ export default function BusinessQRPage() {
     };
   };
 
-  console.log("QR URL:", qrCodeUrl);
 
   return (
     <div className="min-h-screen bg-gray-50">

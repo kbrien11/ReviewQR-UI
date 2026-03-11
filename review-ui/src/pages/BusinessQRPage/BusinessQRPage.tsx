@@ -79,28 +79,39 @@ export default function BusinessQRPage() {
       <div className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
 
         {/* LEFT — QR PREVIEW */}
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center w-full">
 
-          <div className="
-  bg-white border border-gray-200 rounded-xl shadow-sm
-  p-6 w-full flex flex-col items-center
-">
+          <div
+            className="
+                bg-white border border-gray-200 rounded-2xl shadow-md
+                p-6 w-full max-w-[420px]
+                mx-auto
+                pt-safe pb-safe
+              "
+          >
             {editing ? (
               <StyledQRPreview
-                fill={fillColor || brandColor}          // optional override
-                back={backColor || "#FFFFFF"}           // safe fallback
-                brand={brandColor}                      // always required
-                text={businessName}               // center label
-                size={boxSize || 20}                    // safe fallback
-                border={border || 4}                    // safe fallback
-                slug={slug}                             // URL
+                fill={fillColor || brandColor}
+                back={backColor || "#FFFFFF"}
+                brand={brandColor}
+                text={businessName}
+                size={boxSize || 20}
+                border={border || 4}
+                slug={slug}
               />
             ) : (
               qrCodeUrl && (
-                <div className="w-[420px] mx-auto">
-                  <img src={qrCodeUrl} className="w-full h-auto" />
+                <div className="w-full flex justify-center">
+                  <img
+                    src={qrCodeUrl}
+                    className="
+                        w-full max-w-[360px] h-auto
+                        rounded-xl shadow-lg
+                        image-rendering-auto
+                      "
+                    alt="QR Code"
+                  />
                 </div>
-
               )
             )}
 
@@ -112,7 +123,6 @@ export default function BusinessQRPage() {
           </div>
 
           <div className="mt-6 flex items-center gap-3">
-
             {!editing && (
               <button
                 onClick={() => setEditing(true)}
@@ -133,33 +143,18 @@ export default function BusinessQRPage() {
                 link.click();
               }}
               className="
-      inline-flex items-center gap-2
-      px-4 py-3 rounded-lg
-      border border-gray-300
-      text-gray-700 font-medium
-      bg-white
-      hover:bg-gray-50 hover:border-gray-400
-      active:scale-[.98]
-      transition
-    "
+                  inline-flex items-center gap-2
+                  px-4 py-3 rounded-lg
+                  border border-gray-300
+                  text-gray-700 font-medium
+                  bg-white
+                  hover:bg-gray-50 hover:border-gray-400
+                  active:scale-[.98]
+                  transition
+                "
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.8}
-                stroke="currentColor"
-                className="w-5 h-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M7.5 12l4.5 4.5m0 0l4.5-4.5m-4.5 4.5V3"
-                />
-              </svg>
               Download QR
             </button>
-
           </div>
         </div>
 

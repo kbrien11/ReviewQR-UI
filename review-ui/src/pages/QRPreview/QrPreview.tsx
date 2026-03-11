@@ -3,6 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 import PageHeader from "../../layouts/PageHeader";
+import { fetchWithTimeout } from "../../utils/FetchWithTimer";
 
 
 export default function QRPreview() {
@@ -16,7 +17,7 @@ export default function QRPreview() {
   useEffect(() => {
     async function fetchScans() {
       try {
-        const response = await fetch(
+        const response = await fetchWithTimeout(
           `https://reviewqrapi.onrender.com/api/business/${slug}/analytics/summary/`,
           {
             headers: {

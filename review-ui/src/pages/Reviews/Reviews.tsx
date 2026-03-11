@@ -9,6 +9,7 @@ import ReviewsTabs from "./ReviewTabs";
 import { useLocation } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 import PageHeader from "../../layouts/PageHeader";
+import { fetchWithTimeout } from "../../utils/FetchWithTimer";
 
 
 export default function Reviews() {
@@ -65,7 +66,7 @@ export default function Reviews() {
   useEffect(() => {
     async function markRead() {
       try {
-        const response = await fetch(
+        const response = await fetchWithTimeout(
           `https://reviewqrapi.onrender.com/api/business/${businessSlug}/google-reviews/mark-read/`,
           {
             method: "POST",

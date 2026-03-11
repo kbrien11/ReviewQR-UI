@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 
-export default function StyledQRPreview({ fill, back, brand, text }) {
+export default function StyledQRPreview({ fill, back, brand, text,size,border,slug }) {
   const canvasRef = useRef(null);
    // SAFETY FALLBACKS
    const safeFill = fill || brand;   // if fill is "", use brand

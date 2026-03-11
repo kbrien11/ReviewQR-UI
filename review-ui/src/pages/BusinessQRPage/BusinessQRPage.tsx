@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { QRCodeCanvas } from "qrcode.react";
 import { Link } from "react-router-dom";
 import PageHeader from "../../layouts/PageHeader";
+import StyledQRPreview from "../../components/StyledQRPreview";
 
 
 export default function BusinessQRPage() {
@@ -34,19 +35,13 @@ export default function BusinessQRPage() {
       });
   }, [slug]);
 
-  const saveChanges = async () => {
+  const saveChanges = async (payload) => {
     const response = await fetch(
-      `https://reviewqrapi.onrender.com/api/business/${slug}/qr/`,
+      `http://127.0.0.1:8000/api/business/${slug}/qr/`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          brand_color: brandColor,
-          qr_fill_color: fillColor,
-          qr_back_color: backColor,
-          qr_box_size: boxSize,
-          qr_border: border,
-        }),
+        body: JSON.stringify(payload),
       }
     );
 
@@ -59,7 +54,7 @@ export default function BusinessQRPage() {
 
   const fetchNewQrFromBackend = async () => {
     const res = await fetch(
-      `https://reviewqrapi.onrender.com/api/business/${slug}/qr/`
+      `http://127.0.0.1:8000/api/business/${slug}/qr/`
     );
 
     const data = await res.json();
@@ -78,7 +73,7 @@ export default function BusinessQRPage() {
   return (
     <div className="min-h-screen bg-gray-50">
 
-<PageHeader businessName={businessName} title="QR Code" />
+      <PageHeader businessName={businessName} title="QR Code" />
 
       {/* MAIN CONTENT */}
       <div className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -87,27 +82,25 @@ export default function BusinessQRPage() {
         <div className="flex flex-col items-center">
 
           <div className="
-            bg-white border border-gray-200 rounded-xl shadow-sm
-            p-6 w-full flex flex-col items-center
-          ">
+  bg-white border border-gray-200 rounded-xl shadow-sm
+  p-6 w-full flex flex-col items-center
+">
             {editing ? (
-              // LIVE REACTIVE QR PREVIEW
-              <QRCodeCanvas
-                value={`https://reviewqr.com/${slug}`}
-                size={boxSize * 10}
-                bgColor={backColor}
-                fgColor={fillColor}
-                level="H"
-                includeMargin={true}
+              <StyledQRPreview
+                fill={fillColor || brandColor}          // optional override
+                back={backColor || "#FFFFFF"}           // safe fallback
+                brand={brandColor}                      // always required
+                text={businessName}               // center label
+                size={boxSize || 20}                    // safe fallback
+                border={border || 4}                    // safe fallback
+                slug={slug}                             // URL
               />
             ) : (
-              // STATIC BACKEND QR PNG
               qrCodeUrl && (
-                <img
-                  src={qrCodeUrl}
-                  alt="QR Code"
-                  className="w-64 h-64 rounded-lg border shadow-sm"
-                />
+                <div className="w-[420px] mx-auto">
+                  <img src={qrCodeUrl} className="w-full h-auto" />
+                </div>
+
               )
             )}
 
@@ -120,7 +113,6 @@ export default function BusinessQRPage() {
 
           <div className="mt-6 flex items-center gap-3">
 
-            {/* Customize Button */}
             {!editing && (
               <button
                 onClick={() => setEditing(true)}
@@ -133,7 +125,6 @@ export default function BusinessQRPage() {
               </button>
             )}
 
-            {/* Download Button */}
             <button
               onClick={() => {
                 const link = document.createElement("a");
@@ -177,9 +168,9 @@ export default function BusinessQRPage() {
         {/* RIGHT — EDITOR PANEL */}
         {editing && (
           <div className="
-            bg-white border border-gray-200 rounded-xl shadow-sm p-6
-            animate-fadeInUp
-          ">
+    bg-white border border-gray-200 rounded-xl shadow-sm p-6
+    animate-fadeInUp
+  ">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-gray-900">Customize QR</h2>
 
@@ -202,12 +193,12 @@ export default function BusinessQRPage() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`
-                    px-4 py-2 rounded-md text-sm font-medium transition
-                    ${activeTab === tab.id
+            px-4 py-2 rounded-md text-sm font-medium transition
+            ${activeTab === tab.id
                       ? "bg-indigo-600 text-white"
                       : "text-gray-600 hover:bg-gray-100"
                     }
-                  `}
+          `}
                 >
                   {tab.label}
                 </button>
@@ -225,7 +216,13 @@ export default function BusinessQRPage() {
                     <input
                       type="color"
                       value={brandColor}
-                      onChange={e => setBrandColor(e.target.value)}
+                      onChange={e => {
+                        const val = e.target.value
+                        setBrandColor(val)
+
+                        // If fillColor is empty, update fillColor too
+                        if (!fillColor) setFillColor(val)
+                      }}
                       className="w-full h-12 rounded-md border cursor-pointer"
                     />
                   </div>
@@ -289,14 +286,14 @@ export default function BusinessQRPage() {
                     <button
                       key={i}
                       onClick={() => {
-                        setBrandColor(preset.brand);
-                        setFillColor(preset.fill);
-                        setBackColor(preset.back);
+                        setBrandColor(preset.brand)
+                        setFillColor(preset.fill)
+                        setBackColor(preset.back)
                       }}
                       className="
-                        p-4 rounded-md border bg-gray-50 hover:bg-gray-100
-                        transition shadow-sm hover:shadow-md
-                      "
+                p-4 rounded-md border bg-gray-50 hover:bg-gray-100
+                transition shadow-sm hover:shadow-md
+              "
                     >
                       <p className="font-medium text-gray-700">{preset.name}</p>
                     </button>
@@ -308,15 +305,22 @@ export default function BusinessQRPage() {
             {/* SAVE BUTTON */}
             <button
               onClick={async () => {
-                await saveChanges(); // your backend save
-                const refreshed = await fetchNewQrFromBackend();
-                setQrCodeUrl(refreshed.qr_code_url);
-                setEditing(false);
+                await saveChanges({
+                  brand_color: brandColor,
+                  qr_fill_color: fillColor || brandColor,
+                  qr_back_color: backColor || "#FFFFFF",
+                  qr_box_size: boxSize,
+                  qr_border: border,
+                })
+
+                const refreshed = await fetchNewQrFromBackend()
+                setQrCodeUrl(`${refreshed.qr_code_url}?t=${Date.now()}`);
+                setEditing(false)
               }}
               className="
-                w-full mt-8 bg-indigo-600 text-white py-3 rounded-lg font-semibold
-                hover:bg-indigo-700 transition
-              "
+        w-full mt-8 bg-indigo-600 text-white py-3 rounded-lg font-semibold
+        hover:bg-indigo-700 transition
+      "
             >
               Save Changes
             </button>

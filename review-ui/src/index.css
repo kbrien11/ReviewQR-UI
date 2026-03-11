@@ -207,3 +207,14 @@ body {
   .animate-pulseSlow {
     animation: pulseSlow 8s ease-in-out infinite;
   }
+
+
+
+
+  .input-ios {
+    @apply w-full px-4 py-3 rounded-xl bg-white/70 backdrop-blur
+           border border-gray-300 text-[15px] font-medium text-gray-900
+           placeholder:text-gray-400 shadow-sm
+           focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+           transition-all;
+  }

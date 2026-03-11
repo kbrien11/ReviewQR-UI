@@ -21,10 +21,12 @@ export default function Register() {
   const [direction, setDirection] = useState("forward");
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [alert, setAlert] = useState(null);
-
+  const [infoTab, setInfoTab] = useState("business"); // "business" | "owner"
   const [form, setForm] = useState({
     name: "",
     email: "",
+    username: "",
+    password: "",
     phone: "",
     google_review_link: "",
     brand_color: "#BA8E23",
@@ -110,13 +112,19 @@ export default function Register() {
 
   const validateStep = () => {
     switch (step) {
-      case 0:
-        return (
+      case 0: {
+        const businessValid =
           form.name.trim() !== "" &&
-          isValidEmail(form.email) &&
           isValidPhone(form.phone) &&
-          isValidUrl(form.google_review_link)
-        );
+          isValidUrl(form.google_review_link);
+
+        const ownerValid =
+          form.username.trim() !== "" &&
+          isValidEmail(form.email) &&
+          form.password.trim().length >= 6;
+
+        return businessValid && ownerValid;
+      }
       case 1:
         return form.brand_color.trim() !== "";
       case 2:
@@ -131,11 +139,17 @@ export default function Register() {
     }
   };
 
-  // Animation classes
-  const slideClass =
-    direction === "forward"
-      ? "animate-slide-left-fade"
-      : "animate-slide-right-fade";
+  const businessComplete =
+    form.name.trim() !== "" &&
+    isValidPhone(form.phone) &&
+    isValidUrl(form.google_review_link);
+
+  const ownerComplete =
+    form.username.trim() !== "" &&
+    isValidEmail(form.email) &&
+    form.password.trim().length >= 6;
+
+
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -195,7 +209,7 @@ export default function Register() {
         </div>
       </div>
 
-      
+
 
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col px-4 py-6">
@@ -228,39 +242,146 @@ export default function Register() {
             </div>
           )}
 
+          <div className="flex justify-center sm:justify-start">
+            <div className="
+                  inline-flex p-1 rounded-2xl
+                  bg-gradient-to-b from-gray-100 to-gray-200
+                  shadow-inner border border-gray-200
+                ">
+
+              {/* BUSINESS TAB */}
+              <button
+                onClick={() => setInfoTab("business")}
+                className={`
+                        relative px-6 py-2.5 rounded-xl text-sm font-medium
+                        transition-all duration-300
+        ${infoTab === "business"
+                    ? "bg-white shadow-md text-gray-900 scale-[1.02]"
+                    : "text-gray-500 hover:text-gray-700"}
+      `}
+              >
+                Business
+                {businessComplete && (
+                  <span className="absolute -top-1 -right-1 h-3 w-3 bg-green-500 rounded-full shadow-sm"></span>
+                )}
+              </button>
+
+              {/* OWNER TAB */}
+              <button
+                onClick={() => setInfoTab("owner")}
+                className={`
+                    relative px-6 py-2.5 rounded-xl text-sm font-medium
+                    transition-all duration-300
+                    ${infoTab === "owner"
+                    ? "bg-white shadow-md text-gray-900 scale-[1.02]"
+                    : "text-gray-500 hover:text-gray-700"}
+      `}
+              >
+                Owner
+                {ownerComplete && (
+                  <span className="absolute -top-1 -right-1 h-3 w-3 bg-green-500 rounded-full shadow-sm"></span>
+                )}
+              </button>
+
+            </div>
+          </div>
+
+          <p className="text-xs text-gray-500 mt-2 text-center sm:text-left">
+            Complete both sections before continuing
+          </p>
+
           {/* STEP CONTENT */}
           <div className="animate-step">
 
-            {/* STEP 0 — BUSINESS INFO */}
+            {/* STEP 0 — BUSINESS + OWNER INFO */}
+            {/* STEP 0 — BUSINESS + OWNER INFO */}
             {step === 0 && (
-              <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">Business Info</h2>
+              <div className="space-y-10 px-2 sm:px-0">
 
-                <div className="space-y-4">
-                  <input name="name" value={form.name} onChange={handleChange}
-                    placeholder="Business Name"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 transition shadow-sm"
-                  />
+                {/* HEADER */}
+                <div className="text-center sm:text-left space-y-1 pt-4 pb-2 sm:pt-6 sm:pb-4">
+                  <h2 className="text-3xl font-semibold text-gray-900 tracking-tight">
+                    {infoTab === "business" ? "Business Account" : "Owner Account"}
+                  </h2>
 
-                  <input name="email" value={form.email} onChange={handleChange}
-                    placeholder="Email"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 transition shadow-sm"
-                  />
-
-                  <input name="phone" value={form.phone} onChange={handleChange}
-                    placeholder="Phone Number"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 transition shadow-sm"
-                  />
-
-                  <input name="google_review_link" value={form.google_review_link} onChange={handleChange}
-                    placeholder="Google Review Link"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 transition shadow-sm"
-                  />
+                  <p className="text-gray-500 text-sm sm:text-base">
+                    {infoTab === "business"
+                      ? "Tell us about your business to get started"
+                      : "Create your secure owner account"}
+                  </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-white/80 backdrop-blur-xl border border-gray-200 shadow-sm space-y-3">
+
+
+                {/* BUSINESS INFO */}
+                {infoTab === "business" && (
+                  <div className="space-y-5 bg-white/70 backdrop-blur-xl p-6 rounded-2xl border border-gray-200 shadow-sm animate-fadeIn">
+                    <h3 className="text-lg font-semibold text-gray-900">Business Details</h3>
+
+                    <input
+                      name="name"
+                      value={form.name}
+                      onChange={handleChange}
+                      placeholder="Business Name"
+                      className="input-ios"
+                    />
+
+                    <input
+                      name="phone"
+                      value={form.phone}
+                      onChange={handleChange}
+                      placeholder="Business Phone"
+                      className="input-ios"
+                    />
+
+                    <input
+                      name="google_review_link"
+                      value={form.google_review_link}
+                      onChange={handleChange}
+                      placeholder="Google Review Link"
+                      className="input-ios"
+                    />
+                  </div>
+                )}
+
+                {/* OWNER INFO */}
+                {infoTab === "owner" && (
+                  <div className="space-y-5 bg-white/70 backdrop-blur-xl p-6 rounded-2xl border border-gray-200 shadow-sm animate-fadeIn">
+                    <h3 className="text-lg font-semibold text-gray-900">Owner Details</h3>
+
+                    <input
+                      name="owner_name"
+                      value={form.username}
+                      onChange={handleChange}
+                      placeholder="Your Name"
+                      className="input-ios"
+                    />
+
+                    <input
+                      name="email"
+                      value={form.email}
+                      onChange={handleChange}
+                      placeholder="Business Email"
+                      className="input-ios"
+                    />
+
+                    <input
+                      name="owner_password"
+                      type="password"
+                      value={form.password}
+                      onChange={handleChange}
+                      placeholder="Create Password"
+                      className="input-ios"
+                    />
+                  </div>
+                )}
+
+                {/* GOOGLE CONNECT CARD */}
+                <div className="p-5 rounded-2xl bg-white/70 backdrop-blur-xl border border-gray-200 shadow-sm space-y-3">
                   <h3 className="text-sm font-semibold text-gray-800">Connect Google Reviews</h3>
-                  <p className="text-xs text-gray-600">Sync your Google Business Profile to pull reviews automatically.</p>
+                  <p className="text-xs text-gray-600">
+                    Sync your Google Business Profile to pull reviews automatically.
+                  </p>
 
                   {googleConnected ? (
                     <div className="px-4 py-2 rounded-lg bg-green-100 text-green-700 text-sm font-medium">
@@ -275,6 +396,7 @@ export default function Register() {
                     </button>
                   )}
                 </div>
+
               </div>
             )}
 

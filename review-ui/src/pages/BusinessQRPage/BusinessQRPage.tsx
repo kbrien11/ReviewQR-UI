@@ -22,7 +22,7 @@ export default function BusinessQRPage() {
   const [qrShape, setQrShape] = useState("colors");
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/business/${slug}/qr/`)
+    fetch(`https://reviewqrapi.onrender.com/api/business/${slug}/qr/`)
       .then(res => res.json())
       .then(data => {
         setBusinessName(data.name);
@@ -38,7 +38,7 @@ export default function BusinessQRPage() {
 
   const saveChanges = async (payload) => {
     const response = await fetch(
-      `http://127.0.0.1:8000/api/business/${slug}/qr/`,
+      `https://reviewqrapi.onrender.com/api/business/${slug}/qr/`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -55,7 +55,7 @@ export default function BusinessQRPage() {
 
   const fetchNewQrFromBackend = async () => {
     const res = await fetch(
-      `http://127.0.0.1:8000/api/business/${slug}/qr/`
+      `https://reviewqrapi.onrender.com/api/business/${slug}/qr/`
     );
 
     const data = await res.json();
@@ -184,6 +184,7 @@ export default function BusinessQRPage() {
               {[
                 { id: "colors", label: "Colors" },
                 { id: "sizes", label: "Sizes" },
+                { id: "shapes", label: "Shapes" },
                 { id: "presets", label: "Presets" },
               ].map(tab => (
                 <button
@@ -246,6 +247,31 @@ export default function BusinessQRPage() {
                 </div>
               )}
 
+              {/* SHAPES */}
+              {activeTab === "shapes" && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+                  {/* QR Shape Selector */}
+                  <div className="sm:col-span-2">
+                    <label className="text-sm font-medium text-gray-700">QR Shape</label>
+                    <select
+                      value={qrShape}
+                      onChange={e => setQrShape(e.target.value)}
+                      className="w-full h-12 rounded-md border px-3 bg-white"
+                    >
+                      <option value="rectangle">Rectangle</option>
+                      <option value="circle">Circle</option>
+                      <option value="heart">Heart</option>
+                      <option value="diamond">Diamond</option>
+                      <option value="squircle">squircle</option>
+                      <option value="hexagon">hexagon</option>
+                      <option value="star">star</option>
+                    </select>
+                  </div>
+
+                </div>
+              )}
+
               {/* SIZES */}
               {activeTab === "sizes" && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -267,21 +293,6 @@ export default function BusinessQRPage() {
                       onChange={e => setBorder(Number(e.target.value))}
                       className="w-full h-12 rounded-md border px-3"
                     />
-                  </div>
-
-                  {/* NEW: QR Shape Selector */}
-                  <div className="sm:col-span-2">
-                    <label className="text-sm font-medium text-gray-700">QR Shape</label>
-                    <select
-                      value={qrShape}
-                      onChange={e => setQrShape(e.target.value)}
-                      className="w-full h-12 rounded-md border px-3 bg-white"
-                    >
-                      <option value="rectangle">Rectangle</option>
-                      <option value="circle">Circle</option>
-                      <option value="heart">Heart</option>
-                      <option value="diamond">Diamond</option>
-                    </select>
                   </div>
                 </div>
               )}
@@ -323,7 +334,7 @@ export default function BusinessQRPage() {
                   qr_back_color: backColor || "#FFFFFF",
                   qr_box_size: boxSize,
                   qr_border: border,
-                  qr_shape:qrShape
+                  qr_shape: qrShape
                 })
 
                 const refreshed = await fetchNewQrFromBackend()

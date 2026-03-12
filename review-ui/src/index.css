@@ -1,7 +1,10 @@
 @import "tailwindcss";
 
-body {
-  font-family: var(--vercel-font);
+
+
+:root { font-family: 'Inter', sans-serif; }
+@supports (font-variation-settings: normal) {
+  :root { font-family: 'Inter var', sans-serif; }
 }
 
 

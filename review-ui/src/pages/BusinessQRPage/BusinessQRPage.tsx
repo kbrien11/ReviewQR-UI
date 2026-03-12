@@ -19,14 +19,15 @@ export default function BusinessQRPage() {
   const [boxSize, setBoxSize] = useState(10);
   const [border, setBorder] = useState(4);
   const [activeTab, setActiveTab] = useState("colors");
+  const [qrShape, setQrShape] = useState("colors");
 
   useEffect(() => {
-    fetch(`https://reviewqrapi.onrender.com/api/business/${slug}/qr/`)
+    fetch(`http://127.0.0.1:8000/api/business/${slug}/qr/`)
       .then(res => res.json())
       .then(data => {
         setBusinessName(data.name);
         setQrCodeUrl(`${data.qr_code}?t=${Date.now()}`);
-
+        setQrShape(data.qr_shape)
         setBrandColor(data.brand_color);
         setFillColor(data.qr_fill_color);
         setBackColor(data.qr_back_color);
@@ -37,7 +38,7 @@ export default function BusinessQRPage() {
 
   const saveChanges = async (payload) => {
     const response = await fetch(
-      `https://reviewqrapi.onrender.com/api/business/${slug}/qr/`,
+      `http://127.0.0.1:8000/api/business/${slug}/qr/`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -54,7 +55,7 @@ export default function BusinessQRPage() {
 
   const fetchNewQrFromBackend = async () => {
     const res = await fetch(
-      `https://reviewqrapi.onrender.com/api/business/${slug}/qr/`
+      `http://127.0.0.1:8000/api/business/${slug}/qr/`
     );
 
     const data = await res.json();
@@ -65,6 +66,7 @@ export default function BusinessQRPage() {
       back: data.qr_back_color,
       box: data.qr_box_size,
       border: data.qr_border,
+      shape: data.qr_shape
     };
   };
 
@@ -97,6 +99,7 @@ export default function BusinessQRPage() {
                 size={boxSize || 20}
                 border={border || 4}
                 slug={slug}
+                shape={qrShape}   // ← NEW
               />
             ) : (
               qrCodeUrl && (
@@ -265,6 +268,21 @@ export default function BusinessQRPage() {
                       className="w-full h-12 rounded-md border px-3"
                     />
                   </div>
+
+                  {/* NEW: QR Shape Selector */}
+                  <div className="sm:col-span-2">
+                    <label className="text-sm font-medium text-gray-700">QR Shape</label>
+                    <select
+                      value={qrShape}
+                      onChange={e => setQrShape(e.target.value)}
+                      className="w-full h-12 rounded-md border px-3 bg-white"
+                    >
+                      <option value="rectangle">Rectangle</option>
+                      <option value="circle">Circle</option>
+                      <option value="heart">Heart</option>
+                      <option value="diamond">Diamond</option>
+                    </select>
+                  </div>
                 </div>
               )}
 
@@ -305,6 +323,7 @@ export default function BusinessQRPage() {
                   qr_back_color: backColor || "#FFFFFF",
                   qr_box_size: boxSize,
                   qr_border: border,
+                  qr_shape:qrShape
                 })
 
                 const refreshed = await fetchNewQrFromBackend()

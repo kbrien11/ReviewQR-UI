@@ -3,42 +3,46 @@ import { useApp } from "../../context/AppContext";
 import { useAuth } from "../../context/AuthContext";
 import { fetchWithTimeout } from "../../utils/FetchWithTimer";
 
-export function useDashboardSummary() {
-  const { token, setApiOffline,setApiBackendError } = useAuth();
+export function useDashboardSummary(location) {
+  const { token, setApiOffline, setApiBackendError } = useAuth();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [lastGoogleReview, setLastGoogleReview] = useState("");
   const { setBusinessSlug, setBusinessName } = useApp();
 
+  console.log(location)
+
   useEffect(() => {
     async function fetchDashboard() {
       try {
+        const url = location
+          ? `https://reviewqrapi.onrender.com/api/dashboard/summary/?location=${encodeURIComponent(location)}`
+          : `https://reviewqrapi.onrender.com/api/dashboard/summary/`;
+
         const response = await fetchWithTimeout(
-          "https://reviewqrapi.onrender.com/api/dashboard/summary/",
+          url,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
-          15000 // 15 seconds
+          15000
         );
-  
-        // Backend reachable but failing
+
         if (!response.ok) {
           if ([401, 403, 500, 503].includes(response.status)) {
             setApiBackendError(true);
           }
           throw new Error("API error");
         }
-  
+
         const json = await response.json();
         setData(json);
         setBusinessSlug(json.business_slug);
         setBusinessName(json.business_name);
         setLastGoogleReview(json.last_google_review_date);
-  
+
       } catch (err) {
         console.error("Dashboard fetch error:", err);
-  
-        // Timeout OR network failure
+
         if (
           err.message === "timeout" ||
           err.message.includes("Network") ||
@@ -50,11 +54,11 @@ export function useDashboardSummary() {
         setLoading(false);
       }
     }
-  
-    fetchDashboard();
-  }, [token]);
 
- 
+    fetchDashboard();
+  }, [token, location]);
+
+
 
   return { data, loading, lastGoogleReview };
 }

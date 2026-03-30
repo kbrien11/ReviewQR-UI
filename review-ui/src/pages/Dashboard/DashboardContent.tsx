@@ -235,7 +235,7 @@ export default function Dashboard() {
               <motion.div variants={staggerItem}>
                 <DashboardCard
                   label="Conversion Rate (scans/reviews)"
-                  value={data.conversion_rate}
+                  value={data.conversion_rate + "" + "%"}
                   icon="🌐"
                   trend={data.conversion_trend}
                 />

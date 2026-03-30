@@ -72,13 +72,13 @@ export default function DashboardCard({
 
       <p
         className="
-            text-[2.6rem] md:text-[3rem]
-            font-semibold
-            text-black-900
-            tracking-[-0.02em]
-            leading-none
-            font-[system-ui,-apple-system,'SF Pro Display','SF Pro Text']
-          "
+          text-[1.8rem] md:text-[2.1rem]
+          font-semibold
+          text-black-900
+          leading-none
+          tracking-[-0.02em]
+          font-[system-ui,-apple-system,'SF Pro Display','SF Pro Text']
+        "
       >
         {value}
       </p>

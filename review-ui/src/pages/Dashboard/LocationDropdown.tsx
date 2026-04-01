@@ -11,7 +11,7 @@ export default function LocationDropdown({ onSelect }) {
             try {
                 const res = await fetch("https://reviewqrapi.onrender.com/api/locations/", {
                     method: "GET",
-                    credentials: "include", // sends JWT cookie automatically
+                
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

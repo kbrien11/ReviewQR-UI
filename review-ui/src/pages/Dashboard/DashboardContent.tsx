@@ -140,7 +140,8 @@ export default function Dashboard() {
             </div>
 
             {/* LOCATION DROPDOWN */}
-               <LocationDropdown onSelect={(address) => setSelectedLocation(address)} />
+            {data.location_franchise &&<LocationDropdown onSelect={(address) => setSelectedLocation(address)} />}
+               
 
           </div>
         </div>

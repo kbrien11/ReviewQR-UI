@@ -9,7 +9,7 @@ export default function LocationDropdown({ onSelect }) {
     useEffect(() => {
         async function fetchLocations() {
             try {
-                const res = await fetch("http://127.0.0.1:8000/api/locations/", {
+                const res = await fetch("https://reviewqrapi.onrender.com/api/locations/", {
                     method: "GET",
                     credentials: "include", // sends JWT cookie automatically
                     headers: {

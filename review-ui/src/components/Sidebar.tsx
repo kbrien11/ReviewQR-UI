@@ -8,6 +8,7 @@ import {
   MagnifyingGlassIcon,
   Cog6ToothIcon,
   ArrowRightOnRectangleIcon,
+  CreditCardIcon,
 } from "@heroicons/react/24/outline";
 
 export default function Sidebar({ slug, business }) {
@@ -22,8 +23,20 @@ export default function Sidebar({ slug, business }) {
 
   const adminLinks = [
     ...(role?.toLowerCase() === "owner"
-      ? [{ label: "Team Members", to: business ? `/admin/team/${business}` : "#", icon: UsersIcon }]
+      ? [
+        {
+          label: "Team Members",
+          to: business ? `/admin/team/${business}` : "#",
+          icon: UsersIcon,
+        },
+        {
+          label: "Plan & Billing",
+          to: business ? `/admin/plan/${business}` : "#",
+          icon: CreditCardIcon, // or any icon you prefer
+        },
+      ]
       : []),
+
     { label: "Settings", to: "/settings", icon: Cog6ToothIcon },
     { label: "Logout", to: "/login", icon: ArrowRightOnRectangleIcon },
   ];

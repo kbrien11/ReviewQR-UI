@@ -13,6 +13,7 @@ import BusinessQRPage from "./pages/BusinessQRPage/BusinessQRPage";
 import ProtectedRoute from "./context/ProtectedRoute";
 import Register from "./pages/Register/Register";
 import TeamMembers from "./pages/TeamMembers/TeamMembers";
+import PlanAndBilling from "./pages/PlanAndBilling/PlanAndBilling";
 
 export default function App() {
 
@@ -68,6 +69,7 @@ export default function App() {
               <Route path="/review/:slug" element={<LeaveReviewPage />} />
               <Route path="/business/:slug/qr" element={<BusinessQRPage />} />
               <Route path="/admin/team/:business" element={<TeamMembers />} />
+              <Route path="/admin/plan/:business" element={<PlanAndBilling />} />
             </Routes>
           </div>
         </div>

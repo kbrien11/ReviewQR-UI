@@ -176,8 +176,7 @@ export default function StyledQRPreview({
 
     // 6. Gradient overlay
     const gradient = ctx.createLinearGradient(0, 0, 0, height);
-    gradient.addColorStop(0, safeFill);
-    gradient.addColorStop(1, safeBrand);
+   
 
     ctx.fillStyle = gradient;
     ctx.globalAlpha = 0.28;

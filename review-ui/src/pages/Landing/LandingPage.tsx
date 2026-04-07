@@ -20,7 +20,28 @@ export default function LandingPage() {
 
     return () => clearInterval(interval);
   }, []);
-
+  const testimonials = [
+    {
+      name: "Sarah M.",
+      role: "Salon Owner",
+      text: "We doubled our Google reviews in 3 weeks. Customers love how easy it is.",
+    },
+    {
+      name: "Daniel R.",
+      role: "Restaurant Manager",
+      text: "The QR codes look amazing on our tables. ReviewQR is a game changer.",
+    },
+    {
+      name: "Lena K.",
+      role: "Fitness Studio Owner",
+      text: "Finally a tool that makes reviews effortless. Highly recommended.",
+    },
+    {
+      name: "Marcus T.",
+      role: "Barbershop Owner",
+      text: "Our customers scan the code right after their cut. Reviews shot up instantly.",
+    },
+  ];
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
 
@@ -426,8 +447,57 @@ export default function LandingPage() {
           Loved by Local Businesses
         </h3>
 
-        {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto relative z-10">
+        {/* MOBILE CAROUSEL */}
+        <div className="md:hidden overflow-hidden pb-4">
+          <div className="carousel-track flex gap-6">
+            {[...testimonials, ...testimonials].map((t, i) => (
+              <div
+                key={i}
+                className="
+          min-w-[85%]
+          group relative p-8 bg-white rounded-2xl border border-gray-200
+          shadow-sm transition-all duration-500
+        "
+              >
+                {/* Glow */}
+                <div className="
+          absolute inset-0 rounded-2xl bg-gradient-to-br
+          from-indigo-200/30 to-purple-200/30 blur-2xl opacity-0
+          group-hover:opacity-40 transition-all duration-500
+        "></div>
+
+                {/* Avatar */}
+                <div className="relative flex items-center gap-4 mb-4">
+                  <div className="relative">
+                    <div className="
+              absolute inset-0 rounded-full border-2 border-indigo-400
+              opacity-30 animate-ping
+            "></div>
+
+                    <div className="
+              relative w-12 h-12 rounded-full bg-indigo-600
+              flex items-center justify-center text-white font-bold shadow-md
+            ">
+                      {t.name[0]}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="font-semibold text-gray-900">{t.name}</div>
+                    <div className="text-sm text-gray-500">{t.role}</div>
+                  </div>
+                </div>
+
+                <p className="relative text-gray-700 italic leading-relaxed">
+                  “{t.text}”
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* DESKTOP GRID */}
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto relative z-10">
 
           {[
             {
@@ -445,6 +515,11 @@ export default function LandingPage() {
               role: "Fitness Studio Owner",
               text: "Finally a tool that makes reviews effortless. Highly recommended.",
             },
+            {
+              name: "Marcus T.",
+              role: "Barbershop Owner",
+              text: "Our customers scan the code right after their cut. Reviews shot up instantly.",
+            },
           ].map((t, i) => (
             <div
               key={i}
@@ -455,7 +530,6 @@ export default function LandingPage() {
       "
               style={{ animationDelay: `${400 + i * 150}ms` }}
             >
-
               {/* Glow Behind Card */}
               <div className="
         absolute inset-0 rounded-2xl bg-gradient-to-br
@@ -465,16 +539,12 @@ export default function LandingPage() {
 
               {/* Avatar + Info */}
               <div className="relative flex items-center gap-4 mb-4">
-
-                {/* Avatar Container */}
                 <div className="relative">
-                  {/* Glow Ring */}
                   <div className="
             absolute inset-0 rounded-full border-2 border-indigo-400
             opacity-30 animate-ping
           "></div>
 
-                  {/* Avatar */}
                   <div className="
             relative w-12 h-12 rounded-full bg-indigo-600
             flex items-center justify-center text-white font-bold shadow-md
@@ -489,7 +559,6 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Testimonial Text */}
               <p className="relative text-gray-700 italic leading-relaxed">
                 “{t.text}”
               </p>
@@ -498,6 +567,22 @@ export default function LandingPage() {
 
         </div>
       </div>
+
+      {/* Carousel Animation */}
+<style>
+  {`
+.carousel-track {
+  display: flex;
+  gap: 24px;
+  animation: carousel 8s linear infinite;
+}
+
+@keyframes carousel {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-340vw - 72px)); }
+}
+`}
+</style>
 
 
       {/* FOOTER */}

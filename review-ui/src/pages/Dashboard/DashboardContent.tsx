@@ -13,6 +13,7 @@ import ReviewInsightsCard from "./ReviewInsightsCard";
 import { useApp } from "../../context/AppContext";
 import LocationDropdown from "./LocationDropdown";
 import { useState } from "react";
+import PlanBadge from "./PlanBadge";
 
 
 
@@ -23,7 +24,7 @@ export default function Dashboard() {
   const { slug } = useParams();
   const [selectedLocation, setSelectedLocation] = useState("");
   const { data, loading } = useDashboardSummary(selectedLocation);
-  
+
   const { businessSlug } = useApp();
 
 
@@ -117,31 +118,38 @@ export default function Dashboard() {
           {/* Content */}
           <div className="relative flex flex-col gap-3 z-10">
 
-            {/* Title Row */}
-            <div className="flex items-center gap-4">
-              <div className="
-                w-1.5 h-12 md:h-16 rounded-full
-                bg-gradient-to-b from-indigo-500 to-indigo-600
-                shadow-[0_0_14px_rgba(99,102,241,0.35)]
-              " />
+            {/* Title Row + Plan Badge */}
+            <div className="flex items-start justify-between gap-4 w-full">
 
-              <div className="flex flex-col">
-                <h1 className="
-                  text-2xl md:text-4xl font-semibold tracking-tight
-                  bg-gradient-to-r from-slate-900 to-slate-700
-                  bg-clip-text text-transparent
-                ">
-                  {data.business_name} Analytics
-                </h1>
-                <p className="text-xs md:text-base text-gray-500">
-                  {data.status_message}
-                </p>
+              {/* Left: Title */}
+              <div className="flex items-center gap-4">
+                <div className="
+                      w-1.5 h-12 md:h-16 rounded-full
+                      bg-gradient-to-b from-indigo-500 to-indigo-600
+                      shadow-[0_0_14px_rgba(99,102,241,0.35)]
+                    " />
+
+                <div className="flex flex-col">
+                  <h1 className="
+                      text-2xl md:text-4xl font-semibold tracking-tight
+                      bg-gradient-to-r from-slate-900 to-slate-700
+                      bg-clip-text text-transparent
+                    ">
+                    {data.business_name} Analytics
+                  </h1>
+                  <p className="text-xs md:text-base text-gray-500">
+                    {data.status_message}
+                  </p>
+                </div>
               </div>
+
+              {/* Right: Plan Badge */}
+              <PlanBadge />
             </div>
 
             {/* LOCATION DROPDOWN */}
-            {data.location_franchise &&<LocationDropdown onSelect={(address) => setSelectedLocation(address)} />}
-               
+            {data.location_franchise && <LocationDropdown onSelect={(address) => setSelectedLocation(address)} />}
+
 
           </div>
         </div>

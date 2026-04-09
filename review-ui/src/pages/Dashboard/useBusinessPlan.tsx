@@ -13,7 +13,7 @@ export function useBusinessPlan() {
     try {
       setLoading(true);
 
-      const res = await fetch("http://127.0.0.1:8000/api/updatePlan/", {
+      const res = await fetch("https://reviewqrapi.onrender.com/api/updatePlan/", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -32,8 +32,10 @@ export function useBusinessPlan() {
   };
 
   const updatePlan = async (newPlanType) => {
+
+    console.log(newPlanType)
     try {
-      const res = await fetch("/api/business/update-plan/", {
+      const res = await fetch("https://reviewqrapi.onrender.com/api/updatePlan/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -39,11 +39,15 @@ export default function Register() {
   const params = new URLSearchParams(window.location.search);
   const googleConnected = params.get("google") === "connected";
 
-  // Load saved progress
   useEffect(() => {
     const saved = localStorage.getItem("reviewqr_onboarding");
     if (saved) {
-      setForm(JSON.parse(saved));
+      const parsed = JSON.parse(saved);
+
+      setForm((prev) => ({
+        ...prev,      // keep defaults
+        ...parsed,    // overwrite only what exists
+      }));
     }
   }, []);
 

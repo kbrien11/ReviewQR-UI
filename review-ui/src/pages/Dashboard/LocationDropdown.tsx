@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 
-export default function LocationDropdown({ onSelect }) {
+export default function LocationDropdown({ onSelect,selected }) {
     const { token, setApiOffline, setApiBackendError } = useAuth();
     const [locations, setLocations] = useState([]);
-    const [selected, setSelected] = useState("");
+    const [selectedLocation, setSelected] = useState("");
+
+    // Sync parent-selected value into internal state
+useEffect(() => {
+    if (selected) {
+      setSelected(selected);
+    }
+  }, [selected]);
 
     useEffect(() => {
         async function fetchLocations() {
@@ -57,7 +64,7 @@ export default function LocationDropdown({ onSelect }) {
                         "
             >
                 <select
-                    value={selected}
+                    value={selectedLocation}
                     onChange={handleChange}
                     className="
         w-full

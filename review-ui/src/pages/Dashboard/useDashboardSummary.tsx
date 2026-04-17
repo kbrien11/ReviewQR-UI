@@ -8,7 +8,7 @@ export function useDashboardSummary(location) {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [lastGoogleReview, setLastGoogleReview] = useState("");
-  const { setBusinessSlug, setBusinessName } = useApp();
+  const { setBusinessSlug, setBusinessName,setLocations } = useApp();
 
   console.log(location)
 
@@ -16,8 +16,8 @@ export function useDashboardSummary(location) {
     async function fetchDashboard() {
       try {
         const url = location
-          ? `https://reviewqrapi.onrender.com/api/dashboard/summary/?location=${encodeURIComponent(location)}`
-          : `https://reviewqrapi.onrender.com/api/dashboard/summary/`;
+          ? `http://127.0.0.1:8000/api/dashboard/summary/?location=${encodeURIComponent(location)}`
+          : `http://127.0.0.1:8000/api/dashboard/summary/`;
 
         const response = await fetchWithTimeout(
           url,
@@ -39,6 +39,7 @@ export function useDashboardSummary(location) {
         setBusinessSlug(json.business_slug);
         setBusinessName(json.business_name);
         setLastGoogleReview(json.last_google_review_date);
+        setLocations(json.locations)
 
       } catch (err) {
         console.error("Dashboard fetch error:", err);

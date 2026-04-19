@@ -16,8 +16,8 @@ export function useDashboardSummary(location) {
     async function fetchDashboard() {
       try {
         const url = location
-          ? `http://127.0.0.1:8000/api/dashboard/summary/?location=${encodeURIComponent(location)}`
-          : `http://127.0.0.1:8000/api/dashboard/summary/`;
+          ? `https://reviewqrapi.onrender.com/api/dashboard/summary/?location=${encodeURIComponent(location)}`
+          : `https://reviewqrapi.onrender.com/api/dashboard/summary/`;
 
         const response = await fetchWithTimeout(
           url,

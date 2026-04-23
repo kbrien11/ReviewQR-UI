@@ -71,8 +71,7 @@ export default function App() {
               <Route path="/business/:slug/qr" element={<BusinessQRPage />} />
               <Route path="/admin/team/:business" element={<TeamMembers />} />
               <Route path="/admin/plan/:business" element={<PlanAndBilling />} />
-              <Route path="/admin/reward/:business" element={<IncentiveManager />} />
-            </Routes>
+              <Route path="/admin/reward" element={<IncentiveManager />} />            </Routes>
           </div>
         </div>
       </AuthProvider>

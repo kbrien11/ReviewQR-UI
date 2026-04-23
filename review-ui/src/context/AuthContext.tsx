@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 interface AuthContextType {
@@ -23,8 +23,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any>(null);
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [apiOffline, setApiOffline] = useState(false)
-  const [apiBackendError, setApiBackendError] = useState(false) // server issue
+  const [apiOffline, setApiOffline] = useState(false);
+  const [apiBackendError, setApiBackendError] = useState(false);
 
   // Restore session
   useEffect(() => {
@@ -70,178 +70,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem("role");
   };
 
-  // -----------------------------
-  // ⭐ GLOBAL LOGGED-OUT MODAL
-  // -----------------------------
-  const LoggedOutModal = () => {
-    const location = useLocation();
-
-    const PUBLIC_ROUTES = [
-      "/",
-      "/login",
-      "/register",
-    ];
-
-    // Routes that start with these prefixes are also public
-    const PUBLIC_PREFIXES = [
-      "/review/",      // leave review page
-      "/business/",    // public QR page
-    ];
-
-    const isPublicRoute =
-      PUBLIC_ROUTES.includes(location.pathname) ||
-      PUBLIC_PREFIXES.some(prefix => location.pathname.startsWith(prefix));
-
-    if (loading) return null;
-    if (user) return null;
-    if (isPublicRoute) return null;
-
-
-
-    return (
-      <div
-        className="
-          fixed inset-0 z-[9999]
-          flex items-center justify-center
-          px-6
-          
-        "
-      >
-        <div
-          className="
-            w-full max-w-sm
-            bg-white/90 backdrop-blur-xl
-            border border-gray-200/70
-            shadow-xl
-            rounded-2xl
-            p-6
-            text-center
-            animate-fadeIn
-          "
-        >
-          <h2 className="text-lg font-semibold text-gray-900">
-            You’ve been logged out
-          </h2>
-
-          <p className="text-sm text-gray-600 mt-2">
-            Your session has ended. Please log in again to continue.
-          </p>
-
-          <button
-            onClick={() => navigate("/login")}
-            className="
-              mt-4 w-full
-              bg-indigo-600 text-white
-              py-2.5 rounded-xl
-              font-medium text-sm
-              shadow-sm
-              active:scale-95 transition
-            "
-          >
-            Go to Login
-          </button>
-        </div>
-      </div>
-    );
-  };
-
-  const OfflineModal = () => {
-    if (!apiOffline) return null
-
-    return (
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center px-6">
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
-
-        <div className="
-          relative z-10 w-full max-w-sm
-          bg-white/90 backdrop-blur-xl
-          border border-gray-200/70
-          shadow-xl rounded-2xl p-6 text-center animate-fadeIn
-        ">
-          <h2 className="text-lg font-semibold text-gray-900">
-            You’re Offline
-          </h2>
-
-          <p className="text-sm text-gray-600 mt-2">
-            Your session expired or the server went inactive.
-          </p>
-
-          <button
-            onClick={() => {
-              setApiOffline(false)   // ← reset the modal
-              navigate("/login")     // ← then go to login
-            }}
-            className="
-                      mt-4 w-full bg-indigo-600 text-white py-2.5 rounded-xl
-                      font-medium text-sm shadow-sm active:scale-95 transition
-                    "
-          >
-            Log In Again
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  const BackendErrorModal = () => {
-    if (!apiOffline) return null
-
-    return (
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center px-6">
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
-
-        <div className="
-          relative z-10 w-full max-w-sm
-          bg-white/90 backdrop-blur-xl
-          border border-gray-200/70
-          shadow-xl rounded-2xl p-6 text-center animate-fadeIn
-        ">
-          <h2 className="text-lg font-semibold text-gray-900">
-            500 Network Error
-          </h2>
-
-          <p className="text-sm text-gray-600 mt-2">
-            Issue connecting to backend. Please try logging in again
-          </p>
-
-          <button
-            onClick={() => {
-              setApiOffline(false)   // ← reset the modal
-              navigate("/login")     // ← then go to login
-            }}
-            className="
-                      mt-4 w-full bg-indigo-600 text-white py-2.5 rounded-xl
-                      font-medium text-sm shadow-sm active:scale-95 transition
-                    "
-          >
-            Log In Again
-          </button>
-        </div>
-      </div>
-    )
-  }
+  // ⭐ FIX: Memoize the entire context value
+  const value = useMemo(
+    () => ({
+      user,
+      token,
+      role,
+      loading,
+      login,
+      logout,
+      apiOffline,
+      setApiOffline,
+      apiBackendError,
+      setApiBackendError,
+    }),
+    [
+      user,
+      token,
+      role,
+      loading,
+      apiOffline,
+      apiBackendError,
+    ]
+  );
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        token,
-        role,
-        loading,
-        login,
-        logout,
-        apiOffline,
-        setApiOffline,
-        apiBackendError,
-        setApiBackendError
-
-      }}
-    >
-      {/* GLOBAL LOGGED OUT MODAL */}
-      <LoggedOutModal />
-      <OfflineModal />
-      <BackendErrorModal/>
-
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

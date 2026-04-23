@@ -81,7 +81,7 @@ export default function TopBar() {
         {/* Reward */}
         <Tooltip label="Reward">
           <button
-            onClick={() => navigate(`/admin/reward/${businessSlug}`)}
+            onClick={() => navigate(`/admin/reward`)}
             className="
               h-10 w-10 flex items-center justify-center
               rounded-2xl bg-white/80 backdrop-blur-xl

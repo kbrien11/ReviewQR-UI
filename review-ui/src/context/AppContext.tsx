@@ -1,5 +1,5 @@
 // AppContext.tsx
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useMemo } from "react";
 
 interface AppContextType {
   unreadGoogleReviews: number;
@@ -19,34 +19,40 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [unreadGoogleReviews, setUnreadGoogleReviews] = useState(0);
+  const [businessSlug, setBusinessSlug] = useState<string | null>(null);
+  const [businessName, setBusinessName] = useState<string | null>(null);
+  const [planType, setPlanType] = useState<string | null>(null);
+  const [locations, setLocations] = useState<string[] | null>(null);
 
-  const [businessSlug, setBusinessSlug] = useState<string | null>(null)
-  const [businessName, setBusinessName] = useState<string | null>(null)
-  const [planType, setPlanType] = useState<string | null>(null)
-  const [locations, setLocations] = useState<string[] | null>(null)
   const markGoogleReviewsAsRead = () => {
     setUnreadGoogleReviews(0);
   };
 
-  return (
-    <AppContext.Provider
-      value={{
-        unreadGoogleReviews,
-        setUnreadGoogleReviews,
-        markGoogleReviewsAsRead,
-        setBusinessSlug,
-        businessSlug,
-        setBusinessName,
-        businessName,
-        planType,
-        setPlanType,
-        locations,
-        setLocations
-      }}
-    >
-      {children}
-    </AppContext.Provider>
+  // ⭐ FIX: Memoize the entire context value
+  const value = useMemo(
+    () => ({
+      unreadGoogleReviews,
+      setUnreadGoogleReviews,
+      markGoogleReviewsAsRead,
+      businessSlug,
+      setBusinessSlug,
+      businessName,
+      setBusinessName,
+      planType,
+      setPlanType,
+      locations,
+      setLocations,
+    }),
+    [
+      unreadGoogleReviews,
+      businessSlug,
+      businessName,
+      planType,
+      locations,
+    ]
   );
+
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
 
 export function useApp() {

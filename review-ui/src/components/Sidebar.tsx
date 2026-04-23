@@ -37,7 +37,7 @@ export default function Sidebar({ slug, business }) {
         },
         {
           label: "Rewards",
-          to: business ? `/admin/reward/${business}` : "#",
+          to: business ? `/admin/reward` : "#",
           icon: GiftIcon, // or any icon you prefer
         },
       ]

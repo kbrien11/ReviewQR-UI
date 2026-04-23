@@ -9,6 +9,7 @@ import {
   Cog6ToothIcon,
   ArrowRightOnRectangleIcon,
   CreditCardIcon,
+  GiftIcon
 } from "@heroicons/react/24/outline";
 
 export default function Sidebar({ slug, business }) {
@@ -33,6 +34,11 @@ export default function Sidebar({ slug, business }) {
           label: "Plan & Billing",
           to: business ? `/admin/plan/${business}` : "#",
           icon: CreditCardIcon, // or any icon you prefer
+        },
+        {
+          label: "Rewards",
+          to: business ? `/admin/reward/${business}` : "#",
+          icon: GiftIcon, // or any icon you prefer
         },
       ]
       : []),

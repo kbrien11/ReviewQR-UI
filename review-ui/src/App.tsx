@@ -14,6 +14,7 @@ import ProtectedRoute from "./context/ProtectedRoute";
 import Register from "./pages/Register/Register";
 import TeamMembers from "./pages/TeamMembers/TeamMembers";
 import PlanAndBilling from "./pages/PlanAndBilling/PlanAndBilling";
+import IncentiveManager from "./pages/Incentive/IncentiveManager";
 
 export default function App() {
 
@@ -70,6 +71,7 @@ export default function App() {
               <Route path="/business/:slug/qr" element={<BusinessQRPage />} />
               <Route path="/admin/team/:business" element={<TeamMembers />} />
               <Route path="/admin/plan/:business" element={<PlanAndBilling />} />
+              <Route path="/admin/reward/:business" element={<IncentiveManager />} />
             </Routes>
           </div>
         </div>

@@ -41,7 +41,7 @@ export default function LeaveReviewPage() {
         is_public: rating >= 4,      // your funnel logic
         device_type: /mobile/i.test(navigator.userAgent) ? "mobile" : "desktop",
         user_agent: navigator.userAgent,
-    // fetched from an IP API
+        // fetched from an IP API
       }),
     });
 
@@ -49,82 +49,61 @@ export default function LeaveReviewPage() {
     setLoading(false);
     setGooleReviewUrl(json.google_review_url)
 
-  if (!response.ok) {
-    alert("Something went wrong submitting your review.");
-    return;
-  }
+    if (!response.ok) {
+      alert("Something went wrong submitting your review.");
+      return;
+    }
 
-  // Close the feedback modal if it was open
-  setShowFeedbackModal(false);
+    // Close the feedback modal if it was open
+    setShowFeedbackModal(false);
 
-  // Always show success modal after a successful submission
-  setShowSuccessModal(true);
-};
+    // Always show success modal after a successful submission
+    setShowSuccessModal(true);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-6 py-10">
+
       {/* Rating Modal */}
       {showRatingModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center px-6">
           <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl animate-fadeIn">
-          <div className="mb-5 text-center">
-  <p className="text-sm uppercase tracking-wider text-gray-400 font-semibold">
-    {businessName}
-  </p>
 
-  <h2 className="text-2xl font-extrabold text-gray-900 mt-1 leading-tight">
-    How was your experience?
-  </h2>
-</div>
-
+            {/* Stars */}
             <div className="flex justify-center gap-3 mb-6">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
                   onClick={() => setRating(star)}
-                  className={`text-4xl transition ${
-                    rating && rating >= star ? "text-yellow-400" : "text-gray-300"
-                  }`}
+                  className={`text-4xl transition ${rating && rating >= star ? "text-yellow-400" : "text-gray-300"
+                    }`}
                 >
                   ★
                 </button>
               ))}
             </div>
 
-            <div className="mt-4 w-full">
-  <label className="block text-gray-700 font-medium mb-2 text-center">
-    Tell us more about your experience
-  </label>
+            {/* Comment */}
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="Write your feedback here..."
+              className="w-full p-4 rounded-xl border border-gray-200 shadow-sm"
+            />
 
-  <textarea
-    value={comment}
-    onChange={(e) => setComment(e.target.value)}
-    placeholder="Write your feedback here..."
-    className="
-      w-full 
-      p-4 
-      rounded-xl 
-      border 
-      border-gray-200 
-      shadow-sm 
-      focus:ring-2 
-      focus:ring-blue-500 
-      focus:border-blue-500 
-      transition 
-      text-gray-700 
-      placeholder-gray-400 
-      bg-white
-      min-h-[120px]
-      resize-none
-    "
-  />
-</div>
-
+            {/* Submit */}
             <button
               onClick={() => {
                 if (!rating) return;
+
                 setShowRatingModal(false);
-                submitReview();
+
+                if (rating === 5) {
+                  submitReview();
+                  setShowSuccessModal(true);   // ⭐ ONLY 5 stars
+                } else {
+                  setShowFeedbackModal(true);  // ⭐ 1–4 stars
+                }
               }}
               className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
             >
@@ -134,7 +113,7 @@ export default function LeaveReviewPage() {
         </div>
       )}
 
-      {/* Success Modal (4–5 stars) */}
+      {/* Success Modal — ⭐ ONLY 5 stars */}
       {showSuccessModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center px-6">
           <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl animate-fadeIn text-center">
@@ -144,27 +123,28 @@ export default function LeaveReviewPage() {
             <p className="text-gray-600 mb-6">
               Your review helps this business grow.
             </p>
-            {rating >= 4 && (
-            <a
-              href={googleReviewUrl} // Replace with business.google_review_url
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
-            >
-              Leave a Google Review
-            </a>
+
+            {rating === 5 && (
+              <a
+                href={googleReviewUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+              >
+                Leave a Google Review
+              </a>
             )}
           </div>
         </div>
       )}
 
-      {/* Feedback Modal (1–3 stars) */}
+      {/* Feedback Modal — ⭐ 1–4 stars */}
       {showFeedbackModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center px-6">
           <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl animate-fadeIn">
-          <h2 className="text-xl font-semibold text-center mb-4 text-gray-800">
-  Help us improve {businessName}
-</h2>
+            <h2 className="text-xl font-semibold text-center mb-4 text-gray-800">
+              Help us improve {businessName}
+            </h2>
 
             <textarea
               value={comment}

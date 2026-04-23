@@ -25,7 +25,7 @@ export default function AddIncentiveForm({ token, onSuccess }) {
     setError("");
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/createIncentive/", {
+      const res = await fetch("https://reviewqrapi.onrender.com/api/createIncentive/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

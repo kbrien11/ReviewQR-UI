@@ -16,7 +16,7 @@ export default function IncentiveManager() {
 
         async function loadIncentive() {
             try {
-                const res = await fetch("http://127.0.0.1:8000/api/getIncentive/", {
+                const res = await fetch("https://reviewqrapi.onrender.com/api/getIncentive/", {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,

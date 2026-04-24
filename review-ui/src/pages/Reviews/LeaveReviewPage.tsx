@@ -83,13 +83,15 @@ export default function LeaveReviewPage() {
               ))}
             </div>
 
-            {/* Comment */}
-            <textarea
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Write your feedback here..."
-              className="w-full p-4 rounded-xl border border-gray-200 shadow-sm"
-            />
+            {/* Comment — only show for 1–4 stars */}
+            {rating && rating < 5 && (
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Write your feedback here..."
+                className="w-full p-4 rounded-xl border border-gray-200 shadow-sm mb-4"
+              />
+            )}
 
             {/* Submit */}
             <button

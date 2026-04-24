@@ -99,10 +99,11 @@ export default function LeaveReviewPage() {
                 setShowRatingModal(false);
 
                 if (rating === 5) {
+                  // ⭐ 5 stars → submit immediately → success modal
                   submitReview();
-                  setShowSuccessModal(true);   // ⭐ ONLY 5 stars
                 } else {
-                  setShowFeedbackModal(true);  // ⭐ 1–4 stars
+                  // ⭐ 1–4 stars → open feedback modal
+                  setShowFeedbackModal(true);
                 }
               }}
               className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
@@ -113,7 +114,7 @@ export default function LeaveReviewPage() {
         </div>
       )}
 
-      {/* Success Modal — ⭐ ONLY 5 stars */}
+      {/* Success Modal */}
       {showSuccessModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center px-6">
           <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl animate-fadeIn text-center">
@@ -124,6 +125,7 @@ export default function LeaveReviewPage() {
               Your review helps this business grow.
             </p>
 
+            {/* ⭐ Only show Google button for 5-star ratings */}
             {rating === 5 && (
               <a
                 href={googleReviewUrl}

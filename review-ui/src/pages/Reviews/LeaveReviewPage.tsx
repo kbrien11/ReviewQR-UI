@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export default function LeaveReviewPage() {
   const { slug } = useParams();
@@ -15,6 +16,12 @@ export default function LeaveReviewPage() {
   const [businessId, setBusinessId] = useState(null);
   const [businessName, setBusinessName] = useState("");
   const [googleReviewUrl, setGooleReviewUrl] = useState("");
+  const [deviceId, setDeviceId] = useState("");
+  const [reward, setReward] = useState(null);
+  const [eligible, setEligible] = useState(null); // true, false, or null
+
+  const { token, setApiOffline, setApiBackendError } = useAuth();
+
 
   useEffect(() => {
     fetch(`https://reviewqrapi.onrender.com/api/business/${slug}/`)
@@ -22,6 +29,36 @@ export default function LeaveReviewPage() {
       .then(data => {
         setBusinessId(data.id);
         setBusinessName(data.name);
+      });
+  }, [slug]);
+
+  useEffect(() => {
+    // 1. Load or create device_id
+    let id = localStorage.getItem("device_id");
+    if (!id) {
+      id = crypto.randomUUID();
+      localStorage.setItem("device_id", id);
+    }
+    setDeviceId(id);
+
+    // 2. Check if business has an active incentive
+    fetch(`https://reviewqrapi.onrender.com/api/getIncentive/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ device_id: id }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.has_incentive) {
+          setReward(null);
+          return;
+        }
+
+        setReward(data.incentive);
+        setEligible(data.eligible); // true or false
       });
   }, [slug]);
 
@@ -63,6 +100,55 @@ export default function LeaveReviewPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-6 py-10">
+
+      {/* Reward Card */}
+      {reward && (
+        <div className="w-full max-w-sm mt-6">
+          <div className="
+      bg-white/80 backdrop-blur-xl
+      border border-white/50
+      shadow-[0_8px_30px_rgba(0,0,0,0.08)]
+      rounded-3xl p-6 space-y-4
+      text-center
+    ">
+            <h2 className="text-[26px] font-semibold text-gray-900 tracking-tight">
+              {reward.reward_text}
+            </h2>
+
+            <p className="text-gray-500 text-[15px]">
+              Special reward from {businessName}
+            </p>
+
+            {/* Eligible → Show Claim Button */}
+            {eligible === true && (
+              <button
+                onClick={() => alert("Reward claimed! (hook up backend)")}
+                className="
+            w-full py-3 rounded-2xl
+            bg-gradient-to-br from-indigo-500 to-purple-500
+            text-white font-semibold
+            shadow-[0_4px_14px_rgba(0,0,0,0.15)]
+            active:scale-[0.97] transition-all
+          "
+              >
+                Claim Reward
+              </button>
+            )}
+
+            {/* Not Eligible → Show Badge */}
+            {eligible === false && (
+              <div className="
+          inline-block px-4 py-2 rounded-full
+          bg-gray-100 text-gray-600
+          text-sm font-medium
+          shadow-inner
+        ">
+                Already claimed today
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Rating Modal */}
       {showRatingModal && (

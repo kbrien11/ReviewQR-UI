@@ -41,13 +41,11 @@ export default function LeaveReviewPage() {
     }
     setDeviceId(id);
 
-    // 2. First call: does the business have an active incentive?
-    fetch(`https://reviewqrapi.onrender.com/api/getIncentive/`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+    // 2. Call the ONLY endpoint you need
+    fetch(`https://reviewqrapi.onrender.com/api/checkUserIncentive/${slug}/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ device_id: id }),
     })
       .then(res => res.json())
       .then(data => {
@@ -57,24 +55,8 @@ export default function LeaveReviewPage() {
           return;
         }
 
-        // Business DOES have an incentive
         setReward(data.incentive);
-
-        // 3. Second call: check if THIS device already used it today
-        fetch(`https://reviewqrapi.onrender.com/api/checkUserIncentive/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            device_id: id,
-            business_slug: slug,
-          }),
-        })
-          .then(res => res.json())
-          .then(check => {
-            setEligible(check.eligible); // true or false
-          });
+        setEligible(data.eligible);
       });
   }, [slug]);
 

@@ -334,6 +334,15 @@ export default function Dashboard() {
                       <ReviewInsightsCard insights={insights} />
                     )}
                   </motion.div>
+                  {/* DEVICE BREAKDOWN */}
+                  {data?.device_breakdown && (
+                    <FadeIn delay={0.2}>
+                      <DeviceBreakdown
+                        scans={data.total_scans}
+                        reviews={data.total_reviews}
+                      />
+                    </FadeIn>
+                  )}
 
                   {/* LATEST REVIEWS */}
                   <motion.div
@@ -345,15 +354,7 @@ export default function Dashboard() {
                     <LatestReview reviews={data.latest_reviews} />
                   </motion.div>
 
-                  {/* DEVICE BREAKDOWN */}
-                  {data?.device_breakdown && (
-                    <FadeIn delay={0.2}>
-                      <DeviceBreakdown
-                        scans={data.total_scans}
-                        reviews={data.total_reviews}
-                      />
-                    </FadeIn>
-                  )}
+                  
                 </div>
 
                 {/* RIGHT COLUMN */}

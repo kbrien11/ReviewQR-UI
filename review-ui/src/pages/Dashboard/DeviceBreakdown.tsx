@@ -1,12 +1,8 @@
 import { Link } from "react-router-dom";
 import DeviceRing from "./DeviceRing";
 
-export default function DeviceBreakdown({ data, slug }) {
-  const mobile = data.mobile || 0;
-  const desktop = data.desktop || 0;
-
-  // THE FIX — correct total
-  const total = mobile + desktop;
+export default function DeviceBreakdown({ scans, reviews }) {
+  const conversionRate = scans > 0 ? (reviews / scans) * 100 : 0;
 
   return (
     <div
@@ -17,7 +13,7 @@ export default function DeviceBreakdown({ data, slug }) {
       rounded-[28px]
       border border-white/50
       shadow-[0_6px_28px_rgba(0,0,0,0.05)]
-      p-6 space-y-7
+      p-6 space-y-6
       transition-all duration-300
       active:scale-[.98]
       "
@@ -28,41 +24,40 @@ export default function DeviceBreakdown({ data, slug }) {
         <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-purple-300/20 blur-3xl rounded-full" />
       </div>
 
-      {/* Header */}
-      <div className="flex justify-between items-center relative z-10">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white tracking-tight">
-          Device Breakdown
+      <div className="flex justify-between items-center">
+        <h2 className="text-lg font-semibold text-gray-900 tracking-tight">
+          Conversion Analytics
         </h2>
 
-        <Link
-          to={`/scans/${slug}`}
-          className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:opacity-80 transition"
-        >
-          View More →
-        </Link>
+        <div className="px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-600 font-semibold text-sm">
+          {conversionRate.toFixed(1)}%
+        </div>
       </div>
 
-      {/* Device Rings */}
-      <div className="grid grid-cols-2 gap-6 relative z-10">
-
-        <DeviceRing
-          label="Mobile"
-          icon="📱"
-          value={mobile}
-          total={total}
-          from="#60A5FA"   // blue-400
-          to="#2563EB"     // blue-600
+      {/* Conversion Bar */}
+      <div className="relative z-10 space-y-3">
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-shimmer"
+          style={{ transform: "skewX(-20deg)" }}
         />
+        <p className="text-sm font-medium text-gray-700">
+          Scan → Review Conversion
+        </p>
 
-        <DeviceRing
-          label="Desktop"
-          icon="💻"
-          value={desktop}
-          total={total}
-          from="#C084FC"   // purple-400
-          to="#7C3AED"     // purple-600
-        />
+        <div className="w-full bg-gray-200/60 h-3 rounded-full overflow-hidden">
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-700"
+            style={{ width: `${conversionRate}%` }}
+          />
+        </div>
 
+        <div className="flex justify-between text-xs text-gray-500">
+          <span>{scans} scans</span>
+          <span>{reviews} reviews</span>
+          {/* <span className="font-semibold text-gray-700">
+            {conversionRate.toFixed(1)}%
+          </span> */}
+        </div>
       </div>
     </div>
   );

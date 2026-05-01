@@ -111,12 +111,12 @@ export default function Dashboard() {
   };
 
   const shouldBlockDashboard =
-  data.location_franchise === true &&
-  locations &&
-  locations.length > 1 &&
-  !selectedLocation;
+    data.location_franchise === true &&
+    locations &&
+    locations.length > 1 &&
+    !selectedLocation;
 
-  
+
 
 
 
@@ -302,14 +302,7 @@ export default function Dashboard() {
                     />
                   </motion.div>
 
-                  <motion.div variants={staggerItem}>
-                    <DashboardCard
-                      label="Conversion Rate (scans/reviews)"
-                      value={data.conversion_rate + "" + "%"}
-                      icon="🌐"
-                      trend={data.conversion_trend}
-                    />
-                  </motion.div>
+                  
                 </div>
               </Stagger>
 
@@ -356,8 +349,8 @@ export default function Dashboard() {
                   {data?.device_breakdown && (
                     <FadeIn delay={0.2}>
                       <DeviceBreakdown
-                        data={data.device_breakdown}
-                        slug={data.business_slug}
+                        scans={data.total_scans}
+                        reviews={data.total_reviews}
                       />
                     </FadeIn>
                   )}

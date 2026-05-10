@@ -26,7 +26,7 @@ export default function Dashboard() {
   const [showLocationModal, setShowLocationModal] = useState(false);
   const { data, loading } = useDashboardSummary(selectedLocation);
 
-  const { businessSlug, locations } = useApp();
+  const { businessSlug, locations, planType } = useApp();
 
   useEffect(() => {
     if (locations && locations.length > 1 && !selectedLocation) {
@@ -263,18 +263,22 @@ export default function Dashboard() {
 
           {/* MAIN CONTENT */}
           {data.total_reviews > 0 && (
-            <div className="
+            <div
+              className="
               w-full px-4 sm:px-6 lg:px-10 xl:px-14
               py-6
               max-w-[1500px] mx-auto
-            ">
+            "
+            >
 
               {/* KPI ROW */}
               <Stagger>
-                <div className="
+                <div
+                  className="
                   grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4
                   gap-4 sm:gap-6 mb-10
-                ">
+                "
+                >
                   <motion.div variants={staggerItem}>
                     <DashboardCard
                       label="Total Reviews"
@@ -301,20 +305,19 @@ export default function Dashboard() {
                       trend={data.last_7_days_trend}
                     />
                   </motion.div>
-
-                  
                 </div>
               </Stagger>
 
               {/* GRID */}
-              <div className="
+              <div
+                className="
                 grid grid-cols-1 lg:grid-cols-3
                 gap-6 lg:gap-8
-              ">
+              "
+              >
 
                 {/* LEFT COLUMN */}
                 <div className="space-y-6 lg:col-span-2">
-
                   {/* AI INSIGHTS — MOBILE */}
                   <motion.div
                     className="lg:hidden"
@@ -326,35 +329,65 @@ export default function Dashboard() {
                       AI Insights
                     </div>
 
-                    {loadingInsights && (
-                      <div className="animate-pulse h-48 bg-gray-200 rounded-2xl" />
-                    )}
+                    {planType === "starter" ? (
+                      <div
+                        className="
+        bg-white/60 backdrop-blur-xl border border-white/40 
+        rounded-2xl p-6 text-center shadow-sm
+      "
+                      >
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                          Upgrade Required
+                        </h3>
 
-                    {!loadingInsights && insights && (
-                      <ReviewInsightsCard insights={insights} />
+                        <p className="text-sm text-gray-600 mb-4">
+                          Upgrade to <span className="font-semibold">Pro</span> to unlock AI Insights.
+                        </p>
+
+                        <Link
+                          to={`/admin/plan/${businessSlug}`}
+                          className="
+                            inline-block px-4 py-2
+                            rounded-full
+                            bg-indigo-600 text-white text-sm font-medium
+                            hover:bg-indigo-700 transition
+                            shadow-sm
+                          "
+                        >
+                          Upgrade to Pro
+                        </Link>
+                      </div>
+                    ) : (
+                      <>
+                        {loadingInsights && (
+                          <div className="animate-pulse h-48 bg-gray-200 rounded-2xl" />
+                        )}
+
+                        {!loadingInsights && insights && (
+                          <ReviewInsightsCard insights={insights} />
+                        )}
+                      </>
                     )}
                   </motion.div>
-                  {/* DEVICE BREAKDOWN */}
-                  {data?.device_breakdown && (
-                    <FadeIn delay={0.2}>
-                      <DeviceBreakdown
-                        scans={data.total_scans}
-                        reviews={data.total_reviews}
-                      />
-                    </FadeIn>
-                  )}
+
+                  {/* CONVERSION ANALYTICS */}
+                  <FadeIn delay={0.2}>
+                    <DeviceBreakdown
+                      scans={data.total_scans}
+                      reviews={data.total_reviews}
+                    />
+                  </FadeIn>
 
                   {/* LATEST REVIEWS */}
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.2 }}
-                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
                   >
                     <LatestReview reviews={data.latest_reviews} />
                   </motion.div>
 
-                  
                 </div>
 
                 {/* RIGHT COLUMN */}
@@ -363,14 +396,47 @@ export default function Dashboard() {
                     className="hidden lg:block"
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.45, ease: "easeOut" }}
+                    transition={{ duration: 0.45, ease: 'easeOut' }}
                   >
-                    {loadingInsights && (
-                      <div className="animate-pulse h-48 bg-gray-200 rounded-2xl" />
-                    )}
+                    {planType === 'starter' ? (
+                      <div
+                        className="
+                         bg-white/60 backdrop-blur-xl border border-white/40 
+                         rounded-2xl p-6 text-center shadow-sm
+                       "
+                      >
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                          Upgrade Required
+                        </h3>
 
-                    {!loadingInsights && insights && (
-                      <ReviewInsightsCard insights={insights} />
+                        <p className="text-sm text-gray-600 mb-4">
+                          Upgrade to <span className="font-semibold">Pro</span> to unlock AI Insights.
+                        </p>
+
+                        <Link
+                          to={`/admin/plan/${businessSlug}`}
+
+                          className="
+                           inline-block px-4 py-2
+                           rounded-full
+                           bg-indigo-600 text-white text-sm font-medium
+                           hover:bg-indigo-700 transition
+                           shadow-sm
+                         "
+                        >
+                          Upgrade to Pro
+                        </Link>
+                      </div>
+                    ) : (
+                      <>
+                        {loadingInsights && (
+                          <div className="animate-pulse h-48 bg-gray-200 rounded-2xl" />
+                        )}
+
+                        {!loadingInsights && insights && (
+                          <ReviewInsightsCard insights={insights} />
+                        )}
+                      </>
                     )}
                   </motion.div>
                 </div>

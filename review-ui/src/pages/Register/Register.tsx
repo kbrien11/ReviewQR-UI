@@ -1,622 +1,905 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { QRCodeCanvas } from "qrcode.react";
-import { Link } from "react-router-dom";
+
+import { useEffect, useState } from "react";
+import type { ChangeEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import StyledQRPreview from "../../components/StyledQRPreview";
 
+type FormData = {
+  name: string;
+  email: string;
+  username: string;
+  password: string;
+  phone: string;
+  google_review_link: string;
+  brand_color: string;
+  qr_fill_color: string;
+  qr_back_color: string;
+  qr_box_size: number;
+  qr_border: number;
+};
+
+const INITIAL_FORM: FormData = {
+  name: "",
+  email: "",
+  username: "",
+  password: "",
+  phone: "",
+  google_review_link: "",
+  brand_color: "#6D5AE6",
+  qr_fill_color: "#6D5AE6",
+  qr_back_color: "#FFFFFF",
+  qr_box_size: 14,
+  qr_border: 2,
+};
+
+const STEPS = [
+  { title: "Business details", description: "Tell us about your business." },
+  { title: "Brand identity", description: "Choose your signature color." },
+  { title: "QR code color", description: "Customize your QR code." },
+  { title: "Background", description: "Choose a background color." },
+  { title: "QR settings", description: "Fine-tune your design." },
+  { title: "Review & create", description: "Everything ready? Let's go." },
+];
+
+const API_URL =
+  "https://reviewqrapi.onrender.com/api/business/create/";
 
 export default function Register() {
   const navigate = useNavigate();
 
-  const steps = [
-    "Business Info",
-    "Brand Color",
-    "QR Fill",
-    "QR Background",
-    "QR Settings",
-    "Review",
-  ];
-
   const [step, setStep] = useState(0);
-  const [direction, setDirection] = useState("forward");
-  const [showReviewModal, setShowReviewModal] = useState(false);
-  const [alert, setAlert] = useState(null);
-  const [infoTab, setInfoTab] = useState("business"); // "business" | "owner"
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    username: "",
-    password: "",
-    phone: "",
-    google_review_link: "",
-    brand_color: "#BA8E23",
-    qr_fill_color: "#BA8E23",
-    qr_back_color: "#FFFFFF",
-    qr_box_size: 14,
-    qr_border: 2,
-  });
-
-  const params = new URLSearchParams(window.location.search);
-  const googleConnected = params.get("google") === "connected";
+  const [infoTab, setInfoTab] = useState<"business" | "owner">("business");
+  const [form, setForm] = useState<FormData>(INITIAL_FORM);
+  const [alert, setAlert] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [googleConnected, setGoogleConnected] = useState(false);
+  const [savedProgress, setSavedProgress] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("reviewqr_onboarding");
-    if (saved) {
-      const parsed = JSON.parse(saved);
+    try {
+      const saved = localStorage.getItem("reviewqr_onboarding");
 
-      setForm((prev) => ({
-        ...prev,      // keep defaults
-        ...parsed,    // overwrite only what exists
-      }));
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setForm((prev) => ({ ...prev, ...parsed }));
+        setSavedProgress(true);
+      }
+    } catch {
+      localStorage.removeItem("reviewqr_onboarding");
     }
+
+    const params = new URLSearchParams(window.location.search);
+    setGoogleConnected(params.get("google") === "connected");
   }, []);
 
-  const saveProgress = () => {
-    localStorage.setItem("reviewqr_onboarding", JSON.stringify(form));
-    setAlert("Progress saved!");
-    setTimeout(() => setAlert(null), 2000);
+  const updateField = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type } = e.target;
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "number" ? Number(value) : value,
+    }));
+
+    setError("");
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
+  const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
+  const validPhone = /^\+?[0-9\s\-().]{7,20}$/.test(form.phone.trim());
 
-  const next = () => {
-    setDirection("forward");
-    setStep((s) => s + 1);
-  };
-
-  const back = () => {
-    setDirection("back");
-    setStep((s) => s - 1);
-  };
-
-  const handleFinalSubmit = async () => {
+  const validGoogleUrl = (() => {
     try {
-      const res = await fetch("https://reviewqrapi.onrender.com/api/business/create/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          qr_fill_color: form.qr_fill_color || form.brand_color,   // fallback applied here
-        }),
-      });
-
-      await res.json();
-
-      setShowReviewModal(false);
-      setAlert("Business created successfully!");
-
-      setTimeout(() => {
-        navigate("/login");
-      }, 3000);
-    } catch (err) {
-      setAlert("Error creating business");
-      setTimeout(() => setAlert(null), 3000);
-    }
-  };
-
-  const isValidEmail = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
-
-  const isValidPhone = (phone: string) => {
-    return /^\+?[0-9\s\-()]{7,15}$/.test(phone);
-  };
-
-  const isValidUrl = (url: string) => {
-    try {
-      new URL(url);
-      return true;
+      const url = new URL(form.google_review_link);
+      return (
+        (url.protocol === "https:" || url.protocol === "http:") &&
+        url.hostname.includes(".")
+      );
     } catch {
       return false;
     }
-  };
+  })();
 
-  const validateStep = () => {
+  const businessComplete =
+    form.name.trim().length > 0 &&
+    validPhone &&
+    validGoogleUrl;
+
+  const ownerComplete =
+    form.username.trim().length > 0 &&
+    validEmail &&
+    form.password.length >= 8;
+
+  const stepValid = (() => {
     switch (step) {
-      case 0: {
-        const businessValid =
-          form.name.trim() !== "" &&
-          isValidPhone(form.phone) &&
-          isValidUrl(form.google_review_link);
-
-        const ownerValid =
-          form.username.trim() !== "" &&
-          isValidEmail(form.email) &&
-          form.password.trim().length >= 6;
-
-        return businessValid && ownerValid;
-      }
+      case 0:
+        return businessComplete && ownerComplete;
       case 1:
-        return form.brand_color.trim() !== "";
+        return /^#[0-9A-Fa-f]{6}$/.test(form.brand_color);
       case 2:
-        return true; // fill color is optional
-
+        return /^#[0-9A-Fa-f]{6}$/.test(
+          form.qr_fill_color || form.brand_color
+        );
       case 3:
-        return form.qr_back_color.trim() !== "";
+        return /^#[0-9A-Fa-f]{6}$/.test(form.qr_back_color);
       case 4:
-        return form.qr_box_size > 0 && form.qr_border > 0;
+        return (
+          Number.isInteger(form.qr_box_size) &&
+          form.qr_box_size >= 1 &&
+          form.qr_box_size <= 40 &&
+          Number.isInteger(form.qr_border) &&
+          form.qr_border >= 0 &&
+          form.qr_border <= 10
+        );
       default:
         return true;
     }
+  })();
+
+  const saveProgress = () => {
+    try {
+      localStorage.setItem("reviewqr_onboarding", JSON.stringify(form));
+      setAlert("Progress saved on this device.");
+      setError("");
+    } catch {
+      setError("Could not save progress in this browser.");
+    }
   };
 
-  const businessComplete =
-    form.name.trim() !== "" &&
-    isValidPhone(form.phone) &&
-    isValidUrl(form.google_review_link);
+  const next = () => {
+    if (!stepValid) {
+      setError("Please complete the required fields before continuing.");
+      return;
+    }
 
-  const ownerComplete =
-    form.username.trim() !== "" &&
-    isValidEmail(form.email) &&
-    form.password.trim().length >= 6;
+    setError("");
+    setAlert("");
 
+    if (step === 0 && infoTab === "business") {
+      setInfoTab("owner");
+      return;
+    }
 
+    if (step < STEPS.length - 1) {
+      setStep((prev) => prev + 1);
+    }
+  };
+
+  const back = () => {
+    setError("");
+    setAlert("");
+
+    if (step === 0 && infoTab === "owner") {
+      setInfoTab("business");
+      return;
+    }
+
+    if (step > 0) {
+      setStep((prev) => prev - 1);
+    }
+  };
+
+  const connectGoogle = () => {
+    // Replace with your deployed backend URL when appropriate.
+    window.location.href =
+      "http://127.0.0.1:8000/googleAuth/google/oauth/start/";
+  };
+
+  const handleFinalSubmit = async () => {
+    if (loading) return;
+
+    setLoading(true);
+    setError("");
+    setAlert("");
+
+    try {
+      const payload = {
+        ...form,
+        qr_fill_color: form.qr_fill_color || form.brand_color,
+      };
+
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        throw new Error(
+          data?.detail ||
+            data?.error ||
+            "We couldn't create your account. Please check your information."
+        );
+      }
+
+      localStorage.removeItem("reviewqr_onboarding");
+      setAlert("Your business has been created successfully!");
+
+      window.setTimeout(() => navigate("/login"), 1500);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to connect to the server. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const inputClass =
+    "w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10";
+
+  const labelClass =
+    "mb-2 block text-sm font-medium text-slate-700";
+
+  const qrFill = form.qr_fill_color || form.brand_color;
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-
-      {/* LEFT PROGRESS RAIL */}
-      <div className="hidden md:flex flex-col w-64 border-r border-gray-200 bg-white p-6">
-        <h1 className="text-xl font-bold mb-8">ReviewQR Setup</h1>
-
-        <div className="space-y-4">
-          {steps.map((label, i) => {
-            const isCompleted = i < step;
-            const isActive = i === step;
-
-            return (
-              <div
-                key={i}
-                className={`
-                      flex items-center gap-3 text-sm font-medium
-                      ${isActive ? "text-indigo-600" : isCompleted ? "text-gray-700" : "text-gray-400"}
-                    `}
-              >
-                {/* Icon */}
-                <div
-                  className={`
-                        flex items-center justify-center
-                        w-5 h-5 rounded-full border transition-all
-                        ${isCompleted
-                      ? "bg-green-500 border-green-500 text-white"
-                      : isActive
-                        ? "border-indigo-600 text-indigo-600"
-                        : "border-gray-300 text-gray-300"
-                    }
-                      `}
-                >
-                  {isCompleted ? (
-                    <svg
-                      className="w-3 h-3"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="3"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                  ) : (
-                    <div
-                      className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-indigo-600" : "bg-gray-300"
-                        }`}
-                    />
-                  )}
-                </div>
-
-                {label}
+    <div className="min-h-screen bg-[#F7F8FC] text-slate-900">
+      <div className="mx-auto flex min-h-screen max-w-[1440px]">
+        {/* Sidebar */}
+        <aside className="hidden w-[310px] shrink-0 flex-col justify-between border-r border-slate-200 bg-white p-8 lg:flex">
+          <div>
+            <Link to="/" className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-600 text-xl font-bold text-white shadow-lg shadow-violet-600/20">
+                R
               </div>
-            );
-          })}
-        </div>
-      </div>
+              <span className="text-xl font-bold tracking-tight">
+                ReviewQR
+              </span>
+            </Link>
 
-
-
-      {/* MAIN CONTENT AREA */}
-      <div className="flex-1 flex flex-col px-4 py-6">
-
-        {/* MODAL CARD */}
-        <div
-          className="
-                  w-full max-w-sm sm:max-w-md mx-auto
-                  bg-white/80 backdrop-blur-xl
-                  p-5 sm:p-8
-                  rounded-2xl
-                  border border-gray-200
-                  shadow-xl
-                  animate-fadeUp
-                "
-        >
-
-          {/* ALERTS */}
-          {alert && (
-            <div
-              className={`
-        mb-5 px-4 py-3 rounded-xl text-sm font-medium shadow-sm
-        ${alert.includes("successfully")
-                  ? "bg-green-50 text-green-700 border border-green-200"
-                  : "bg-red-50 text-red-700 border border-red-200"
-                }
-      `}
-            >
-              {alert}
+            <div className="mt-16">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-600">
+                Get started
+              </p>
+              <h1 className="mt-3 text-3xl font-bold leading-tight tracking-tight">
+                Build a better review experience.
+              </h1>
+              <p className="mt-4 text-sm leading-6 text-slate-500">
+                Set up your business, personalize your QR code, and
+                get everything ready from one simple workflow.
+              </p>
             </div>
-          )}
 
-          <div className="flex justify-center sm:justify-start">
-            <div className="
-                  inline-flex p-1 rounded-2xl
-                  bg-gradient-to-b from-gray-100 to-gray-200
-                  shadow-inner border border-gray-200
-                ">
+            <div className="mt-12 space-y-2">
+              {STEPS.map((item, index) => {
+                const active = index === step;
+                const complete = index < step;
 
-              {/* BUSINESS TAB */}
-              <button
-                onClick={() => setInfoTab("business")}
-                className={`
-                        relative px-6 py-2.5 rounded-xl text-sm font-medium
-                        transition-all duration-300
-        ${infoTab === "business"
-                    ? "bg-white shadow-md text-gray-900 scale-[1.02]"
-                    : "text-gray-500 hover:text-gray-700"}
-      `}
-              >
-                Business
-                {businessComplete && (
-                  <span className="absolute -top-1 -right-1 h-3 w-3 bg-green-500 rounded-full shadow-sm"></span>
-                )}
-              </button>
+                return (
+                  <div
+                    key={item.title}
+                    className={`flex gap-4 rounded-2xl p-3 transition ${
+                      active
+                        ? "bg-violet-50"
+                        : "hover:bg-slate-50"
+                    }`}
+                  >
+                    <div
+                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-sm font-semibold ${
+                        complete
+                          ? "bg-emerald-100 text-emerald-700"
+                          : active
+                            ? "bg-violet-600 text-white"
+                            : "bg-slate-100 text-slate-400"
+                      }`}
+                    >
+                      {complete ? "✓" : `0${index + 1}`}
+                    </div>
 
-              {/* OWNER TAB */}
-              <button
-                onClick={() => setInfoTab("owner")}
-                className={`
-                    relative px-6 py-2.5 rounded-xl text-sm font-medium
-                    transition-all duration-300
-                    ${infoTab === "owner"
-                    ? "bg-white shadow-md text-gray-900 scale-[1.02]"
-                    : "text-gray-500 hover:text-gray-700"}
-      `}
-              >
-                Owner
-                {ownerComplete && (
-                  <span className="absolute -top-1 -right-1 h-3 w-3 bg-green-500 rounded-full shadow-sm"></span>
-                )}
-              </button>
-
+                    <div className="pt-0.5">
+                      <p
+                        className={`text-sm font-semibold ${
+                          active ? "text-violet-700" : "text-slate-700"
+                        }`}
+                      >
+                        {item.title}
+                      </p>
+                      <p className="mt-1 text-xs leading-5 text-slate-500">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
-          <p className="text-xs text-gray-500 mt-2 text-center sm:text-left">
-            Complete both sections before continuing
-          </p>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-xl shadow-sm">
+              ✨
+            </div>
+            <p className="mt-4 font-semibold">Make it yours</p>
+            <p className="mt-2 text-sm leading-6 text-slate-500">
+              Your QR code can reflect your brand from the very first scan.
+            </p>
+          </div>
+        </aside>
 
-          {/* STEP CONTENT */}
-          <div className="animate-step">
+        {/* Main area */}
+        <main className="flex min-w-0 flex-1 flex-col px-4 py-6 sm:px-8 lg:px-14 lg:py-10">
+          <header className="mx-auto flex w-full max-w-3xl items-center justify-between">
+            <Link to="/" className="flex items-center gap-2 lg:hidden">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-600 font-bold text-white">
+                R
+              </div>
+              <span className="font-bold">ReviewQR</span>
+            </Link>
 
-            {/* STEP 0 — BUSINESS + OWNER INFO */}
-            {/* STEP 0 — BUSINESS + OWNER INFO */}
-            {step === 0 && (
-              <div className="space-y-10 px-2 sm:px-0">
+            <div className="hidden sm:block lg:ml-auto">
+              <span className="text-sm text-slate-500">
+                Already have an account?
+              </span>
+              <Link
+                to="/login"
+                className="ml-2 text-sm font-semibold text-violet-600 hover:text-violet-800"
+              >
+                Log in
+              </Link>
+            </div>
 
-                {/* HEADER */}
-                <div className="text-center sm:text-left space-y-1 pt-4 pb-2 sm:pt-6 sm:pb-4">
-                  <h2 className="text-3xl font-semibold text-gray-900 tracking-tight">
-                    {infoTab === "business" ? "Business Account" : "Owner Account"}
-                  </h2>
+            <Link
+              to="/login"
+              className="text-sm font-semibold text-violet-600 sm:hidden"
+            >
+              Log in
+            </Link>
+          </header>
 
-                  <p className="text-gray-500 text-sm sm:text-base">
-                    {infoTab === "business"
-                      ? "Tell us about your business to get started"
-                      : "Create your secure owner account"}
-                  </p>
-                </div>
+          {/* Mobile progress */}
+          <div className="mx-auto mt-8 w-full max-w-3xl lg:hidden">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold text-slate-700">
+                Step {step + 1} of {STEPS.length}
+              </span>
+              <span className="text-sm text-slate-500">
+                {Math.round(((step + 1) / STEPS.length) * 100)}%
+              </span>
+            </div>
+            <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200">
+              <div
+                className="h-full rounded-full bg-violet-600 transition-all duration-300"
+                style={{
+                  width: `${((step + 1) / STEPS.length) * 100}%`,
+                }}
+              />
+            </div>
+          </div>
 
+          <div className="mx-auto my-8 w-full max-w-3xl flex-1 sm:my-12">
+            <div className="mb-8">
+              <p className="text-sm font-semibold text-violet-600">
+                STEP {step + 1} / {STEPS.length}
+              </p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+                {step === 0
+                  ? infoTab === "business"
+                    ? "Tell us about your business"
+                    : "Create your owner account"
+                  : STEPS[step].title}
+              </h2>
+              <p className="mt-3 text-base leading-7 text-slate-500">
+                {step === 0
+                  ? infoTab === "business"
+                    ? "Let's start with the basics so we can personalize your experience."
+                    : "Add your account details to manage your business."
+                  : STEPS[step].description}
+              </p>
+            </div>
 
-
-                {/* BUSINESS INFO */}
-                {infoTab === "business" && (
-                  <div className="space-y-5 bg-white/70 backdrop-blur-xl p-6 rounded-2xl border border-gray-200 shadow-sm animate-fadeIn">
-                    <h3 className="text-lg font-semibold text-gray-900">Business Details</h3>
-
-                    <input
-                      name="name"
-                      value={form.name}
-                      onChange={handleChange}
-                      placeholder="Business Name"
-                      className="input-ios"
-                    />
-
-                    <input
-                      name="phone"
-                      value={form.phone}
-                      onChange={handleChange}
-                      placeholder="Business Phone"
-                      className="input-ios"
-                    />
-
-                    <input
-                      name="google_review_link"
-                      value={form.google_review_link}
-                      onChange={handleChange}
-                      placeholder="Google Review Link"
-                      className="input-ios"
-                    />
-                  </div>
-                )}
-
-                {/* OWNER INFO */}
-                {infoTab === "owner" && (
-                  <div className="space-y-5 bg-white/70 backdrop-blur-xl p-6 rounded-2xl border border-gray-200 shadow-sm animate-fadeIn">
-                    <h3 className="text-lg font-semibold text-gray-900">Owner Details</h3>
-
-                    <input
-                      name="owner_name"
-                      value={form.username}
-                      onChange={handleChange}
-                      placeholder="Your Name"
-                      className="input-ios"
-                    />
-
-                    <input
-                      name="email"
-                      value={form.email}
-                      onChange={handleChange}
-                      placeholder="Business Email"
-                      className="input-ios"
-                    />
-
-                    <input
-                      name="owner_password"
-                      type="password"
-                      value={form.password}
-                      onChange={handleChange}
-                      placeholder="Create Password"
-                      className="input-ios"
-                    />
-                  </div>
-                )}
-
-                {/* GOOGLE CONNECT CARD */}
-                <div className="p-5 rounded-2xl bg-white/70 backdrop-blur-xl border border-gray-200 shadow-sm space-y-3">
-                  <h3 className="text-sm font-semibold text-gray-800">Connect Google Reviews</h3>
-                  <p className="text-xs text-gray-600">
-                    Sync your Google Business Profile to pull reviews automatically.
-                  </p>
-
-                  {googleConnected ? (
-                    <div className="px-4 py-2 rounded-lg bg-green-100 text-green-700 text-sm font-medium">
-                      ✓ Google Reviews Connected
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => window.location.href = "http://127.0.0.1:8000/googleAuth/google/oauth/start/"}
-                      className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition"
-                    >
-                      Connect Google Business Profile
-                    </button>
-                  )}
-                </div>
-
+            {/* Alerts */}
+            {alert && (
+              <div
+                role="status"
+                className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
+              >
+                {alert}
               </div>
             )}
 
-            {/* STEP 1 — BRAND COLOR */}
-            {step === 1 && (
-              <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">
-                  Brand Color
-                </h2>
+            {error && (
+              <div
+                role="alert"
+                className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+              >
+                {error}
+              </div>
+            )}
 
-                <div className="p-4 rounded-xl bg-white/80 backdrop-blur-xl border border-gray-200 shadow-sm flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">
-                    Choose your brand color
-                  </span>
+            {savedProgress && (
+              <div className="mb-5 flex items-center gap-2 rounded-xl border border-violet-100 bg-violet-50 px-4 py-3 text-sm text-violet-800">
+                <span>✓</span>
+                Your previous setup details were restored.
+                <button
+                  type="button"
+                  onClick={() => setSavedProgress(false)}
+                  className="ml-auto text-violet-700"
+                  aria-label="Dismiss restored progress message"
+                >
+                  ×
+                </button>
+              </div>
+            )}
 
-                  <input
-                    type="color"
-                    name="brand_color"
-                    value={form.brand_color}
-                    onChange={handleChange}
-                    className="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer shadow-sm"
-                  />
+            <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+              {/* Step 1: Business + owner */}
+              {step === 0 && (
+                <div className="space-y-7">
+                  <div className="flex rounded-xl bg-slate-100 p-1">
+                    <button
+                      type="button"
+                      onClick={() => setInfoTab("business")}
+                      className={`flex-1 rounded-lg px-3 py-3 text-sm font-semibold transition ${
+                        infoTab === "business"
+                          ? "bg-white text-violet-700 shadow-sm"
+                          : "text-slate-500"
+                      }`}
+                    >
+                      Business details {businessComplete ? "✓" : ""}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setInfoTab("owner")}
+                      className={`flex-1 rounded-lg px-3 py-3 text-sm font-semibold transition ${
+                        infoTab === "owner"
+                          ? "bg-white text-violet-700 shadow-sm"
+                          : "text-slate-500"
+                      }`}
+                    >
+                      Owner account {ownerComplete ? "✓" : ""}
+                    </button>
+                  </div>
+
+                  {infoTab === "business" ? (
+                    <div className="space-y-5">
+                      <div>
+                        <label className={labelClass} htmlFor="name">
+                          Business name
+                        </label>
+                        <input
+                          id="name"
+                          name="name"
+                          autoComplete="organization"
+                          value={form.name}
+                          onChange={updateField}
+                          placeholder="e.g. The Corner Cafe"
+                          className={inputClass}
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label className={labelClass} htmlFor="phone">
+                          Business phone
+                        </label>
+                        <input
+                          id="phone"
+                          name="phone"
+                          type="tel"
+                          autoComplete="tel"
+                          value={form.phone}
+                          onChange={updateField}
+                          placeholder="+1 (555) 123-4567"
+                          className={inputClass}
+                          required
+                        />
+                        {form.phone && !validPhone && (
+                          <p className="mt-2 text-xs text-red-600">
+                            Enter a valid phone number.
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label
+                          className={labelClass}
+                          htmlFor="google_review_link"
+                        >
+                          Google review link
+                        </label>
+                        <input
+                          id="google_review_link"
+                          name="google_review_link"
+                          type="url"
+                          value={form.google_review_link}
+                          onChange={updateField}
+                          placeholder="https://g.page/r/..."
+                          className={inputClass}
+                          required
+                        />
+                        <p className="mt-2 text-xs leading-5 text-slate-500">
+                          Add the link customers should use to leave a Google review.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-5">
+                      <div>
+                        <label className={labelClass} htmlFor="username">
+                          Your name / username
+                        </label>
+                        <input
+                          id="username"
+                          name="username"
+                          autoComplete="username"
+                          value={form.username}
+                          onChange={updateField}
+                          placeholder="How should we identify you?"
+                          className={inputClass}
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label className={labelClass} htmlFor="email">
+                          Business email
+                        </label>
+                        <input
+                          id="email"
+                          name="email"
+                          type="email"
+                          autoComplete="email"
+                          value={form.email}
+                          onChange={updateField}
+                          placeholder="you@yourbusiness.com"
+                          className={inputClass}
+                          required
+                        />
+                        {form.email && !validEmail && (
+                          <p className="mt-2 text-xs text-red-600">
+                            Enter a valid email address.
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className={labelClass} htmlFor="password">
+                          Password
+                        </label>
+                        <input
+                          id="password"
+                          name="password"
+                          type="password"
+                          autoComplete="new-password"
+                          value={form.password}
+                          onChange={updateField}
+                          placeholder="At least 8 characters"
+                          className={inputClass}
+                          minLength={8}
+                          required
+                        />
+                      </div>
+
+                      <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                        <p className="font-semibold text-slate-800">
+                          Connect Google Business Profile
+                        </p>
+                        <p className="mt-2 text-sm leading-6 text-slate-500">
+                          Connect your profile if your integration supports automatic review syncing.
+                        </p>
+
+                        {googleConnected ? (
+                          <p className="mt-4 rounded-lg bg-emerald-50 px-3 py-3 text-sm font-medium text-emerald-700">
+                            ✓ Google connection detected
+                          </p>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={connectGoogle}
+                            className="mt-4 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-violet-300 hover:text-violet-700"
+                          >
+                            Connect Google Business Profile
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
+              )}
 
-                {/* QR PREVIEW USING BRAND COLOR */}
-                <div className="flex justify-center">
-                  <div className="p-4 rounded-xl bg-white shadow-sm border">
+              {/* Step 2: Brand color */}
+              {step === 1 && (
+                <div className="space-y-6">
+                  <div>
+                    <label className={labelClass} htmlFor="brand_color">
+                      Choose your brand color
+                    </label>
+                    <div className="flex items-center gap-4 rounded-xl border border-slate-200 p-4">
+                      <input
+                        id="brand_color"
+                        name="brand_color"
+                        type="color"
+                        value={form.brand_color}
+                        onChange={updateField}
+                        className="h-12 w-14 cursor-pointer rounded-lg border-0 bg-transparent"
+                      />
+                      <div>
+                        <p className="font-semibold">{form.brand_color}</p>
+                        <p className="mt-1 text-sm text-slate-500">
+                          Use your logo or brand's primary color.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl bg-slate-50 p-6 text-center">
+                    <p className="mb-4 text-sm font-medium text-slate-600">
+                      Your preview
+                    </p>
                     <StyledQRPreview
-                      fill={form.brand_color}          // brand color becomes QR fill
-                      back="#FFFFFF"                   // default background
-                      brand={form.brand_color}         // brand color for gradient + capsule
+                      fill={form.brand_color}
+                      back="#FFFFFF"
+                      brand={form.brand_color}
                       text={form.name || "Your Business"}
                     />
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* STEP 2 — QR FILL COLOR */}
-            {step === 2 && (
-              <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">
-                  QR Fill Color <span className="text-gray-500 text-sm">(optional)</span>
-                </h2>
+              {/* Step 3: QR fill */}
+              {step === 2 && (
+                <div className="space-y-6">
+                  <div>
+                    <label className={labelClass} htmlFor="qr_fill_color">
+                      QR code fill color
+                    </label>
+                    <div className="flex items-center gap-4 rounded-xl border border-slate-200 p-4">
+                      <input
+                        id="qr_fill_color"
+                        name="qr_fill_color"
+                        type="color"
+                        value={qrFill}
+                        onChange={updateField}
+                        className="h-12 w-14 cursor-pointer rounded-lg border-0 bg-transparent"
+                      />
+                      <div>
+                        <p className="font-semibold">{qrFill}</p>
+                        <p className="mt-1 text-sm text-slate-500">
+                          Choose a color with strong contrast against the background.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-                <div className="p-4 rounded-xl bg-white/80 backdrop-blur-xl border border-gray-200 shadow-sm flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Fill Color</span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setForm((prev) => ({
+                        ...prev,
+                        qr_fill_color: prev.brand_color,
+                      }))
+                    }
+                    className="text-sm font-semibold text-violet-600 hover:text-violet-800"
+                  >
+                    Use brand color
+                  </button>
 
-                  <input
-                    type="color"
-                    name="qr_fill_color"
-                    value={form.qr_fill_color || form.brand_color}   // visually shows brand color
-                    onChange={handleChange}                           // only sets if user picks
-                    className="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer shadow-sm"
-                  />
-                </div>
-
-                <div className="flex justify-center">
-                  <div className="p-4 rounded-xl bg-white shadow-sm border">
+                  <div className="flex justify-center rounded-2xl bg-slate-50 p-6">
                     <StyledQRPreview
-                      fill={form.qr_fill_color || form.brand_color}   // optional override
+                      fill={qrFill}
                       back={form.qr_back_color}
                       brand={form.brand_color}
                       text={form.name || "Your Business"}
                     />
                   </div>
                 </div>
+              )}
 
-                {/* Optional reset */}
-                {form.qr_fill_color && (
-                  <button
-                    type="button"
-                    onClick={() => setForm(prev => ({ ...prev, qr_fill_color: "" }))}
-                    className="text-xs text-gray-500 underline"
-                  >
-                    Reset to brand color
-                  </button>
-                )}
-              </div>
-            )}
-            {/* STEP 3 — QR BACKGROUND COLOR */}
-            {step === 3 && (
-              <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">
-                  QR Background Color
-                </h2>
+              {/* Step 4: Background */}
+              {step === 3 && (
+                <div className="space-y-6">
+                  <div>
+                    <label className={labelClass} htmlFor="qr_back_color">
+                      QR code background
+                    </label>
+                    <div className="flex items-center gap-4 rounded-xl border border-slate-200 p-4">
+                      <input
+                        id="qr_back_color"
+                        name="qr_back_color"
+                        type="color"
+                        value={form.qr_back_color}
+                        onChange={updateField}
+                        className="h-12 w-14 cursor-pointer rounded-lg border-0 bg-transparent"
+                      />
+                      <div>
+                        <p className="font-semibold">{form.qr_back_color}</p>
+                        <p className="mt-1 text-sm text-slate-500">
+                          A light background generally scans more reliably.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-                <div className="p-4 rounded-xl bg-white/80 backdrop-blur-xl border border-gray-200 shadow-sm flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Background Color</span>
-
-                  <input
-                    type="color"
-                    name="qr_back_color"
-                    value={form.qr_back_color || "#FFFFFF"}   // fallback so input never breaks
-                    onChange={handleChange}
-                    className="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer shadow-sm"
-                  />
-                </div>
-
-                <div className="flex justify-center">
-                  <div className="p-4 rounded-xl bg-white shadow-sm border">
+                  <div className="flex justify-center rounded-2xl bg-slate-50 p-6">
                     <StyledQRPreview
-                      fill={form.qr_fill_color || form.brand_color}   // optional override
-                      back={form.qr_back_color || "#FFFFFF"}          // SAFE fallback
+                      fill={qrFill}
+                      back={form.qr_back_color}
                       brand={form.brand_color}
                       text={form.name || "Your Business"}
                     />
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* STEP 4 — QR SETTINGS */}
-            {step === 4 && (
-              <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">QR Settings</h2>
-
-                <input type="number" name="qr_box_size" value={form.qr_box_size} onChange={handleChange}
-                  placeholder="QR Box Size"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 transition shadow-sm"
-                />
-
-                <input type="number" name="qr_border" value={form.qr_border} onChange={handleChange}
-                  placeholder="QR Border Size"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 transition shadow-sm"
-                />
-              </div>
-            )}
-
-            {/* STEP 5 — REVIEW */}
-            {step === 5 && (
-              <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">Review Your Info</h2>
-
-                <div className="bg-white/80 backdrop-blur-xl rounded-xl border border-gray-200 shadow-sm p-4 space-y-4">
-                  <div className="space-y-1">
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Business Info</p>
-                    <div className="bg-gray-50 rounded-lg p-3 text-sm text-gray-800 space-y-1">
-                      <p><span className="font-medium text-gray-700">Name:</span> {form.name}</p>
-                      <p><span className="font-medium text-gray-700">Email:</span> {form.email}</p>
-                      <p><span className="font-medium text-gray-700">Phone:</span> {form.phone}</p>
-                      <p><span className="font-medium text-gray-700">Google Link:</span> {form.google_review_link}</p>
-                    </div>
+              {/* Step 5: QR settings */}
+              {step === 4 && (
+                <div className="space-y-6">
+                  <div>
+                    <label className={labelClass} htmlFor="qr_box_size">
+                      QR box size
+                    </label>
+                    <input
+                      id="qr_box_size"
+                      name="qr_box_size"
+                      type="number"
+                      min={1}
+                      max={40}
+                      step={1}
+                      value={form.qr_box_size}
+                      onChange={updateField}
+                      className={inputClass}
+                    />
+                    <p className="mt-2 text-xs text-slate-500">
+                      Allowed range: 1–40.
+                    </p>
                   </div>
 
-                  <div className="space-y-1">
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Branding</p>
-                    <div className="bg-gray-50 rounded-lg p-3 text-sm text-gray-800 space-y-1">
-                      <p><span className="font-medium text-gray-700">Brand Color:</span> {form.brand_color}</p>
-                    </div>
+                  <div>
+                    <label className={labelClass} htmlFor="qr_border">
+                      QR border size
+                    </label>
+                    <input
+                      id="qr_border"
+                      name="qr_border"
+                      type="number"
+                      min={0}
+                      max={10}
+                      step={1}
+                      value={form.qr_border}
+                      onChange={updateField}
+                      className={inputClass}
+                    />
+                    <p className="mt-2 text-xs text-slate-500">
+                      Allowed range: 0–10.
+                    </p>
                   </div>
 
-                  <div className="space-y-1">
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">QR Settings</p>
-                    <div className="bg-gray-50 rounded-lg p-3 text-sm text-gray-800 space-y-1">
-                      <p><span className="font-medium text-gray-700">Fill Color:</span> {form.qr_fill_color}</p>
-                      <p><span className="font-medium text-gray-700">Background:</span> {form.qr_back_color}</p>
-                      <p><span className="font-medium text-gray-700">Box Size:</span> {form.qr_box_size}</p>
-                      <p><span className="font-medium text-gray-700">Border:</span> {form.qr_border}</p>
-                    </div>
+                  <div className="flex justify-center rounded-2xl bg-slate-50 p-6">
+                    <StyledQRPreview
+                      fill={qrFill}
+                      back={form.qr_back_color}
+                      brand={form.brand_color}
+                      text={form.name || "Your Business"}
+                    />
                   </div>
                 </div>
+              )}
 
+              {/* Step 6: Review */}
+              {step === 5 && (
+                <div className="space-y-5">
+                  <div className="flex justify-center rounded-2xl bg-slate-50 p-6">
+                    <StyledQRPreview
+                      fill={qrFill}
+                      back={form.qr_back_color}
+                      brand={form.brand_color}
+                      text={form.name || "Your Business"}
+                    />
+                  </div>
+
+                  {[
+                    {
+                      title: "Business information",
+                      rows: [
+                        ["Business", form.name],
+                        ["Owner username", form.username],
+                        ["Email", form.email],
+                        ["Phone", form.phone],
+                        ["Google review link", form.google_review_link],
+                      ],
+                    },
+                    {
+                      title: "QR design",
+                      rows: [
+                        ["Brand color", form.brand_color],
+                        ["Fill color", qrFill],
+                        ["Background", form.qr_back_color],
+                        ["Box size", String(form.qr_box_size)],
+                        ["Border", String(form.qr_border)],
+                      ],
+                    },
+                  ].map((section) => (
+                    <div
+                      key={section.title}
+                      className="rounded-2xl border border-slate-200 p-4"
+                    >
+                      <h3 className="mb-3 font-semibold">{section.title}</h3>
+                      <dl className="space-y-3">
+                        {section.rows.map(([label, value]) => (
+                          <div
+                            key={label}
+                            className="flex flex-col gap-1 sm:flex-row sm:justify-between"
+                          >
+                            <dt className="text-sm text-slate-500">
+                              {label}
+                            </dt>
+                            <dd className="break-all text-sm font-medium text-slate-800 sm:max-w-[60%] sm:text-right">
+                              {value || "Not provided"}
+                            </dd>
+                          </div>
+                        ))}
+                      </dl>
+                    </div>
+                  ))}
+
+                  <p className="text-sm leading-6 text-slate-500">
+                    By creating your account, you confirm that you are
+                    authorized to register this business.
+                  </p>
+                </div>
+              )}
+
+              {/* Navigation */}
+              <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-6">
                 <button
-                  onClick={handleFinalSubmit}
-                  className="w-full py-3.5 rounded-lg bg-indigo-600 text-white font-semibold shadow-md hover:bg-indigo-700 active:scale-[.98] transition-all duration-200"
+                  type="button"
+                  onClick={back}
+                  disabled={step === 0 && infoTab === "business"}
+                  className="rounded-xl px-4 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 disabled:invisible"
                 >
-                  Submit
+                  ← Back
                 </button>
+
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    onClick={saveProgress}
+                    className="rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                  >
+                    Save progress
+                  </button>
+
+                  {step < STEPS.length - 1 ? (
+                    <button
+                      type="button"
+                      onClick={next}
+                      disabled={!stepValid}
+                      className="rounded-xl bg-violet-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-600/20 transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      {step === 0 && infoTab === "business"
+                        ? "Continue to owner →"
+                        : step === 0
+                          ? "Continue →"
+                          : "Continue →"}
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleFinalSubmit}
+                      disabled={loading}
+                      className="rounded-xl bg-violet-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-600/20 transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {loading ? "Creating business..." : "Create business →"}
+                    </button>
+                  )}
+                </div>
               </div>
-            )}
+            </div>
 
+            <p className="mt-6 text-center text-xs leading-5 text-slate-400">
+              Your setup details are saved locally only when you choose
+              Save progress. Avoid using shared devices to save passwords.
+            </p>
           </div>
 
-          {/* NAVIGATION BUTTONS */}
-          <div className="flex justify-between mt-10">
-            {step > 0 ? (
-              <button
-                onClick={back}
-                className="px-4 py-2 text-gray-600 hover:text-gray-900"
-              >
-                Back
-              </button>
-            ) : (
-              <div />
-            )}
-
-            {step < steps.length - 1 && (
-              <button
-                onClick={next}
-                disabled={!validateStep()}
-                className="
-                      px-6 py-3 rounded-lg bg-indigo-600 text-white font-semibold
-                      hover:bg-indigo-700 disabled:opacity-40 transition
-                    "
-              >
-                Continue
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* LOGIN LINK UNDER MODAL */}
-        <div className="w-full text-center mt-6 mb-10">
-          <p className="text-sm text-gray-600">
-            Already have an account?
-            <Link
-              to="/login"
-              className="ml-1 font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
-            >
-              Log in
-            </Link>
-          </p>
-        </div>
-
-      </div >
-    </div >
+          <footer className="mx-auto w-full max-w-3xl border-t border-slate-200 pt-5 text-center text-xs text-slate-400">
+            © {new Date().getFullYear()} ReviewQR. All rights reserved.
+          </footer>
+        </main>
+      </div>
+    </div>
   );
 }

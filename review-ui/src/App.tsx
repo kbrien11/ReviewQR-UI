@@ -15,6 +15,8 @@ import Register from "./pages/Register/Register";
 import TeamMembers from "./pages/TeamMembers/TeamMembers";
 import PlanAndBilling from "./pages/PlanAndBilling/PlanAndBilling";
 import IncentiveManager from "./pages/Incentive/IncentiveManager";
+import Checkout from "./pages/PlanAndBilling/Checkout";
+import AboutAdyenIntegration from "./pages/AboutAdyenIntegration/AboutAdyenIntegration";
 
 export default function App() {
 
@@ -39,6 +41,8 @@ export default function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/reviews" element={<Reviews />} />
               <Route path="/register" element={<Register />} />
+              <Route path = "/checkout" element = {<Checkout/>} />
+              <Route path = "/about" element = {<AboutAdyenIntegration/>} />
 
               <Route
                 path="/dashboard"

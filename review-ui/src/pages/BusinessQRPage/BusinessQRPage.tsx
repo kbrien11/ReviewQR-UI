@@ -137,69 +137,46 @@ export default function BusinessQRPage() {
   }, [loadQR]);
 
  
-const saveChanges = async () => {
-  if (!slug || saving) return;
-
-  setSaving(true);
-  setError("");
-
-  try {
-    const response = await fetch(
-      `${API_BASE}/business/${encodeURIComponent(slug)}/qr/`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          brand_color: settings.brand_color,
-          qr_fill_color: settings.qr_fill_color,
-          qr_back_color: settings.qr_back_color,
-          qr_box_size: settings.qr_box_size,
-          qr_border: settings.qr_border,
-          qr_shape: settings.qr_shape,
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      const detail = await response.text();
-      throw new Error(
-        `Could not save QR settings (${response.status}): ${
-          detail || response.statusText
-        }`
+  const saveChanges = async () => {
+    setSaving(true);
+    setError("");
+  
+    try {
+      const response = await fetch(
+        `${API_BASE}/business/${slug}/qr/`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(settings),
+        }
       );
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.detail || "Failed to save QR settings.");
+      }
+  
+      // Use the settings actually returned by the backend.
+      setSettings((current) => ({
+        ...current,
+        ...data,
+      }));
+  
+      if (data.qr_code) {
+        setQrCodeUrl(data.qr_code);
+        setImageError(false);
+      }
+  
+      setEditing(false);
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "Failed to save QR settings."
+      );
+    } finally {
+      setSaving(false);
     }
-
-    const updated: QRData = await response.json();
-
-    // Use any settings returned by the backend to keep UI and server in sync.
-    setSettings((current) => ({
-      ...current,
-      brand_color: updated.brand_color ?? current.brand_color,
-      qr_fill_color: updated.qr_fill_color ?? current.qr_fill_color,
-      qr_back_color: updated.qr_back_color ?? current.qr_back_color,
-      qr_box_size: Number(updated.qr_box_size ?? current.qr_box_size),
-      qr_border: Number(updated.qr_border ?? current.qr_border),
-      qr_shape: updated.qr_shape ?? current.qr_shape,
-    }));
-
-    // Prefer the new URL returned by the backend.
-    // A timestamp forces the browser to fetch the newly generated image.
-    if (updated.qr_code) {
-      setQrCodeUrl(withCacheBuster(updated.qr_code));
-      setImageError(false);
-    } else {
-      // Reload the server's data if the API didn't return the QR URL.
-      await loadQR(false);
-    }
-
-    setEditing(false);
-  } catch (err) {
-    setError(getErrorMessage(err));
-  } finally {
-    setSaving(false);
-  }
-};
-
+  };
 
   const downloadQR = async () => {
     if (!qrCodeUrl) return;

@@ -1,7 +1,8 @@
 
+import type { CSSProperties } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 
-type QRShape =
+export type QRShape =
   | "rectangle"
   | "circle"
   | "heart"
@@ -21,54 +22,32 @@ type StyledQRPreviewProps = {
   shape?: QRShape;
 };
 
-const MIN_BOX_SIZE = 4;
-const MAX_BOX_SIZE = 20;
-const MIN_DISPLAY_SIZE = 160;
-const MAX_DISPLAY_SIZE = 320;
-
-function getDisplaySize(boxSize: number): number {
-  const normalized =
-    (boxSize - MIN_BOX_SIZE) / (MAX_BOX_SIZE - MIN_BOX_SIZE);
-
-  return Math.round(
-    MIN_DISPLAY_SIZE +
-      Math.max(0, Math.min(1, normalized)) *
-        (MAX_DISPLAY_SIZE - MIN_DISPLAY_SIZE)
-  );
-}
-
-function getShapeStyle(shape: QRShape): React.CSSProperties {
+function getShapeStyle(shape: QRShape): CSSProperties {
   switch (shape) {
     case "circle":
-      return { clipPath: "circle(50% at 50% 50%)" };
-
+      return { borderRadius: "50%" };
     case "heart":
       return {
+        borderRadius: "35% 35% 45% 45%",
         clipPath:
-          "path('M 160 285 C 140 265 20 180 20 95 C 20 20 110 5 160 75 C 210 5 300 20 300 95 C 300 180 180 265 160 285 Z')",
+          "polygon(50% 95%, 8% 58%, 3% 40%, 12% 22%, 30% 16%, 50% 33%, 70% 16%, 88% 22%, 97% 40%, 92% 58%)",
       };
-
     case "diamond":
       return {
         clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
       };
-
     case "squircle":
       return { borderRadius: "30%" };
-
     case "hexagon":
       return {
         clipPath:
           "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
       };
-
     case "star":
       return {
         clipPath:
-          "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 94%, 50% 72%, 21% 94%, 32% 57%, 2% 35%, 39% 35%)",
+          "polygon(50% 0%, 62% 34%, 98% 35%, 70% 57%, 80% 95%, 50% 74%, 20% 95%, 30% 57%, 2% 35%, 38% 34%)",
       };
-
-    case "rectangle":
     default:
       return { borderRadius: "12px" };
   }
@@ -84,56 +63,50 @@ export default function StyledQRPreview({
   slug,
   shape = "rectangle",
 }: StyledQRPreviewProps) {
-  const displaySize = getDisplaySize(size);
-  const safeFill = fill || brand || "#000000";
-  const safeBack = back || "#FFFFFF";
+  const normalizedSize = Math.max(4, Math.min(20, Number(size) || 10));
+  const displaySize = Math.round(160 + ((normalizedSize - 4) / 16) * 100);
+  const quietZone = Math.max(0, Math.min(10, Number(border) || 0));
+  const qrValue = slug
+    ? `https://reviewqrapi.onrender.com/r/${slug}`
+    : "https://reviewqrapi.onrender.com/r/preview";
 
-  const qrValue =
-    slug || "https://reviewqr.com/preview";
-
-  // Keep the QR square and intact for scanning.
-  // The selected shape is applied to the decorative backing.
-  const shapeStyle = getShapeStyle(shape);
-
-  const padding = Math.max(0, Math.min(10, border)) * 2;
+  const frameStyle = getShapeStyle(shape);
 
   return (
-    <div className="flex flex-col items-center gap-3">
-      <div
-        className="flex items-center justify-center transition-all duration-200"
-        style={{
-          ...shapeStyle,
-          width: displaySize + padding * 2 + 24,
-          height: displaySize + padding * 2 + 24,
-          backgroundColor: brand || safeFill,
-          padding: 12,
-          boxSizing: "border-box",
-        }}
-      >
+    <div className="flex w-full min-w-0 flex-col items-center gap-3">
+      <div className="relative flex w-full max-w-[320px] items-center justify-center p-3">
+        {/* Decorative frame: kept separate so it cannot crop the QR. */}
         <div
-          className="flex items-center justify-center"
+          aria-hidden="true"
+          className="absolute inset-2"
           style={{
-            backgroundColor: safeBack,
-            padding,
-            borderRadius: shape === "circle" ? "4px" : "6px",
-            boxSizing: "content-box",
-            maxWidth: "100%",
-            maxHeight: "100%",
+            ...frameStyle,
+            backgroundColor: brand || fill,
+          }}
+        />
+
+        {/* The QR stays square and has a contrasting quiet zone. */}
+        <div
+          className="relative z-10 max-w-full"
+          style={{
+            padding: Math.max(8, quietZone * 2),
+            backgroundColor: back,
+            borderRadius: shape === "circle" || shape === "squircle" ? 8 : 2,
           }}
         >
           <QRCodeCanvas
+            key={`${qrValue}-${fill}-${back}-${displaySize}-${quietZone}`}
             value={qrValue}
             size={displaySize}
-            bgColor={safeBack}
-            fgColor={safeFill}
+            bgColor={back}
+            fgColor={fill}
             level="H"
-            includeMargin={true}
+            marginSize={quietZone}
             style={{
               display: "block",
-              width: displaySize,
-              height: displaySize,
-              maxWidth: "100%",
-              imageRendering: "pixelated",
+              width: "100%",
+              maxWidth: displaySize,
+              height: "auto",
             }}
           />
         </div>
@@ -142,7 +115,7 @@ export default function StyledQRPreview({
       {text.trim() && (
         <p
           className="max-w-full break-words text-center text-sm font-semibold"
-          style={{ color: brand || safeFill }}
+          style={{ color: brand }}
         >
           {text}
         </p>
